@@ -4,15 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 
-type Theme = "dark" | "light";
-
-interface NavbarProps {
-  theme: Theme;
-  toggleTheme: () => void;
-}
-
-export default function Navbar({ theme, toggleTheme }: NavbarProps) {
-  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+export default function Navbar({ theme, toggleTheme }) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
@@ -29,10 +22,10 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
         await navigator.share(shareData);
       } else {
         await navigator.clipboard.writeText(shareData.url);
-        alert("Link copied to clipboard!");
+        alert("Lien copié dans le presse-papier !");
       }
     } catch (err) {
-      console.error("Error sharing:", err);
+      console.error("Erreur lors du partage :", err);
     }
   };
 
@@ -70,7 +63,7 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
         </span>
       </Link>
 
-      {/* Desktop Menu Links */}
+      {/* Menu Desktop */}
       <div className="hidden md:flex items-center gap-4">
         <Link href="/projects" className="hover:text-red-500 transition-colors">
           Projets
@@ -85,11 +78,11 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
           About
         </Link>
 
-        {/* Theme Toggle */}
+        {/* Bouton de thème */}
         <button
           onClick={toggleTheme}
           className="p-3 rounded-full shadow-md hover:scale-105 transition-transform bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-white"
-          title="Toggle theme"
+          title="Changer de thème"
         >
           {theme === "dark" ? (
             <svg xmlns="http://www.w3.org/2000/svg" fill="yellow" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
@@ -102,11 +95,11 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
           )}
         </button>
 
-        {/* Share Button */}
+        {/* Bouton de partage */}
         <button
           onClick={sharePortfolio}
           className="p-3 rounded-full shadow-md hover:scale-105 transition-transform bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-white"
-          title="Share portfolio"
+          title="Partager le portfolio"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
             <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 8.25l7.5-7.5m0 0v7.5m0-7.5h-7.5M16.5 16.5l-7.5 7.5m0 0v-7.5m0 7.5h7.5" />
@@ -114,12 +107,12 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Menu Mobile */}
       <div className="flex md:hidden items-center gap-2">
         <button
           onClick={toggleTheme}
           className="p-3 rounded-full shadow-md hover:scale-105 transition-transform bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-white"
-          title="Toggle theme"
+          title="Changer de thème"
         >
           {theme === "dark" ? (
             <svg xmlns="http://www.w3.org/2000/svg" fill="yellow" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
@@ -135,7 +128,7 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
         <button
           onClick={sharePortfolio}
           className="p-3 rounded-full shadow-md hover:scale-105 transition-transform bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-white"
-          title="Share portfolio"
+          title="Partager le portfolio"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
             <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 8.25l7.5-7.5m0 0v7.5m0-7.5h-7.5M16.5 16.5l-7.5 7.5m0 0v-7.5m0 7.5h7.5" />
@@ -146,7 +139,7 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
         <button
           onClick={toggleMenu}
           className="p-3 rounded-full shadow-md hover:scale-105 transition-transform focus:outline-none focus:ring-2 focus:ring-red-500"
-          aria-label="Toggle menu"
+          aria-label="Ouvrir le menu"
         >
           {isMenuOpen ? (
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
@@ -160,7 +153,7 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
         </button>
       </div>
 
-      {/* Mobile Menu Links */}
+      {/* Liens Mobile */}
       <div
         className={`md:hidden absolute top-full left-0 w-full transition-all duration-300 ease-in-out shadow-lg
           ${theme === "dark" ? "bg-gray-900/95 text-white" : "bg-white/95 text-gray-900"}

@@ -2,14 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 
-interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  theme: "dark" | "light";
-}
-
-export default function Modal({ isOpen, onClose, onConfirm, theme }: ModalProps) {
+export default function Modal({ isOpen, onClose, onConfirm, theme }) {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -18,15 +11,19 @@ export default function Modal({ isOpen, onClose, onConfirm, theme }: ModalProps)
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          onClick={onClose}
         >
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className={`p-6 rounded-lg shadow-xl w-80 text-center ${
-              theme === "dark" ? "bg-gray-800 text-white" : "bg-white text-gray-900"
+            className={`p-6 rounded-lg shadow-xl w-80 text-center relative ${
+              theme === "dark"
+                ? "bg-gray-800 text-white"
+                : "bg-white text-gray-900"
             }`}
+            onClick={(e) => e.stopPropagation()}
           >
             <h2 className="text-lg font-bold mb-3">Confirmer l’envoi</h2>
             <p className="mb-6 text-sm">

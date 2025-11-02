@@ -4,19 +4,17 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Navbar from "../components/Navbar";
 
-type Theme = "dark" | "light";
-
 export default function About() {
-  const [theme, setTheme] = useState<Theme>("dark");
+  const [theme, setTheme] = useState("dark");
 
   useEffect(() => {
-    const savedTheme = (localStorage.getItem("theme") as Theme) || "dark";
+    const savedTheme = localStorage.getItem("theme") || "dark";
     setTheme(savedTheme);
     document.documentElement.classList.toggle("dark", savedTheme === "dark");
   }, []);
 
   const toggleTheme = () => {
-    const newTheme: Theme = theme === "dark" ? "light" : "dark";
+    const newTheme = theme === "dark" ? "light" : "dark";
     setTheme(newTheme);
     document.documentElement.classList.toggle("dark", newTheme === "dark");
     localStorage.setItem("theme", newTheme);
@@ -25,9 +23,10 @@ export default function About() {
   return (
     <main
       className={`relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 py-12 transition-colors duration-700 
-        ${theme === "dark"
-          ? "bg-gradient-to-b from-gray-900 to-black text-white"
-          : "bg-gradient-to-b from-gray-100 to-white text-gray-900"
+        ${
+          theme === "dark"
+            ? "bg-gradient-to-b from-gray-900 to-black text-white"
+            : "bg-gradient-to-b from-gray-100 to-white text-gray-900"
         }`}
     >
       <Navbar theme={theme} toggleTheme={toggleTheme} />
@@ -68,37 +67,64 @@ export default function About() {
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
             About Me
           </h1>
-          <p className={`text-lg leading-relaxed mb-6 ${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}>
+          <p
+            className={`text-lg leading-relaxed mb-6 ${
+              theme === "dark" ? "text-gray-300" : "text-gray-700"
+            }`}
+          >
             Hello, my name is{" "}
             <span className="font-semibold text-blue-500 dark:text-blue-400">
               Paterne SEKA
             </span>
-            . I am a developer passionate about creating modern, performant, and elegant web experiences.
+            . I am a developer passionate about creating modern, performant, and
+            elegant web experiences.
             <br />
             <br />
             I love working with technologies like{" "}
             <span className="font-semibold">Next.js, TailwindCSS</span> and{" "}
-            <span className="font-semibold">Framer Motion</span>.
-            My goal is to design smooth and intuitive interfaces that combine aesthetics and performance.
+            <span className="font-semibold">Framer Motion</span>. My goal is to
+            design smooth and intuitive interfaces that combine aesthetics and
+            performance.
             <br />
             <br />
-            Outside of coding, I enjoy music, photography, and exploring new creative ideas.
+            Outside of coding, I enjoy music, photography, and exploring new
+            creative ideas.
           </p>
 
           <div className="mb-4">
             <strong>Contacts:</strong>{" "}
-            <a href="tel:+2250702418667" className="text-blue-500 hover:underline" aria-label="Call +2250702418667">
+            <a
+              href="tel:+2250702418667"
+              className="text-blue-500 hover:underline"
+              aria-label="Call +2250702418667"
+            >
               +225 07 02 41 86 67
-            </a>{" / "}
-            <a href="tel:+2250546670693" className="text-blue-500 hover:underline" aria-label="Call +2250546670693">
+            </a>{" "}
+            /{" "}
+            <a
+              href="tel:+2250546670693"
+              className="text-blue-500 hover:underline"
+              aria-label="Call +2250546670693"
+            >
               +225 05 46 67 06 93
             </a>
           </div>
 
           <div className="mb-4">
             <strong>E-mail:</strong>{" "}
-            <a href="mailto:sekapaterne25@gmail.com" className="text-blue-500 hover:underline">sekapaterne25@gmail.com</a>{" / "}
-            <a href="mailto:paterne.seka@epitech.eu" className="text-blue-500 hover:underline">paterne.seka@epitech.eu</a>
+            <a
+              href="mailto:sekapaterne25@gmail.com"
+              className="text-blue-500 hover:underline"
+            >
+              sekapaterne25@gmail.com
+            </a>{" "}
+            /{" "}
+            <a
+              href="mailto:paterne.seka@epitech.eu"
+              className="text-blue-500 hover:underline"
+            >
+              paterne.seka@epitech.eu
+            </a>
           </div>
 
           <div className="mb-6">

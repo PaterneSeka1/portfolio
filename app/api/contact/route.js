@@ -1,16 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
-interface ContactRequestBody {
-  name: string;
-  email: string;
-  message: string;
-}
-
-export async function POST(req: NextRequest) {
+export async function POST(req) {
   try {
-    const body: ContactRequestBody = await req.json();
+    const body = await req.json();
     const { name, email, message } = body;
 
     if (!name || !email || !message) {
@@ -47,7 +40,7 @@ export async function POST(req: NextRequest) {
       { message: "Email sent successfully" },
       { status: 200 }
     );
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error sending email:", error);
     return NextResponse.json(
       {

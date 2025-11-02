@@ -2,13 +2,7 @@
 
 import { motion } from "framer-motion";
 
-interface VideoModalProps {
-  videoSrc: string;
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-export default function VideoModal({ videoSrc, isOpen, onClose }: VideoModalProps) {
+export default function VideoModal({ videoSrc, isOpen, onClose }) {
   if (!isOpen) return null;
 
   return (
@@ -32,6 +26,7 @@ export default function VideoModal({ videoSrc, isOpen, onClose }: VideoModalProp
         >
           ×
         </button>
+
         <video
           src={videoSrc}
           controls

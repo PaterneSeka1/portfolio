@@ -1,42 +1,12 @@
 "use client";
 
-import { useState, useEffect, ReactNode } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Navbar from "../components/Navbar";
 import { FaGitAlt, FaFigma, FaLinux, FaGithub, FaNodeJs } from "react-icons/fa";
 import { SiPostman, SiMysql, SiMongodb, SiPrisma } from "react-icons/si";
 
-// Typage du thème
-type Theme = "dark" | "light";
-
-// Typage d'une compétence
-interface Skill {
-  name: string;
-  level: number;
-}
-
-// Typage d'un outil/tech
-interface Tool {
-  name: string;
-  icon: ReactNode;
-  color: string;
-}
-
-// Props SkillBar
-interface SkillBarProps {
-  skill: Skill;
-  theme: Theme;
-}
-
-// Props SkillSection
-interface SkillSectionProps {
-  title: string;
-  skills: Skill[];
-  theme: Theme;
-  color: "blue" | "green";
-}
-
-function SkillBar({ skill, theme }: SkillBarProps) {
+function SkillBar({ skill, theme }) {
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -87,7 +57,7 @@ function SkillBar({ skill, theme }: SkillBarProps) {
   );
 }
 
-function SkillSection({ title, skills, theme, color }: SkillSectionProps) {
+function SkillSection({ title, skills, theme, color }) {
   const textColor =
     color === "blue"
       ? "text-blue-500 dark:text-blue-400"
@@ -109,16 +79,16 @@ function SkillSection({ title, skills, theme, color }: SkillSectionProps) {
 }
 
 export default function Skills() {
-  const [theme, setTheme] = useState<Theme>("dark");
+  const [theme, setTheme] = useState("dark");
 
   useEffect(() => {
-    const savedTheme = (localStorage.getItem("theme") as Theme) || "dark";
+    const savedTheme = localStorage.getItem("theme") || "dark";
     setTheme(savedTheme);
     document.documentElement.classList.toggle("dark", savedTheme === "dark");
   }, []);
 
   const toggleTheme = () => {
-    const newTheme: Theme = theme === "dark" ? "light" : "dark";
+    const newTheme = theme === "dark" ? "light" : "dark";
     setTheme(newTheme);
     document.documentElement.classList.toggle("dark", newTheme === "dark");
     localStorage.setItem("theme", newTheme);
@@ -129,16 +99,16 @@ export default function Skills() {
       { name: "Vue.js", level: 90 },
       { name: "Next.js", level: 85 },
       { name: "React.js", level: 88 },
-    ] as Skill[],
+    ],
     backend: [
       { name: "Laravel", level: 80 },
       { name: "NestJS", level: 78 },
       { name: "Flask", level: 70 },
       { name: "Express", level: 82 },
-    ] as Skill[],
+    ],
   };
 
-  const tools: Tool[] = [
+  const tools = [
     { name: "GitHub", icon: <FaGithub />, color: "text-gray-800 dark:text-gray-200" },
     { name: "Figma", icon: <FaFigma />, color: "text-pink-500" },
     { name: "Linux", icon: <FaLinux />, color: "text-yellow-500" },
@@ -180,7 +150,6 @@ export default function Skills() {
         transition={{ duration: 1 }}
         className="w-full max-w-5xl mt-16 space-y-20"
       >
-        {/* Section titre */}
         <div className="text-center">
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
             Mes Compétences
@@ -190,13 +159,9 @@ export default function Skills() {
           </p>
         </div>
 
-        {/* Frontend */}
         <SkillSection title="Frontend" skills={skills.frontend} theme={theme} color="blue" />
-
-        {/* Backend */}
         <SkillSection title="Backend" skills={skills.backend} theme={theme} color="green" />
 
-        {/* Outils & Technologies */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}

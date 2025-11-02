@@ -1,24 +1,14 @@
 "use client";
 
-import { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import Navbar from "../components/Navbar";
 import Modal from "../components/ModalContact";
 
-// Typage du thème
-type Theme = "dark" | "light";
-
-// Typage du formulaire
-interface FormData {
-  name: string;
-  email: string;
-  message: string;
-}
-
 export default function Contact() {
-  const [theme, setTheme] = useState<Theme>("dark");
-  const [formData, setFormData] = useState<FormData>({
+  const [theme, setTheme] = useState("dark");
+  const [formData, setFormData] = useState({
     name: "",
     email: "",
     message: "",
@@ -28,23 +18,22 @@ export default function Contact() {
 
   // Chargement du thème depuis le localStorage
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") as Theme | null;
-    const initialTheme: Theme = savedTheme === "light" ? "light" : "dark";
-    setTheme(initialTheme);
-    document.documentElement.classList.toggle("dark", initialTheme === "dark");
+    const savedTheme = localStorage.getItem("theme") || "dark";
+    setTheme(savedTheme);
+    document.documentElement.classList.toggle("dark", savedTheme === "dark");
   }, []);
 
   const toggleTheme = () => {
-    const newTheme: Theme = theme === "dark" ? "light" : "dark";
+    const newTheme = theme === "dark" ? "light" : "dark";
     setTheme(newTheme);
     document.documentElement.classList.toggle("dark", newTheme === "dark");
     localStorage.setItem("theme", newTheme);
   };
 
   // Gestion du changement d'input
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   // Envoi du formulaire
@@ -85,7 +74,11 @@ export default function Contact() {
   return (
     <main
       className={`relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 transition-colors duration-700
-        ${theme === "dark" ? "bg-gradient-to-b from-gray-900 to-black text-white" : "bg-gradient-to-b from-gray-100 to-white text-gray-900"}`}
+        ${
+          theme === "dark"
+            ? "bg-gradient-to-b from-gray-900 to-black text-white"
+            : "bg-gradient-to-b from-gray-100 to-white text-gray-900"
+        }`}
     >
       <Navbar theme={theme} toggleTheme={toggleTheme} />
 
@@ -115,13 +108,16 @@ export default function Contact() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3, duration: 1 }}
-        className={`text-lg md:text-xl mb-8 text-center max-w-2xl ${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}
+        className={`text-lg md:text-xl mb-8 text-center max-w-2xl ${
+          theme === "dark" ? "text-gray-300" : "text-gray-700"
+        }`}
       >
-        Vous avez un projet ou une question ? Envoyez-moi un message et je vous répondrai dès que possible.
+        Vous avez un projet ou une question ? Envoyez-moi un message et je vous
+        répondrai dès que possible.
       </motion.p>
 
       <motion.form
-        onSubmit={(e: FormEvent) => e.preventDefault()}
+        onSubmit={(e) => e.preventDefault()}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5, duration: 1 }}
@@ -151,7 +147,7 @@ export default function Contact() {
           value={formData.message}
           onChange={handleChange}
           className="w-full p-3 border rounded-md bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-          rows={6}
+          rows="6"
           required
         />
         <button
