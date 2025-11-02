@@ -138,7 +138,7 @@ export default function Projects() {
 
       {/* Modal vidéo */}
       <VideoModal
-        videoSrc={selectedVideo}
+        videoSrc={selectedVideo || ""}
         isOpen={!!selectedVideo}
         onClose={() => setSelectedVideo(null)}
       />
