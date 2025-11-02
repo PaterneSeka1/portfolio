@@ -2,7 +2,14 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function Modal({ isOpen, onClose, onConfirm, theme }) {
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  theme: "dark" | "light";
+}
+
+export default function Modal({ isOpen, onClose, onConfirm, theme }: ModalProps) {
   return (
     <AnimatePresence>
       {isOpen && (
