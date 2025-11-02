@@ -4,8 +4,15 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 
-export default function Navbar({ theme, toggleTheme }) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+type Theme = "dark" | "light";
+
+interface NavbarProps {
+  theme: Theme;
+  toggleTheme: () => void;
+}
+
+export default function Navbar({ theme, toggleTheme }: NavbarProps) {
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);

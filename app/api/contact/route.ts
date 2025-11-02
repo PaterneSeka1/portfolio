@@ -1,9 +1,24 @@
-import { NextResponse } from "next/server";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
-export async function POST(req) {
+interface ContactRequestBody {
+  name: string;
+  email: string;
+  message: string;
+}
+
+export async function POST(req: NextRequest) {
   try {
-    const { name, email, message } = await req.json();
+    const body: ContactRequestBody = await req.json();
+    const { name, email, message } = body;
+
+    if (!name || !email || !message) {
+      return NextResponse.json(
+        { message: "Missing required fields" },
+        { status: 400 }
+      );
+    }
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -26,19 +41,18 @@ export async function POST(req) {
       `,
     };
 
-    // Send email
     await transporter.sendMail(mailOptions);
 
     return NextResponse.json(
       { message: "Email sent successfully" },
       { status: 200 }
     );
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error sending email:", error);
     return NextResponse.json(
       {
         message: "Failed to send email. Please try again later.",
-        error: error.message,
+        error: error?.message ?? "Unknown error",
       },
       { status: 500 }
     );

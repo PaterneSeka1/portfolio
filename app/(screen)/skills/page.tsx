@@ -1,12 +1,42 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, ReactNode } from "react";
 import { motion } from "framer-motion";
 import Navbar from "../components/Navbar";
 import { FaGitAlt, FaFigma, FaLinux, FaGithub, FaNodeJs } from "react-icons/fa";
-import { SiPostman, SiMysql, SiMongodb, SiPrisma   } from "react-icons/si";
+import { SiPostman, SiMysql, SiMongodb, SiPrisma } from "react-icons/si";
 
-function SkillBar({ skill, theme }) {
+// Typage du thème
+type Theme = "dark" | "light";
+
+// Typage d'une compétence
+interface Skill {
+  name: string;
+  level: number;
+}
+
+// Typage d'un outil/tech
+interface Tool {
+  name: string;
+  icon: ReactNode;
+  color: string;
+}
+
+// Props SkillBar
+interface SkillBarProps {
+  skill: Skill;
+  theme: Theme;
+}
+
+// Props SkillSection
+interface SkillSectionProps {
+  title: string;
+  skills: Skill[];
+  theme: Theme;
+  color: "blue" | "green";
+}
+
+function SkillBar({ skill, theme }: SkillBarProps) {
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -57,17 +87,38 @@ function SkillBar({ skill, theme }) {
   );
 }
 
+function SkillSection({ title, skills, theme, color }: SkillSectionProps) {
+  const textColor =
+    color === "blue"
+      ? "text-blue-500 dark:text-blue-400"
+      : "text-green-500 dark:text-green-400";
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: color === "blue" ? -40 : 40 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 1 }}
+      className="space-y-6"
+    >
+      <h2 className={`text-2xl font-semibold ${textColor}`}>{title}</h2>
+      {skills.map((skill, index) => (
+        <SkillBar key={index} skill={skill} theme={theme} />
+      ))}
+    </motion.div>
+  );
+}
+
 export default function Skills() {
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState<Theme>("dark");
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") || "dark";
+    const savedTheme = (localStorage.getItem("theme") as Theme) || "dark";
     setTheme(savedTheme);
     document.documentElement.classList.toggle("dark", savedTheme === "dark");
   }, []);
 
   const toggleTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
+    const newTheme: Theme = theme === "dark" ? "light" : "dark";
     setTheme(newTheme);
     document.documentElement.classList.toggle("dark", newTheme === "dark");
     localStorage.setItem("theme", newTheme);
@@ -78,16 +129,16 @@ export default function Skills() {
       { name: "Vue.js", level: 90 },
       { name: "Next.js", level: 85 },
       { name: "React.js", level: 88 },
-    ],
+    ] as Skill[],
     backend: [
       { name: "Laravel", level: 80 },
       { name: "NestJS", level: 78 },
       { name: "Flask", level: 70 },
       { name: "Express", level: 82 },
-    ],
+    ] as Skill[],
   };
 
-  const tools = [
+  const tools: Tool[] = [
     { name: "GitHub", icon: <FaGithub />, color: "text-gray-800 dark:text-gray-200" },
     { name: "Figma", icon: <FaFigma />, color: "text-pink-500" },
     { name: "Linux", icon: <FaLinux />, color: "text-yellow-500" },
@@ -95,7 +146,7 @@ export default function Skills() {
     { name: "Postman", icon: <SiPostman />, color: "text-orange-400" },
     { name: "Mongo", icon: <SiMongodb />, color: "text-green-600" },
     { name: "Node.js", icon: <FaNodeJs />, color: "text-green-500" },
-    { name: "Mongo", icon: <SiPrisma />, color: "text-blue-600" },
+    { name: "Prisma", icon: <SiPrisma />, color: "text-blue-600" },
     { name: "MySQL", icon: <SiMysql />, color: "text-blue-600" },
   ];
 
@@ -180,26 +231,5 @@ export default function Skills() {
         </motion.div>
       </motion.section>
     </main>
-  );
-}
-
-function SkillSection({ title, skills, theme, color }) {
-  const textColor =
-    color === "blue"
-      ? "text-blue-500 dark:text-blue-400"
-      : "text-green-500 dark:text-green-400";
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: color === "blue" ? -40 : 40 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 1 }}
-      className="space-y-6"
-    >
-      <h2 className={`text-2xl font-semibold ${textColor}`}>{title}</h2>
-      {skills.map((skill, index) => (
-        <SkillBar key={index} skill={skill} theme={theme} />
-      ))}
-    </motion.div>
   );
 }

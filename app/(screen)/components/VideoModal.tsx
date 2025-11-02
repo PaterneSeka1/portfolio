@@ -1,6 +1,14 @@
+"use client";
+
 import { motion } from "framer-motion";
 
-export default function VideoModal({ videoSrc, isOpen, onClose }) {
+interface VideoModalProps {
+  videoSrc: string;
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export default function VideoModal({ videoSrc, isOpen, onClose }: VideoModalProps) {
   if (!isOpen) return null;
 
   return (

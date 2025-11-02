@@ -1,24 +1,44 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Navbar from "../components/Navbar";
 import VideoModal from "../components/VideoModal";
 import { FaGithub } from "react-icons/fa";
 
+// Typage du thème
+type Theme = "dark" | "light";
+
+// Typage d'un projet
+interface Project {
+  title: string;
+  description: string;
+  tech: string[];
+  image?: string;
+  video?: string;
+  github?: string;
+}
+
 export default function Projects() {
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState<Theme>("dark");
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
 
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") as Theme | null;
+    const initialTheme: Theme = savedTheme === "light" ? "light" : "dark";
+    setTheme(initialTheme);
+    document.documentElement.classList.toggle("dark", initialTheme === "dark");
+  }, []);
+
   const toggleTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
+    const newTheme: Theme = theme === "dark" ? "light" : "dark";
     setTheme(newTheme);
     document.documentElement.classList.toggle("dark", newTheme === "dark");
     localStorage.setItem("theme", newTheme);
   };
 
-  const projects = [
+  const projects: Project[] = [
     {
       title: "Portfolio Paterne SEKA",
       description:
@@ -28,11 +48,12 @@ export default function Projects() {
       video: "/projects/portfolio.mp4",
       github: "https://github.com/tonprofil/portfolio",
     },
+    // Ajoutez d'autres projets ici
   ];
 
   return (
     <main
-      className={`relative flex min-h-screen flex-col items-center justify-center px-6 py-12 transition-colors duration-700 
+      className={`relative flex min-h-screen flex-col items-center justify-center px-6 py-12 transition-colors duration-700
         ${theme === "dark"
           ? "bg-gradient-to-b from-gray-900 to-black text-white"
           : "bg-gradient-to-b from-gray-100 to-white text-gray-900"
@@ -56,7 +77,7 @@ export default function Projects() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ type: "spring", stiffness: 120, damping: 12, delay: index * 0.2 }}
               whileHover={{ scale: 1.03 }}
-              className={`rounded-xl overflow-hidden shadow-lg transition-all duration-300 cursor-pointer 
+              className={`rounded-xl overflow-hidden shadow-lg transition-all duration-300 cursor-pointer
                 ${theme === "dark" ? "bg-gray-800" : "bg-white"}`}
             >
               {project.image && (
@@ -89,17 +110,20 @@ export default function Projects() {
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <button
-                    className="bg-green-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-md shadow-md transition-colors"
-                    onClick={() => setSelectedVideo(project.video)}
-                  >
-                    démo
-                  </button>
+                  {project.video && (
+                    <button
+                      className="bg-green-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-md shadow-md transition-colors"
+                      onClick={() => setSelectedVideo(project.video!)}
+                    >
+                      démo
+                    </button>
+                  )}
 
                   {project.github && (
                     <a
                       href={project.github}
                       target="_blank"
+                      rel="noopener noreferrer"
                       className="text-gray-100 dark:text-white hover:text-blue-400"
                     >
                       <FaGithub size={35} />
