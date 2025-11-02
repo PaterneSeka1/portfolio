@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Navbar from "../components/Navbar";
 import { FaGitAlt, FaFigma, FaLinux, FaGithub, FaNodeJs } from "react-icons/fa";
 import { SiPostman, SiMysql, SiMongodb, SiPrisma } from "react-icons/si";
+import { useThemeStore } from "../../store/themeStore";
 
 function SkillBar({ skill, theme }) {
   const [hovered, setHovered] = useState(false);
@@ -79,22 +80,8 @@ function SkillSection({ title, skills, theme, color }) {
 }
 
 export default function Skills() {
-  const [theme, setTheme] = useState("dark");
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") || "dark";
-    setTheme(savedTheme);
-    document.documentElement.classList.toggle("dark", savedTheme === "dark");
-  }, []);
-
-  const toggleTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
-    setTheme(newTheme);
-    document.documentElement.classList.toggle("dark", newTheme === "dark");
-    localStorage.setItem("theme", newTheme);
-  };
-
-  const skills = {
+  const { theme, toggleTheme } = useThemeStore();
+  const [skills] = useState({
     frontend: [
       { name: "Vue.js", level: 90 },
       { name: "Next.js", level: 85 },
@@ -106,9 +93,12 @@ export default function Skills() {
       { name: "Flask", level: 70 },
       { name: "Express", level: 82 },
     ],
-  };
+    mobile: [
+      {name : "React Native", level: 60},
+    ],
+  });
 
-  const tools = [
+  const [tools] = useState([
     { name: "GitHub", icon: <FaGithub />, color: "text-gray-800 dark:text-gray-200" },
     { name: "Figma", icon: <FaFigma />, color: "text-pink-500" },
     { name: "Linux", icon: <FaLinux />, color: "text-yellow-500" },
@@ -118,7 +108,7 @@ export default function Skills() {
     { name: "Node.js", icon: <FaNodeJs />, color: "text-green-500" },
     { name: "Prisma", icon: <SiPrisma />, color: "text-blue-600" },
     { name: "MySQL", icon: <SiMysql />, color: "text-blue-600" },
-  ];
+  ]);
 
   return (
     <main
@@ -130,7 +120,6 @@ export default function Skills() {
     >
       <Navbar theme={theme} toggleTheme={toggleTheme} />
 
-      {/* Animated background effect */}
       <motion.div
         className="absolute inset-0 -z-10"
         initial={{ opacity: 0 }}
@@ -143,7 +132,6 @@ export default function Skills() {
         />
       </motion.div>
 
-      {/* Main content */}
       <motion.section
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
@@ -151,14 +139,13 @@ export default function Skills() {
         className="w-full max-w-5xl mt-16 space-y-20"
       >
         <div className="text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
-            My Skills
-          </h1>
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-4">My Skills</h1>
           <p className={`text-lg ${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}>
             Explore my technical skills and favorite tools
           </p>
         </div>
 
+        <SkillSection title="Mobile" skills={skills.mobile} theme={theme} color="blue" />
         <SkillSection title="Frontend" skills={skills.frontend} theme={theme} color="blue" />
         <SkillSection title="Backend" skills={skills.backend} theme={theme} color="green" />
 

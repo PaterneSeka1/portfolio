@@ -1,179 +1,166 @@
-"use client";
+'use client'
 
-import Link from "next/link";
-import Image from "next/image";
-import { useState } from "react";
+import Link from 'next/link'
+import Image from 'next/image'
+import { useState } from 'react'
+import { useThemeStore } from '../../store/themeStore'
+import { FiSun, FiMoon, FiShare2, FiMenu, FiX } from 'react-icons/fi'
 
-export default function Navbar({ theme, toggleTheme }) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+const links = ['projects', 'expertises', 'skills', 'contact', 'about']
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-  const closeMenu = () => setIsMenuOpen(false);
+export default function Navbar () {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { theme, toggleTheme } = useThemeStore()
 
-  // Portfolio sharing function
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
+  const closeMenu = () => setIsMenuOpen(false)
+  const [activeLink, setActiveLink] = useState(null)
+
+  const baseClass = 'hover:text-red-500 transition-colors'
+  const activeClass = 'text-red-500 font-semibold'
+
   const sharePortfolio = async () => {
-    const shareData = {
-      title: "Paterne SEKA",
-      url: window.location.origin,
-    };
-
+    const shareData = { title: 'Paterne SEKA', url: window.location.origin }
     try {
       if (navigator.share) {
-        await navigator.share(shareData);
+        await navigator.share(shareData)
       } else {
-        await navigator.clipboard.writeText(shareData.url);
-        alert("Link copied to clipboard!");
+        await navigator.clipboard.writeText(shareData.url)
+        alert('Link copied to clipboard!')
       }
     } catch (err) {
-      console.error("Error sharing:", err);
+      console.error('Error sharing:', err)
     }
-  };
+  }
 
   return (
     <nav
       className={`w-full flex justify-between items-center py-4 px-6 fixed top-0 left-0 z-50 backdrop-blur-md transition-colors duration-500
-        ${theme === "dark" ? "bg-gray-900/70 text-white" : "bg-white/70 text-gray-900"}`}
+        ${
+          theme === 'dark'
+            ? 'bg-gray-900/70 text-white'
+            : 'bg-white/70 text-gray-900'
+        }`}
     >
+      {/* Logo */}
       <Link
-        href="/"
-        className="flex items-center gap-3 text-2xl font-bold group"
+        href='/'
+        className='flex items-center gap-3 text-2xl font-bold group'
         onClick={closeMenu}
       >
         <div
           className={`relative w-10 h-10 rounded-full overflow-hidden border-2 transition-all duration-300
-            ${theme === "dark"
-              ? "border-green-400 group-hover:border-green-300"
-              : "border-green-600 group-hover:border-green-500"
-            } group-hover:scale-110 group-hover:shadow-[0_0_15px_rgba(34,197,94,0.6)]`}
+            ${
+              theme === 'dark'
+                ? 'border-green-400 group-hover:border-green-300'
+                : 'border-green-600 group-hover:border-green-500'
+            }
+            group-hover:scale-110 group-hover:shadow-[0_0_15px_rgba(34,197,94,0.6)]`}
         >
           <Image
-            src="/me.jpeg"
-            alt="Photo of Paterne SEKA"
+            src='/me.jpeg'
+            alt='Photo of Paterne SEKA'
             width={40}
             height={40}
-            className="object-cover w-full h-full"
+            className='object-cover w-full h-full'
           />
         </div>
-
         <span
           className={`text-transparent bg-clip-text bg-gradient-to-r
-            ${theme === "dark" ? "from-blue-400 to-green-500" : "from-blue-600 to-green-700"}`}
+            ${
+              theme === 'dark'
+                ? 'from-blue-400 to-green-500'
+                : 'from-blue-600 to-green-700'
+            }`}
         >
           Paterne SEKA
         </span>
       </Link>
 
       {/* Desktop Menu */}
-      <div className="hidden md:flex items-center gap-4">
-        <Link href="/projects" className="hover:text-red-500 transition-colors">
-          Projects
-        </Link>
-        <Link href="/skills" className="hover:text-red-500 transition-colors">
-          Skills
-        </Link>
-        <Link href="/contact" className="hover:text-red-500 transition-colors">
-          Contact
-        </Link>
-        <Link href="/about" className="hover:text-red-500 transition-colors">
-          About
-        </Link>
-
-        {/* Theme Button */}
+      <div className='hidden md:flex items-center gap-4'>
+        {links.map(link => (
+          <Link
+            key={link}
+            href={`/${link}`}
+            className={`${baseClass} ${activeLink === link ? activeClass : ''}`}
+            onClick={() => setActiveLink(link)}
+          >
+            {link.charAt(0).toUpperCase() + link.slice(1)}
+          </Link>
+        ))}
+      </div>
+      
+      <div className='flex gap-4 text-2xl'>
+        {/* Theme Toggle */}
         <button
           onClick={toggleTheme}
-          className="p-3 rounded-full shadow-md hover:scale-105 transition-transform bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-white"
-          title="Toggle theme"
+          className='p-3 rounded-full shadow-md hover:scale-105 transition-transform bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-white'
+          title='Toggle theme'
         >
-          {theme === "dark" ? (
-            <svg xmlns="http://www.w3.org/2000/svg" fill="yellow" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1.5m0 15V21m9-9h-1.5M4.5 12H3m15.364-6.364l-1.06 1.06M6.696 17.304l-1.06 1.06m0-12.728l1.06 1.06m10.608 10.608l1.06 1.06M12 7.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9z" />
-            </svg>
-          ) : (
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5 text-yellow-500">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.718 9.718 0 0112 21a9.75 9.75 0 010-19.5c.967 0 1.905.147 2.789.42a.75.75 0 01.293 1.279 7.5 7.5 0 006.67 12.803z" />
-            </svg>
-          )}
+          {theme === 'dark' ? <FiSun size={20} /> : <FiMoon size={20} />}
         </button>
 
         {/* Share Button */}
         <button
           onClick={sharePortfolio}
-          className="p-3 rounded-full shadow-md hover:scale-105 transition-transform bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-white"
-          title="Share portfolio"
+          className='p-3 rounded-full shadow-md hover:scale-105 transition-transform bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-white'
+          title='Share portfolio'
         >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 8.25l7.5-7.5m0 0v7.5m0-7.5h-7.5M16.5 16.5l-7.5 7.5m0 0v-7.5m0 7.5h7.5" />
-          </svg>
+          <FiShare2 size={20} />
         </button>
       </div>
 
       {/* Mobile Menu */}
-      <div className="flex md:hidden items-center gap-2">
-        <button
-          onClick={toggleTheme}
-          className="p-3 rounded-full shadow-md hover:scale-105 transition-transform bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-white"
-          title="Toggle theme"
-        >
-          {theme === "dark" ? (
-            <svg xmlns="http://www.w3.org/2000/svg" fill="yellow" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1.5m0 15V21m9-9h-1.5M4.5 12H3m15.364-6.364l-1.06 1.06M6.696 17.304l-1.06 1.06m0-12.728l1.06 1.06m10.608 10.608l1.06 1.06M12 7.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9z" />
-            </svg>
-          ) : (
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5 text-yellow-500">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.718 9.718 0 0112 21a9.75 9.75 0 010-19.5c.967 0 1.905.147 2.789.42a.75.75 0 01.293 1.279 7.5 7.5 0 006.67 12.803z" />
-            </svg>
-          )}
-        </button>
-
+      <div className='flex md:hidden items-center gap-2'>
         <button
           onClick={sharePortfolio}
-          className="p-3 rounded-full shadow-md hover:scale-105 transition-transform bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-white"
-          title="Share portfolio"
+          className='p-3 rounded-full shadow-md hover:scale-105 transition-transform bg-gray-200 dark:bg-gray-800 hidden'
         >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 8.25l7.5-7.5m0 0v7.5m0-7.5h-7.5M16.5 16.5l-7.5 7.5m0 0v-7.5m0 7.5h7.5" />
-          </svg>
+          <FiShare2 size={20} />
         </button>
 
-        {/* Burger Menu */}
         <button
           onClick={toggleMenu}
-          className="p-3 rounded-full shadow-md hover:scale-105 transition-transform focus:outline-none focus:ring-2 focus:ring-red-500"
-          aria-label="Open menu"
+          className='p-3 rounded-full shadow-md hover:scale-105 transition-transform focus:outline-none focus:ring-2 focus:ring-red-500 '
+          aria-label='Open menu'
         >
-          {isMenuOpen ? (
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          ) : (
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-            </svg>
-          )}
+          {isMenuOpen ? <FiX size={20} /> : <FiMenu size={20} />}
         </button>
       </div>
 
       {/* Mobile Links */}
       <div
         className={`md:hidden absolute top-full left-0 w-full transition-all duration-300 ease-in-out shadow-lg
-          ${theme === "dark" ? "bg-gray-900/95 text-white" : "bg-white/95 text-gray-900"}
-          ${isMenuOpen ? "max-h-screen opacity-100 visible" : "max-h-0 opacity-0 invisible overflow-hidden"}`}
+          ${
+            theme === 'dark'
+              ? 'bg-gray-900/95 text-white'
+              : 'bg-white/95 text-gray-900'
+          }
+          ${
+            isMenuOpen
+              ? 'max-h-screen opacity-100 visible'
+              : 'max-h-0 opacity-0 invisible overflow-hidden'
+          }`}
       >
-        <div className="flex flex-col p-6 space-y-4">
-          <Link href="/projects" className="hover:text-red-500 transition-colors text-lg" onClick={closeMenu}>
-            Projects
-          </Link>
-          <Link href="/skills" className="hover:text-red-500 transition-colors text-lg" onClick={closeMenu}>
-            Skills
-          </Link>
-          <Link href="/contact" className="hover:text-red-500 transition-colors text-lg" onClick={closeMenu}>
-            Contact
-          </Link>
-          <Link href="/about" className="hover:text-red-500 transition-colors text-lg" onClick={closeMenu}>
-            About
-          </Link>
+        <div className='flex flex-col p-6 space-y-4'>
+          {links.map(link => (
+            <Link
+              key={link}
+              href={`/${link}`}
+              className={`${baseClass} ${
+                activeLink === link ? activeClass : ''
+              }`}
+              onClick={() => {
+                setActiveLink(link)
+                closeMenu()
+              }}
+            >
+              {link.charAt(0).toUpperCase() + link.slice(1)}
+            </Link>
+          ))}
         </div>
       </div>
     </nav>
-  );
+  )
 }

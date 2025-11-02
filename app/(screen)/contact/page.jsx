@@ -1,13 +1,14 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
-import Navbar from "../components/Navbar";
+import { useThemeStore } from "../../store/themeStore";
 import Modal from "../components/ModalContact";
 
 export default function Contact() {
-  const [theme, setTheme] = useState("dark");
+  const { theme } = useThemeStore();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -15,20 +16,6 @@ export default function Contact() {
   });
   const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-
-  // Load theme from localStorage
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") || "dark";
-    setTheme(savedTheme);
-    document.documentElement.classList.toggle("dark", savedTheme === "dark");
-  }, []);
-
-  const toggleTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
-    setTheme(newTheme);
-    document.documentElement.classList.toggle("dark", newTheme === "dark");
-    localStorage.setItem("theme", newTheme);
-  };
 
   // Handle input change
   const handleChange = (e) => {
@@ -74,14 +61,11 @@ export default function Contact() {
   return (
     <main
       className={`relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 transition-colors duration-700
-        ${
-          theme === "dark"
-            ? "bg-gradient-to-b from-gray-900 to-black text-white"
-            : "bg-gradient-to-b from-gray-100 to-white text-gray-900"
+        ${theme === "dark"
+          ? "bg-gradient-to-b from-gray-900 to-black text-white"
+          : "bg-gradient-to-b from-gray-100 to-white text-gray-900"
         }`}
     >
-      <Navbar theme={theme} toggleTheme={toggleTheme} />
-
       {/* Animated background effect */}
       <motion.div
         className="absolute inset-0 -z-10"
@@ -120,7 +104,9 @@ export default function Contact() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5, duration: 1 }}
-        className="w-full max-w-xl flex flex-col gap-4 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md"
+        className={`w-full max-w-xl flex flex-col gap-4 p-6 rounded-lg shadow-md ${
+          theme === "dark" ? "bg-gray-800" : "bg-white"
+        }`}
       >
         <input
           type="text"
@@ -128,7 +114,11 @@ export default function Contact() {
           placeholder="Your Name"
           value={formData.name}
           onChange={handleChange}
-          className="w-full p-3 border rounded-md bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+          className={`w-full p-3 border rounded-md ${
+            theme === "dark"
+              ? "bg-gray-700 text-gray-100 border-gray-600"
+              : "bg-gray-100 text-gray-900 border-gray-300"
+          }`}
           required
         />
         <input
@@ -137,7 +127,11 @@ export default function Contact() {
           placeholder="Your Email"
           value={formData.email}
           onChange={handleChange}
-          className="w-full p-3 border rounded-md bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+          className={`w-full p-3 border rounded-md ${
+            theme === "dark"
+              ? "bg-gray-700 text-gray-100 border-gray-600"
+              : "bg-gray-100 text-gray-900 border-gray-300"
+          }`}
           required
         />
         <textarea
@@ -145,7 +139,11 @@ export default function Contact() {
           placeholder="Your Message"
           value={formData.message}
           onChange={handleChange}
-          className="w-full p-3 border rounded-md bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+          className={`w-full p-3 border rounded-md ${
+            theme === "dark"
+              ? "bg-gray-700 text-gray-100 border-gray-600"
+              : "bg-gray-100 text-gray-900 border-gray-300"
+          }`}
           rows="6"
           required
         />
