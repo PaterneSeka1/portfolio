@@ -114,7 +114,7 @@ export default function Skills() {
     { name: "Linux", icon: <FaLinux />, color: "text-yellow-500" },
     { name: "Git", icon: <FaGitAlt />, color: "text-orange-500" },
     { name: "Postman", icon: <SiPostman />, color: "text-orange-400" },
-    { name: "Mongo", icon: <SiMongodb />, color: "text-green-600" },
+    { name: "MongoDB", icon: <SiMongodb />, color: "text-green-600" },
     { name: "Node.js", icon: <FaNodeJs />, color: "text-green-500" },
     { name: "Prisma", icon: <SiPrisma />, color: "text-blue-600" },
     { name: "MySQL", icon: <SiMysql />, color: "text-blue-600" },
@@ -130,7 +130,7 @@ export default function Skills() {
     >
       <Navbar theme={theme} toggleTheme={toggleTheme} />
 
-      {/* Effet de fond animé */}
+      {/* Animated background effect */}
       <motion.div
         className="absolute inset-0 -z-10"
         initial={{ opacity: 0 }}
@@ -143,7 +143,7 @@ export default function Skills() {
         />
       </motion.div>
 
-      {/* Contenu principal */}
+      {/* Main content */}
       <motion.section
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
@@ -152,10 +152,10 @@ export default function Skills() {
       >
         <div className="text-center">
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
-            Mes Compétences
+            My Skills
           </h1>
           <p className={`text-lg ${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}>
-            Découvrez mes compétences techniques et mes outils favoris
+            Explore my technical skills and favorite tools
           </p>
         </div>
 
@@ -170,7 +170,7 @@ export default function Skills() {
           className="text-center"
         >
           <h2 className="text-2xl font-semibold mb-8 text-pink-500 dark:text-pink-400">
-            Outils & Technologies
+            Tools & Technologies
           </h2>
 
           <div className="flex flex-wrap justify-center gap-8">

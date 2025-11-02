@@ -132,7 +132,7 @@ export default function About() {
               href="https://wa.me/2250702418667"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-2 rounded-md shadow-md transition-colors mr-2"
+              className="inline-block bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-2 rounded-md shadow-md transition-colors mr-2 mb-2"
             >
               Chat on WhatsApp
             </a>

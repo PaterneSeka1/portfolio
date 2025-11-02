@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import Navbar from "./(screen)/components/Navbar";
 
 export default function Home() {
-  // Lazy initialization pour éviter l'usage de useEffect pour le thème
+  // Lazy initialization for theme to avoid flicker
   const [theme, setTheme] = useState(() => {
     if (typeof window !== "undefined") {
       return localStorage.getItem("theme") || "dark";
@@ -14,7 +14,7 @@ export default function Home() {
     return "dark";
   });
 
-  // Synchroniser le thème avec le DOM dès le rendu
+  // Sync theme with DOM
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");
   }, [theme]);
@@ -25,18 +25,25 @@ export default function Home() {
     localStorage.setItem("theme", newTheme);
   };
 
+  const bgGradient = theme === "dark"
+    ? "bg-gradient-to-b from-gray-900 to-black text-white"
+    : "bg-gradient-to-b from-gray-100 to-white text-gray-900";
+
+  const nameGradient = theme === "dark"
+    ? "from-blue-400 to-green-500"
+    : "from-blue-600 to-green-700";
+
+  const btnClasses = theme === "dark"
+    ? "bg-blue-500 hover:bg-green-600 text-white"
+    : "bg-blue-600 hover:bg-green-500 text-white";
+
   return (
-    <main
-      className={`relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 transition-colors duration-700 ${
-        theme === "dark"
-          ? "bg-gradient-to-b from-gray-900 to-black text-white"
-          : "bg-gradient-to-b from-gray-100 to-white text-gray-900"
-      }`}
-    >
+    <main className={`relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 transition-colors duration-700 ${bgGradient}`}>
+      
       {/* Navbar */}
       <Navbar theme={theme} toggleTheme={toggleTheme} />
 
-      {/* Fond animé */}
+      {/* Animated background */}
       <motion.div
         className="absolute inset-0 -z-10"
         initial={{ opacity: 0 }}
@@ -50,51 +57,38 @@ export default function Home() {
         />
       </motion.div>
 
-      {/* Titre principal */}
+      {/* Main Title */}
       <motion.h1
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
         className="text-5xl md:text-7xl font-extrabold mb-4 text-center"
       >
-        Bienvenue sur mon portfolio, je suis
+        Welcome to my portfolio, I am
         <br />
-        <span
-          className={`text-transparent bg-clip-text bg-gradient-to-r ${
-            theme === "dark"
-              ? "from-blue-400 to-green-500"
-              : "from-blue-600 to-green-700"
-          }`}
-        >
+        <span className={`text-transparent bg-clip-text bg-gradient-to-r ${nameGradient}`}>
           Paterne SEKA
         </span>
       </motion.h1>
 
-      {/* Sous-titre */}
+      {/* Subtitle */}
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.4, duration: 1 }}
-        className={`text-lg md:text-xl mb-8 text-center max-w-2xl ${
-          theme === "dark" ? "text-gray-300" : "text-gray-700"
-        }`}
+        className={`text-lg md:text-xl mb-8 text-center max-w-2xl ${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}
       >
-        Développeur full stack passionné par la création d'expériences web
-        innovantes et performantes.
+        Full-stack developer passionate about creating innovative and performant web experiences.
       </motion.p>
 
-      {/* Bouton vers les projets */}
+      {/* Button to Projects */}
       <motion.a
-        href="projects"
+        href="/projects"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className={`px-6 py-3 rounded-lg font-medium transition-all shadow-lg ${
-          theme === "dark"
-            ? "bg-blue-500 hover:bg-green-600 text-white"
-            : "bg-blue-600 hover:bg-green-500 text-white"
-        }`}
+        className={`px-6 py-3 rounded-lg font-medium transition-all shadow-lg ${btnClasses}`}
       >
-        Voir mes projets
+        View My Projects
       </motion.a>
     </main>
   );

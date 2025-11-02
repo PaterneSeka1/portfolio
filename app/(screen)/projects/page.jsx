@@ -26,15 +26,14 @@ export default function Projects() {
 
   const projects = [
     {
-      title: "Portfolio Paterne SEKA",
+      title: "Paterne SEKA Portfolio",
       description:
-        "Mon portfolio personnel développé avec Next.js, TailwindCSS et Framer Motion.",
+        "My personal portfolio developed with Next.js, TailwindCSS, and Framer Motion.",
       tech: ["Next.js", "TailwindCSS", "Framer Motion"],
       image: "/projects/portfolio.png",
       video: "/projects/portfolio.mp4",
       github: "https://github.com/PaterneSeka1/portfolio",
     },
-    // Tu peux ajouter d'autres projets ici
   ];
 
   return (
@@ -50,13 +49,13 @@ export default function Projects() {
 
       <section className="w-full max-w-6xl mt-16 space-y-16">
         <div className="text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Mes Projets</h1>
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-4">My Projects</h1>
           <p
             className={`text-lg ${
               theme === "dark" ? "text-gray-300" : "text-gray-700"
             }`}
           >
-            Voici une sélection de projets que j’ai réalisés récemment.
+            Here is a selection of projects I have worked on recently.
           </p>
         </div>
 
@@ -115,7 +114,7 @@ export default function Projects() {
                       className="bg-green-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-md shadow-md transition-colors"
                       onClick={() => setSelectedVideo(project.video)}
                     >
-                      démo
+                      Demo
                     </button>
                   )}
 
@@ -136,7 +135,7 @@ export default function Projects() {
         </div>
       </section>
 
-      {/* Modal vidéo */}
+      {/* Video Modal */}
       <VideoModal
         videoSrc={selectedVideo || ""}
         isOpen={!!selectedVideo}

@@ -16,7 +16,7 @@ export default function Contact() {
   const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
-  // Chargement du thème depuis le localStorage
+  // Load theme from localStorage
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "dark";
     setTheme(savedTheme);
@@ -30,21 +30,21 @@ export default function Contact() {
     localStorage.setItem("theme", newTheme);
   };
 
-  // Gestion du changement d'input
+  // Handle input change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Envoi du formulaire
+  // Handle form submission
   const handleSubmit = async () => {
     if (!formData.name || !formData.email || !formData.message) {
-      toast.error("Veuillez remplir tous les champs du formulaire.");
+      toast.error("Please fill out all fields.");
       return;
     }
 
     setLoading(true);
-    toast.loading("Envoi du message...");
+    toast.loading("Sending message...");
 
     try {
       const res = await fetch("/api/contact", {
@@ -56,15 +56,15 @@ export default function Contact() {
       if (res.ok) {
         toast.dismiss();
         setFormData({ name: "", email: "", message: "" });
-        toast.success("Merci pour votre message ! Je vous répondrai bientôt.");
+        toast.success("Thank you for your message! I will reply soon.");
         setModalOpen(false);
       } else {
         toast.dismiss();
-        toast.error("Erreur lors de l'envoi. Réessayez plus tard.");
+        toast.error("Error sending message. Please try again later.");
       }
     } catch (err) {
       toast.dismiss();
-      toast.error("Erreur lors de l'envoi. Réessayez plus tard.");
+      toast.error("Error sending message. Please try again later.");
       console.error(err);
     }
 
@@ -82,7 +82,7 @@ export default function Contact() {
     >
       <Navbar theme={theme} toggleTheme={toggleTheme} />
 
-      {/* Effet de fond animé */}
+      {/* Animated background effect */}
       <motion.div
         className="absolute inset-0 -z-10"
         initial={{ opacity: 0 }}
@@ -112,8 +112,7 @@ export default function Contact() {
           theme === "dark" ? "text-gray-300" : "text-gray-700"
         }`}
       >
-        Vous avez un projet ou une question ? Envoyez-moi un message et je vous
-        répondrai dès que possible.
+        Do you have a project or a question? Send me a message and I will get back to you as soon as possible.
       </motion.p>
 
       <motion.form
@@ -126,7 +125,7 @@ export default function Contact() {
         <input
           type="text"
           name="name"
-          placeholder="Votre nom"
+          placeholder="Your Name"
           value={formData.name}
           onChange={handleChange}
           className="w-full p-3 border rounded-md bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
@@ -135,7 +134,7 @@ export default function Contact() {
         <input
           type="email"
           name="email"
-          placeholder="Votre email"
+          placeholder="Your Email"
           value={formData.email}
           onChange={handleChange}
           className="w-full p-3 border rounded-md bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
@@ -143,7 +142,7 @@ export default function Contact() {
         />
         <textarea
           name="message"
-          placeholder="Votre message"
+          placeholder="Your Message"
           value={formData.message}
           onChange={handleChange}
           className="w-full p-3 border rounded-md bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
@@ -156,11 +155,11 @@ export default function Contact() {
           onClick={() => setModalOpen(true)}
           className="self-end bg-blue-500 hover:bg-green-600 text-white px-4 py-2 rounded-md font-medium transition-colors disabled:opacity-50"
         >
-          {loading ? "Envoi..." : "Envoyer le message"}
+          {loading ? "Sending..." : "Send Message"}
         </button>
       </motion.form>
 
-      {/* Modal de confirmation */}
+      {/* Confirmation Modal */}
       <Modal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
