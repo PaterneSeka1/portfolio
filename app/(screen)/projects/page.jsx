@@ -32,7 +32,7 @@ export default function Projects() {
       tech: ["Next.js", "TailwindCSS", "Framer Motion"],
       image: "/projects/portfolio.png",
       video: "/projects/portfolio.mp4",
-      github: "https://github.com/tonprofil/portfolio",
+      github: "https://github.com/PaterneSeka1/portfolio",
     },
     // Tu peux ajouter d'autres projets ici
   ];
