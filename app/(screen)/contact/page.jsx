@@ -47,7 +47,7 @@ export default function Contact() {
         setModalOpen(false);
       } else {
         toast.dismiss();
-        toast.error("Error sending message. Please try again later.");
+        toast.error("Error sending message.");
       }
     } catch (err) {
       toast.dismiss();
