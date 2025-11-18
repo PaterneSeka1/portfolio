@@ -70,7 +70,7 @@ export default function Footer() {
           <FaLinkedin />
         </a>
         <a
-          href="mailto:contact@example.com"
+          href="mailto:paterne.seka@epitech.eu"
           className={`hover:text-green-500 transition-colors ${
             theme === 'dark' ? 'text-white' : 'text-gray-800'
           }`}

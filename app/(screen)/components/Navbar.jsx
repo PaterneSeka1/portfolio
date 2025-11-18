@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import Image from 'next/image'
 import { useState } from 'react'
 import { useThemeStore } from '../../store/themeStore'
 import { FiSun, FiMoon, FiShare2, FiMenu, FiX } from 'react-icons/fi'
@@ -49,7 +48,7 @@ export default function Navbar () {
         onClick={closeMenu}
       >
         <div
-          className={`relative w-10 h-10 rounded-full overflow-hidden border-2 transition-all duration-300
+          className={`relative w-10 h-10 rounded-full overflow-hidden border-2 transition-all duration-300 py-1 px-1
             ${
               theme === 'dark'
                 ? 'border-green-400 group-hover:border-green-300'
@@ -57,15 +56,7 @@ export default function Navbar () {
             }
             group-hover:scale-110 group-hover:shadow-[0_0_15px_rgba(34,197,94,0.6)]`}
         >
-          <Image
-            src='/me.jpeg'
-            alt='Photo of Paterne SEKA'
-            width={40}
-            height={40}
-            className='object-cover w-full h-full'
-          />
-        </div>
-        <span
+          <span
           className={`text-transparent bg-clip-text bg-gradient-to-r
             ${
               theme === 'dark'
@@ -73,8 +64,9 @@ export default function Navbar () {
                 : 'from-blue-600 to-green-700'
             }`}
         >
-          Paterne SEKA
+          PS
         </span>
+        </div>
       </Link>
 
       {/* Desktop Menu */}

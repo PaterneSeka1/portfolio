@@ -15,8 +15,8 @@ export async function POST(req) {
     }
 
     await resend.emails.send({
-      from: "Contact Form <onboarding@resend.dev>", // tu peux aussi utiliser ton domaine validé
-      to: "sekapaterne25@gmail.com", // ton email de réception
+      from: "Portfolio Contact <onboarding@resend.dev>", 
+      to: "sekapaterne25@gmail.com",
       subject: `New contact message from ${name}`,
       html: `
         <p><strong>Name:</strong> ${name}</p>
