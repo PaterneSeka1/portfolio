@@ -41,7 +41,7 @@ export default function About () {
           className='flex-shrink-0 rounded-full overflow-hidden border-4 border-blue-500 shadow-lg w-52 h-52 md:w-64 md:h-64 bg-gray-200 dark:bg-gray-700'
         >
           <img
-            src='/me.jpeg'
+            src='/me.png'
             alt='Profile photo'
             className='object-cover w-full h-full'
           />

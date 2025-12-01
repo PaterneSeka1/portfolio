@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import nodemailer from "nodemailer";
 
 export async function POST(req) {
   try {
@@ -9,31 +7,45 @@ export async function POST(req) {
 
     if (!name || !email || !message) {
       return NextResponse.json(
-        { message: "Missing required fields" },
+        { message: "All fields are required" },
         { status: 400 }
       );
     }
 
-    await resend.emails.send({
-      from: "Portfolio Contact <onboarding@resend.dev>", 
-      to: "sekapaterne25@gmail.com",
-      subject: `New contact message from ${name}`,
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER, // ton email
+        pass: process.env.EMAIL_PASS, // ton mot de passe d'application
+      },
+    });
+
+    const mailOptions = {
+      from: `${name} <${email}>`,
+      to: process.env.EMAIL_USER,
+      subject: `Nouveau message de ${name}`,
       html: `
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Message:</strong></p>
+        <h2>Nouveau message reçu</h2>
+        <p><strong>Nom :</strong> ${name}</p>
+        <p><strong>Email :</strong> ${email}</p>
+        <p><strong>Message :</strong></p>
         <p>${message}</p>
       `,
-    });
+    };
+
+    await transporter.sendMail(mailOptions);
 
     return NextResponse.json(
       { message: "Email sent successfully" },
       { status: 200 }
     );
   } catch (error) {
-    console.error("Resend error:", error);
+    console.error("Error sending email:", error);
     return NextResponse.json(
-      { message: "Error sending email", error },
+      {
+        message: "Failed to send email",
+        error: error?.message,
+      },
       { status: 500 }
     );
   }
