@@ -1,156 +1,195 @@
 'use client'
 
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { FaGraduationCap, FaBriefcase } from 'react-icons/fa'
 import { useThemeStore } from '../../store/themeStore'
 
-export default function FormationExperiences () {
+export default function FormationExperiences() {
   const { theme } = useThemeStore()
+  const [activeTab, setActiveTab] = useState("experience") // valeur par défaut
 
   const formations = [
     {
-      title: 'Developper Student Web et Mobile',
-      school: 'We.Code - Epitech',
-      year: 'in progress',
-      description: 'specialization in web and mobile development.'
+      title: "Web & Mobile Developer Student",
+      school: "We.Code - Epitech",
+      year: "In progress",
+      description: "Specialization in web and mobile development.",
+      icon: <FaGraduationCap size={20} />
     },
     {
-      title: 'Developper Student',
-      school: 'Virtual University in Ivory Coast',
-      year: 'in progress',
-      description: 'student in development applications and e-services (DAS).'
+      title: "Developer Student",
+      school: "Virtual University of Côte d'Ivoire",
+      year: "In progress",
+      description: "Studying Application Development and E-Services (DAS).",
+      icon: <FaGraduationCap size={20} />
     },
     {
-      title: 'Developper Student Web Junior',
-      school: 'Start Up Academy',
-      year: 'August - September 2022',
-      description:
-        'Formation in web development technologies: HTML, CSS, JavaScript.'
+      title: "Junior Web Developer Training",
+      school: "Start Up Academy",
+      year: "Aug – Sep 2022",
+      description: "Training in web technologies: HTML, CSS, and JavaScript.",
+      icon: <FaGraduationCap size={20} />
     },
     {
-      title: 'Baccalauréat',
-      school: 'Groupe Sainte Foi Abidjan (GSFA)',
-      year: '2021',
-      description: 'Série D'
+      title: "High School Diploma",
+      school: "Groupe Sainte Foi Abidjan (GSFA)",
+      year: "2021",
+      description: "Science track (Series D).",
+      icon: <FaGraduationCap size={20} />
     }
   ]
 
   const experiences = [
     {
-      title: 'Stagiaire Développeur Full Stack',
-      company: 'Worldev',
-      year: 'February - Mai 2025',
-      description: "Create application web with Laravel."
+      title: "Full-Stack Developer Intern",
+      company: "Worldev",
+      year: "Feb – May 2025",
+      description: "Developed web applications using Laravel.",
+      icon: <FaBriefcase size={20} />
     },
     {
-      title: 'Développeur Web Freelance',
-      company: 'Freelance',
-      year: 'June - August 2024',
-      description: "Help to create websites for church with wordpress."
+      title: "Freelance Web Developer",
+      company: "Freelance",
+      year: "Jun – Aug 2024",
+      description: "Created websites for churches using WordPress.",
+      icon: <FaBriefcase size={20} />
     },
     {
-      title: 'Stagiaire Développeur Frontend',
-      company: 'Start Up Academy',
-      year: 'September - January 2023',
-      description: "Create landing pages for small businesses."
-    },
+      title: "Frontend Developer Intern",
+      company: "Start Up Academy",
+      year: "Sep 2022 – Jan 2023",
+      description: "Built landing pages for small businesses.",
+      icon: <FaBriefcase size={20} />
+    }
   ]
 
   return (
     <main
-      className={`relative flex min-h-screen flex-col items-center justify-center px-6 py-12 transition-colors duration-700 ${
+      className={`min-h-screen px-6 py-16 transition-colors duration-700 ${
         theme === 'dark'
           ? 'bg-gradient-to-b from-gray-900 to-black text-white'
           : 'bg-gradient-to-b from-gray-100 to-white text-gray-900'
       }`}
     >
-      <section className='w-full max-w-5xl mt-16 space-y-16'>
-        <div className='text-center'>
-          <h1 className='text-4xl md:text-5xl font-extrabold mb-4'>
-            Training & Experiences
-          </h1>
-          <p
-            className={`text-lg ${
-              theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
-            }`}
-          >
-            Academic background and professional experience.
-          </p>
-        </div>
+      <div className="text-center mt-10 mb-10">
+        <h1 className="text-4xl md:text-5xl font-extrabold">
+          Training & Experience
+        </h1>
+        <p className={`mt-2 text-lg ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+          Academic background and professional experience.
+        </p>
+      </div>
 
-        {/* Expériences */}
-        <div className='space-y-8 mt-12'>
-          <h2
-            className={`text-2xl font-semibold mb-4 ${
-              theme === 'dark' ? 'text-green-400' : 'text-green-600'
+      {/* TABS */}
+      <div className="flex justify-center mb-10">
+        <div className="flex bg-gray-200 dark:bg-gray-800 p-2 rounded-full shadow-lg">
+          
+          {/* Experience Tab */}
+          <button
+            onClick={() => setActiveTab("experience")}
+            className={`px-6 py-2 rounded-full font-semibold transition-all ${
+              activeTab === "experience"
+                ? "bg-green-500 text-white shadow-md scale-105"
+                : "text-gray-700 dark:text-gray-300"
             }`}
           >
-            Expériences
-          </h2>
-          {experiences.map((exp, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.2, duration: 0.5 }}
-              className={`relative p-5 rounded-xl shadow-md cursor-pointer transform transition-all duration-300 hover:scale-105 ${
-                theme === 'dark' ? 'bg-gray-800' : 'bg-white'
-              }`}
-            >
-              <div className='absolute -top-4 left-4 w-10 h-10 flex items-center justify-center rounded-full bg-green-500 text-white shadow-lg'>
-                <FaBriefcase size={20} />
-              </div>
-              <h3 className='text-xl font-semibold ml-14'>{exp.title}</h3>
-              <span className='text-sm text-gray-400 ml-14'>
-                {exp.company} | {exp.year}
-              </span>
-              <p
-                className={`mt-2 ml-14 ${
-                  theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
-                }`}
-              >
-                {exp.description}
-              </p>
-            </motion.div>
-          ))}
-        </div>
+            Experience
+          </button>
 
-        {/* Formation */}
-        <div className='space-y-8'>
-          <h2
-            className={`text-2xl font-semibold mb-4 ${
-              theme === 'dark' ? 'text-indigo-400' : 'text-blue-600'
+          {/* Training Tab */}
+          <button
+            onClick={() => setActiveTab("training")}
+            className={`px-6 py-2 rounded-full font-semibold transition-all ${
+              activeTab === "training"
+                ? "bg-indigo-500 text-white shadow-md scale-105"
+                : "text-gray-700 dark:text-gray-300"
             }`}
           >
-            Formation
-          </h2>
-          {formations.map((f, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.2, duration: 0.5 }}
-              className={`relative p-5 rounded-xl shadow-md cursor-pointer transform transition-all duration-300 hover:scale-105 ${
-                theme === 'dark' ? 'bg-gray-800' : 'bg-white'
-              }`}
-            >
-              <div className='absolute -top-4 left-4 w-10 h-10 flex items-center justify-center rounded-full bg-indigo-500 text-white shadow-lg'>
-                <FaGraduationCap size={20} />
-              </div>
-              <h3 className='text-xl font-semibold ml-14'>{f.title}</h3>
-              <span className='text-sm text-gray-400 ml-14'>
-                {f.school} | {f.year}
-              </span>
-              <p
-                className={`mt-2 ml-14 ${
-                  theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
-                }`}
-              >
-                {f.description}
-              </p>
-            </motion.div>
-          ))}
+            Training
+          </button>
         </div>
+      </div>
+
+      {/* CONTENU DES TABS */}
+      <section className="max-w-4xl mx-auto">
+
+        {activeTab === "experience" && (
+          <motion.div
+            key="experience"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="space-y-10 relative border-l-4 border-green-500 ml-4"
+          >
+            {experiences.map((exp, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.15 }}
+                className="relative pl-10"
+              >
+                <div className="absolute -left-5 top-1 w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white shadow-lg">
+                  {exp.icon}
+                </div>
+
+                <div
+                  className={`p-5 rounded-xl shadow-md transition-all hover:scale-[1.02] ${
+                    theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+                  }`}
+                >
+                  <h3 className="text-xl font-semibold">{exp.title}</h3>
+                  <p className="text-sm text-gray-400">
+                    {exp.company} • {exp.year}
+                  </p>
+                  <p className={`mt-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
+                    {exp.description}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
+
+        {activeTab === "training" && (
+          <motion.div
+            key="training"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="space-y-10 relative border-l-4 border-indigo-500 ml-4"
+          >
+            {formations.map((f, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.15 }}
+                className="relative pl-10"
+              >
+                <div className="absolute -left-5 top-1 w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center text-white shadow-lg">
+                  {f.icon}
+                </div>
+
+                <div
+                  className={`p-5 rounded-xl shadow-md transition-all hover:scale-[1.02] ${
+                    theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+                  }`}
+                >
+                  <h3 className="text-xl font-semibold">{f.title}</h3>
+                  <p className="text-sm text-gray-400">
+                    {f.school} • {f.year}
+                  </p>
+                  <p className={`mt-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
+                    {f.description}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
+
       </section>
     </main>
   )

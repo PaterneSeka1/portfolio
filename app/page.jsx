@@ -22,7 +22,7 @@ export default function Home() {
 
   return (
     <main
-      className={`relative flex flex-col items-center justify-center min-h-screen overflow-hidden px-6 transition-colors duration-700 ${bgGradient}`}
+      className={`pt-18 relative flex flex-col items-center justify-center min-h-screen overflow-hidden px-6 transition-colors duration-700 ${bgGradient}`}
     >
       {/* Background */}
       <motion.div
