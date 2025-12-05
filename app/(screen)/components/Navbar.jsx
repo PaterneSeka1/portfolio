@@ -22,9 +22,9 @@ export default function Navbar() {
   const [activeLink, setActiveLink] = useState('home')
   const controls = useAnimation()
   const router = useRouter()
-  const pathname = usePathname()  // Pour détecter l'URL actuelle
+  const pathname = usePathname()
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
+  const toggleMenu = () => setIsMenuOpen(prev => !prev)
   const closeMenu = () => setIsMenuOpen(false)
 
   const sharePortfolio = async () => {
@@ -41,13 +41,13 @@ export default function Navbar() {
     }
   }
 
-  // Mettre à jour activeLink selon le pathname actuel
+  // Detect active link from route
   useEffect(() => {
     const link = links.find(l => l.href === pathname)
     if (link) setActiveLink(link.name)
   }, [pathname])
 
-  // Pulse continu sur le logo
+  // Logo pulse
   useEffect(() => {
     controls.start({
       scale: [1, 1.05, 1],
@@ -55,7 +55,7 @@ export default function Navbar() {
     })
   }, [controls])
 
-  const baseClass = 'relative hover:text-red-500 transition-all duration-300 drop-shadow-md'
+  const baseClass = 'relative hover:text-red-500 transition-all duration-300 select-none'
   const activeClass = 'text-red-500 font-semibold'
 
   return (
@@ -70,12 +70,12 @@ export default function Navbar() {
           router.push('/')
           closeMenu()
         }}
-        className='flex items-center gap-3 text-2xl font-bold group cursor-pointer'
+        className="flex items-center gap-3 text-2xl font-bold cursor-pointer"
       >
         <motion.div
           animate={controls}
           whileHover={{
-            rotate: 5,
+            rotate: 4,
             boxShadow:
               theme === 'dark'
                 ? '0 0 25px rgba(34,197,94,0.8)'
@@ -83,14 +83,12 @@ export default function Navbar() {
           }}
           transition={{ type: 'spring', stiffness: 300 }}
           className={`relative w-10 h-10 rounded-full overflow-hidden border-2 py-1 px-1
-            ${theme === 'dark' ? 'border-green-400' : 'border-green-600'} 
-            bg-gradient-to-r from-blue-400 via-green-400 to-green-600 flex items-center justify-center`}
+          ${theme === 'dark' ? 'border-green-400' : 'border-green-600'} 
+          bg-gradient-to-r from-blue-400 via-green-400 to-green-600 flex items-center justify-center`}
         >
           <motion.span
-            className='text-white font-bold text-lg select-none bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 text-transparent'
-            whileHover={{
-              backgroundPosition: ['0%','100%','0%'],
-            }}
+            className="text-white font-bold text-lg select-none bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 text-transparent"
+            whileHover={{ backgroundPosition: ['0%','100%','0%'] }}
             style={{ backgroundSize: '200% auto' }}
           >
             PS
@@ -98,8 +96,8 @@ export default function Navbar() {
         </motion.div>
       </div>
 
-      {/* Desktop Menu */}
-      <div className='hidden md:flex items-center gap-6 relative'>
+      {/* Desktop */}
+      <div className="hidden md:flex items-center gap-6 relative">
         {links.map(link => (
           <Link
             key={link.name}
@@ -109,11 +107,10 @@ export default function Navbar() {
           >
             {link.name.charAt(0).toUpperCase() + link.name.slice(1)}
 
-            {/* Soulignement animé */}
             {activeLink === link.name && (
               <motion.div
                 layoutId="underline"
-                className={`absolute -bottom-1 left-0 w-full h-[2px] rounded-full bg-red-500`}
+                className="absolute -bottom-1 left-0 w-full h-[2px] rounded-full bg-red-500"
               />
             )}
           </Link>
@@ -121,47 +118,51 @@ export default function Navbar() {
       </div>
 
       {/* Buttons */}
-      <div className='flex gap-4 text-2xl'>
+      <div className="flex gap-4 text-2xl">
         <motion.button
-          whileHover={{ scale: 1.1, boxShadow: theme === 'dark' ? '0 0 15px rgba(255,255,255,0.4)' : '0 0 15px rgba(0,0,0,0.2)' }}
+          whileHover={{ scale: 1.1 }}
           transition={{ duration: 0.3 }}
           onClick={toggleTheme}
-          className='p-3 rounded-full shadow-md bg-gray-200 dark:bg-gray-800 dark:text-white text-gray-900'
-          title='Toggle theme'
+          className="p-3 rounded-full shadow-md bg-gray-200 dark:bg-gray-800 dark:text-white text-gray-900"
+          title="Toggle theme"
         >
           {theme === 'dark' ? <FiSun size={20} /> : <FiMoon size={20} />}
         </motion.button>
 
         <motion.button
-          whileHover={{ scale: 1.1, boxShadow: theme === 'dark' ? '0 0 15px rgba(255,255,255,0.4)' : '0 0 15px rgba(0,0,0,0.2)' }}
+          whileHover={{ scale: 1.1 }}
           transition={{ duration: 0.3 }}
           onClick={sharePortfolio}
-          className='p-3 rounded-full shadow-md bg-gray-200 dark:bg-gray-800 dark:text-white text-gray-900'
-          title='Share portfolio'
+          className="p-3 rounded-full shadow-md bg-gray-200 dark:bg-gray-800 dark:text-white text-gray-900"
+          title="Share portfolio"
         >
           <FiShare2 size={20} />
         </motion.button>
       </div>
 
-      {/* Mobile Menu Toggle */}
-      <div className='flex md:hidden items-center gap-2'>
+      {/* Mobile menu toggle */}
+      <div className="flex md:hidden items-center">
         <button
           onClick={toggleMenu}
-          className='p-3 rounded-full shadow-md hover:scale-105 transition-transform focus:outline-none focus:ring-2 focus:ring-red-500'
-          aria-label='Open menu'
+          className="p-3 rounded-full shadow-md hover:scale-105 transition-transform"
         >
           {isMenuOpen ? <FiX size={20} /> : <FiMenu size={20} />}
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile menu */}
       <motion.div
-        initial={{ y: -50, opacity: 0 }}
-        animate={{ y: isMenuOpen ? 0 : -50, opacity: isMenuOpen ? 1 : 0 }}
-        transition={{ duration: 0.3 }}
-        className={`md:hidden absolute top-full left-0 w-full bg-white/95 dark:bg-gray-900/95 text-gray-900 dark:text-white shadow-lg overflow-hidden`}
+        initial={{ opacity: 0, y: -40 }}
+        animate={{ opacity: isMenuOpen ? 1 : 0, y: isMenuOpen ? 0 : -40 }}
+        transition={{ duration: 0.25 }}
+        className={`
+          md:hidden absolute top-full left-0 w-full 
+          bg-white/95 dark:bg-gray-900/95 text-gray-900 dark:text-white 
+          shadow-lg overflow-hidden
+          ${isMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'}
+        `}
       >
-        <div className='flex flex-col p-6 space-y-4'>
+        <div className="flex flex-col p-6 space-y-4">
           {links.map(link => (
             <Link
               key={link.name}
@@ -177,7 +178,7 @@ export default function Navbar() {
               {activeLink === link.name && (
                 <motion.div
                   layoutId="underline"
-                  className={`absolute -bottom-1 left-0 w-full h-[2px] rounded-full bg-red-500`}
+                  className="absolute -bottom-1 left-0 w-full h-[2px] rounded-full bg-red-500"
                 />
               )}
             </Link>
