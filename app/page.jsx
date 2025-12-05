@@ -65,7 +65,7 @@ export default function Home() {
                 className={
                   letter === ' ' 
                     ? 'inline-block w-4' 
-                    : 'text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-teal-400 to-green-500 inline-block'
+                    : 'text-transparent bg-clip-text bg-linear-to-r from-blue-400 via-teal-400 to-green-500 '
                 }
               >
                 {letter}
