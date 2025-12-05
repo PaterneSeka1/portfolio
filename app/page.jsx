@@ -16,15 +16,15 @@ export default function Home() {
       ? "bg-gradient-to-r from-blue-600 to-green-600 hover:from-green-600 hover:to-blue-600 text-white"
       : "bg-gradient-to-r from-blue-600 to-green-500 hover:from-green-500 hover:to-blue-600 text-white"
 
-  // Animated letters for name with extra space between Paterne and SEKA
-  const name = "Paterne  SEKA" // double space added
+  const name = "Paterne  SEKA"
   const letters = name.split("")
 
   return (
     <main
       className={`pt-18 relative flex flex-col items-center justify-center min-h-screen overflow-hidden px-6 transition-colors duration-700 ${bgGradient}`}
     >
-      {/* Background */}
+
+      {/* Background Colors */}
       <motion.div
         className="absolute inset-0 -z-10"
         initial={{ opacity: 0 }}
@@ -63,8 +63,8 @@ export default function Home() {
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: index * 0.05, type: "spring", stiffness: 120 }}
                 className={
-                  letter === ' ' 
-                    ? 'inline-block w-4' 
+                  letter === ''
+                    ? 'inline-block w-4'
                     : 'text-transparent bg-clip-text bg-linear-to-r from-blue-400 via-teal-400 to-green-500 '
                 }
               >

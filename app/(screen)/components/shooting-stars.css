@@ -1,0 +1,31 @@
+.shooting-stars-container {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.star {
+  position: absolute;
+  width: 2px;
+  height: 80px;
+  background: var(--color, white);
+  opacity: 0.7;
+  filter: drop-shadow(0 0 6px var(--color, white));
+  top: -120px;
+  left: calc(100% * var(--x));
+  transform: rotate(45deg);
+  animation: shooting var(--duration) linear infinite;
+}
+
+@keyframes shooting {
+  0% {
+    transform: translateY(0) translateX(0) rotate(45deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(900px) translateX(-900px) rotate(45deg);
+    opacity: 0;
+  }
+}

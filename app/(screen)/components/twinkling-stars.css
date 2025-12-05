@@ -1,0 +1,26 @@
+.twinkling-stars {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.twinkle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: var(--color, white);
+  border-radius: 50%;
+  opacity: var(--opacity, 0.5);
+  top: calc(100% * var(--y));
+  left: calc(100% * var(--x));
+  box-shadow: 0 0 6px var(--color, white);
+  animation: twinkle var(--duration) infinite ease-in-out;
+  animation-delay: var(--delay);
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.8); }
+}

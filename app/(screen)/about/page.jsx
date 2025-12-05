@@ -43,7 +43,7 @@ export default function About() {
           animate={{ scale: 1, opacity: 1 }}
           whileHover={{ scale: 1.05, rotate: 2 }}
           transition={{ duration: 0.8 }}
-          className="flex-shrink-0 rounded-full overflow-hidden border-4 border-blue-500 shadow-lg w-52 h-52 md:w-64 md:h-64 bg-gray-200 dark:bg-gray-700"
+          className="flex-shrink-0 rounded-full overflow-hidden border-4 border-blue-500 shadow-lg w-52 h-52 md:w-64 md:h-64 bg-gray-200 dark:bg-gray-700 z-40"
         >
           <img
             src="/me.png"

@@ -2,6 +2,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import ClientLayout from "./ClientLayout";
+import ShootingStars from "./(screen)/components/ShootingStars";
+import TwinklingStars from "./(screen)/components/TwinklingStars";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,6 +25,8 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
+        <ShootingStars />
+        <TwinklingStars />
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
