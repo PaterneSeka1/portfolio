@@ -17,21 +17,19 @@ export default function Contact() {
   const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
-  // Handle input change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle form submission
   const handleSubmit = async () => {
     if (!formData.name || !formData.email || !formData.message) {
-      toast.error("Please fill out all fields.");
+      toast.error("Veuillez remplir tous les champs.");
       return;
     }
 
     setLoading(true);
-    toast.loading("Sending message...");
+    toast.loading("Envoi du message...");
 
     try {
       const res = await fetch("/api/contact", {
@@ -43,15 +41,15 @@ export default function Contact() {
       if (res.ok) {
         toast.dismiss();
         setFormData({ name: "", email: "", message: "" });
-        toast.success("Thank you for your message! I will reply soon.");
+        toast.success("Merci pour votre message ! Je vous répondrai rapidement.");
         setModalOpen(false);
       } else {
         toast.dismiss();
-        toast.error("Error sending message.");
+        toast.error("Erreur lors de l'envoi du message.");
       }
     } catch (err) {
       toast.dismiss();
-      toast.error("Error sending message. Please try again later.");
+      toast.error("Erreur lors de l'envoi du message. Veuillez réessayer plus tard.");
       console.error(err);
     }
 
@@ -60,13 +58,12 @@ export default function Contact() {
 
   return (
     <main
-      className={`relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 transition-colors duration-700
+      className={`relative overflow-hidden transition-colors duration-700
         ${theme === "dark"
           ? "bg-gradient-to-b from-gray-900 to-black text-white"
-          : "bg-gradient-to-b from-gray-100 to-white text-gray-900"
+          : "bg-gradient-to-b from-slate-200 via-slate-100 to-slate-200 text-slate-900"
         }`}
     >
-      {/* Animated background effect */}
       <motion.div
         className="absolute inset-0 -z-10"
         initial={{ opacity: 0 }}
@@ -75,43 +72,30 @@ export default function Contact() {
       >
         <div
           className={`absolute top-1/2 left-1/2 w-[1200px] h-[1200px] rounded-full blur-[180px] opacity-25 animate-pulse -translate-x-1/2 -translate-y-1/2
-          ${theme === "dark" ? "bg-indigo-600" : "bg-blue-300"}`}
+          ${theme === "dark" ? "bg-sky-600" : "bg-sky-300"}`}
         />
       </motion.div>
-
-      <motion.h1
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        className="text-4xl md:text-6xl font-extrabold mb-4 text-center"
-      >
-        Contact
-      </motion.h1>
-
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3, duration: 1 }}
-        className={`text-lg md:text-xl mb-8 text-center max-w-2xl ${
-          theme === "dark" ? "text-gray-300" : "text-gray-700"
-        }`}
-      >
-        Do you have a project or a question? Send me a message and I will get back to you as soon as possible.
-      </motion.p>
 
       <motion.form
         onSubmit={(e) => e.preventDefault()}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5, duration: 1 }}
-        className={`w-full max-w-xl flex flex-col gap-4 p-6 rounded-lg shadow-md ${
-          theme === "dark" ? "bg-gray-800" : "bg-white"
+        className={`section-wrap soft-card mt-2 flex w-full max-w-3xl flex-col gap-4 rounded-3xl p-6 md:p-8 ${
+          theme === "dark" ? "bg-gray-800/70" : "bg-white/90"
         }`}
       >
+        <h1 className="soft-title text-center">Contact</h1>
+        <p className={`mb-2 text-center text-base md:text-lg ${
+          theme === "dark" ? "text-slate-300" : "text-slate-600"
+        }`}>
+          Vous avez un projet ou une question ? Envoyez-moi un message et je vous répondrai dès que possible.
+        </p>
+
         <input
           type="text"
           name="name"
-          placeholder="Your Name"
+          placeholder="Votre nom"
           value={formData.name}
           onChange={handleChange}
           className={`w-full p-3 border rounded-md ${
@@ -124,7 +108,7 @@ export default function Contact() {
         <input
           type="email"
           name="email"
-          placeholder="Your Email"
+          placeholder="Votre email"
           value={formData.email}
           onChange={handleChange}
           className={`w-full p-3 border rounded-md ${
@@ -136,7 +120,7 @@ export default function Contact() {
         />
         <textarea
           name="message"
-          placeholder="Your Message"
+          placeholder="Votre message"
           value={formData.message}
           onChange={handleChange}
           className={`w-full p-3 border rounded-md ${
@@ -151,13 +135,12 @@ export default function Contact() {
           type="button"
           disabled={loading}
           onClick={() => setModalOpen(true)}
-          className="self-end bg-blue-500 hover:bg-green-600 text-white px-4 py-2 rounded-md font-medium transition-colors disabled:opacity-50"
+          className="self-end bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-md font-medium transition-colors disabled:opacity-50"
         >
-          {loading ? "Sending..." : "Send Message"}
+          {loading ? "Envoi..." : "Envoyer le message"}
         </button>
       </motion.form>
 
-      {/* Confirmation Modal */}
       <Modal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}

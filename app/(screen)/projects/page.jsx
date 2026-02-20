@@ -10,9 +10,9 @@ export default function Projects() {
 
   const projects = [
     {
-      title: "Paterne SEKA Portfolio",
+      title: "Portfolio Paterne SEKA",
       description:
-        "My personal portfolio developed with Next.js, TailwindCSS, and Framer Motion.",
+        "Mon portfolio personnel développé avec Next.js, TailwindCSS et Framer Motion.",
       tech: ["Next.js", "TailwindCSS", "Framer Motion"],
       image: "/projects/portfolio.png",
       live: "https://paternefolio.vercel.app/",
@@ -21,15 +21,15 @@ export default function Projects() {
     {
       title: "PostIt Board",
       description:
-        "A collaborative board application to share ideas and notes in real-time.",
+        "Une application de tableau collaboratif pour partager des idées et des notes en temps réel.",
       tech: ["Vue Js", "TailwindCSS"],
       image: "/projects/postIT.jpg",
       live: "https://resilient-crisp-06b2d0.netlify.app/",
       github: "",
     },
     {
-      title: "Dashboard",
-      description: "Create a widget and display",
+      title: "Tableau de bord",
+      description: "Créer et afficher des widgets",
       tech: ["Next.js", "Prisma", "TailwindCSS"],
       image: "/projects/ecommerce.png",
       live: "",
@@ -38,7 +38,7 @@ export default function Projects() {
     {
       title: "Showtime",
       description:
-        "Using Rotten Tomatoes API to display movies and series ratings.",
+        "Utilisation de l&apos;API Rotten Tomatoes pour afficher les notes de films et séries.",
       tech: ["NestJS", "Prisma"],
       image: "/projects/chat_app.png",
       live: "",
@@ -50,23 +50,23 @@ export default function Projects() {
 
   return (
     <main
-      className={`relative flex min-h-screen flex-col items-center justify-center px-6 py-12 transition-colors duration-700
+      className={`relative transition-colors duration-700
         ${theme === "dark"
           ? "bg-gradient-to-b from-gray-900 to-black text-white"
-          : "bg-gradient-to-b from-gray-100 to-white text-gray-900"
+          : "bg-gradient-to-b from-slate-200 via-slate-100 to-slate-200 text-slate-900"
         }`}
     >
-      <section className="w-full max-w-6xl mt-16 space-y-10">
-        <div className="text-center">
+      <section className="section-wrap mt-2 space-y-10">
+        <div className="soft-card rounded-3xl px-6 py-8 text-center md:px-10">
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
-            My Projects
+            Mes projets
           </h1>
           <p
             className={`text-lg ${
-              theme === "dark" ? "text-gray-300" : "text-gray-700"
+              theme === "dark" ? "text-slate-300" : "text-slate-600"
             }`}
           >
-            Here is a selection of projects I have worked on recently.
+            Voici une sélection de projets sur lesquels j&apos;ai travaillé récemment.
           </p>
         </div>
 
@@ -94,8 +94,8 @@ export default function Projects() {
                       ? "0 8px 25px rgba(0,0,0,0.5)"
                       : "0 8px 25px rgba(0,0,0,0.1)",
                 }}
-                className={`rounded-xl overflow-hidden shadow-lg transition-all duration-300 
-                    ${theme === "dark" ? "bg-gray-800" : "bg-white"}`}
+                className={`soft-card rounded-xl overflow-hidden transition-all duration-300
+                    ${theme === "dark" ? "bg-gray-800/70" : "bg-white/90"}`}
               >
                 <img
                   src={hasImage ? project.image : placeholder}
@@ -107,7 +107,7 @@ export default function Projects() {
                   <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
                   <p
                     className={`text-sm mb-4 ${
-                      theme === "dark" ? "text-gray-300" : "text-gray-700"
+                      theme === "dark" ? "text-slate-300" : "text-slate-600"
                     }`}
                   >
                     {project.description}
@@ -119,8 +119,8 @@ export default function Projects() {
                         key={i}
                         className={`px-3 py-1 text-xs rounded-full ${
                           theme === "dark"
-                            ? "bg-indigo-500/20 text-indigo-300"
-                            : "bg-blue-100 text-blue-600"
+                            ? "bg-sky-500/20 text-sky-300"
+                            : "bg-sky-100 text-sky-700"
                         }`}
                       >
                         {tech}
@@ -129,7 +129,6 @@ export default function Projects() {
                   </div>
 
                   <div className="flex justify-between items-center">
-                    {/* Live Demo Button */}
                     <a
                       href={hasLive ? project.live : undefined}
                       target="_blank"
@@ -137,20 +136,19 @@ export default function Projects() {
                       className={`px-4 py-2 rounded-md font-semibold text-white transition-colors
                         ${
                           hasLive
-                            ? "bg-green-600 hover:bg-green-700"
+                            ? "bg-sky-600 hover:bg-sky-700"
                             : "bg-gray-300 cursor-not-allowed dark:bg-gray-700 dark:text-gray-400"
                         }`}
                     >
-                      Live Demo
+                      Démo en ligne
                     </a>
 
-                    {/* GitHub */}
                     {hasGithub ? (
                       <a
                         href={project.github}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-gray-800 dark:text-white hover:text-blue-400"
+                        className="text-gray-800 dark:text-white hover:text-sky-400"
                       >
                         <FaGithub size={32} />
                       </a>

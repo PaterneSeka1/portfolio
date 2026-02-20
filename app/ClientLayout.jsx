@@ -10,7 +10,7 @@ export default function ClientLayout({ children }) {
   return (
     <>
       <Navbar theme={theme} toggleTheme={toggleTheme} />
-      <main className="min-h-screen transition-colors duration-700">
+      <main className="page-shell transition-colors duration-500">
         {children}
       </main>
       <Footer theme={theme} />

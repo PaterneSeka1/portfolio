@@ -7,7 +7,7 @@ export async function POST(req) {
 
     if (!name || !email || !message) {
       return NextResponse.json(
-        { message: "All fields are required" },
+        { message: "Tous les champs sont obligatoires" },
         { status: 400 }
       );
     }
@@ -15,8 +15,8 @@ export async function POST(req) {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.EMAIL_USER, // ton email
-        pass: process.env.EMAIL_PASS, // ton mot de passe d'application
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
@@ -36,14 +36,14 @@ export async function POST(req) {
     await transporter.sendMail(mailOptions);
 
     return NextResponse.json(
-      { message: "Email sent successfully" },
+      { message: "Email envoyé avec succès" },
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error sending email:", error);
+    console.error("Erreur lors de l'envoi de l'email :", error);
     return NextResponse.json(
       {
-        message: "Failed to send email",
+        message: "Échec de l'envoi de l'email",
         error: error?.message,
       },
       { status: 500 }

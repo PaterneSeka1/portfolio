@@ -18,16 +18,16 @@ export default function Modal({ isOpen, onClose, onConfirm, theme }) {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className={`p-6 rounded-lg shadow-xl w-80 text-center relative ${
+            className={`w-80 rounded-2xl border p-6 text-center relative ${
               theme === "dark"
-                ? "bg-gray-800 text-white"
-                : "bg-white text-gray-900"
+                ? "bg-gray-800 text-white border-gray-600"
+                : "bg-white/95 text-gray-900 border-gray-200"
             }`}
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 className="text-lg font-bold mb-3">Confirm Sending</h2>
+            <h2 className="text-lg font-bold mb-3">Confirmer l&apos;envoi</h2>
             <p className="mb-6 text-sm">
-              Are you sure you want to send this message?
+              Voulez-vous vraiment envoyer ce message ?
             </p>
 
             <div className="flex justify-between">
@@ -39,16 +39,16 @@ export default function Modal({ isOpen, onClose, onConfirm, theme }) {
                     : "bg-gray-200 hover:bg-gray-300"
                 }`}
               >
-                Cancel
+                Annuler
               </button>
               <button
                 onClick={() => {
                   onConfirm();
                   onClose();
                 }}
-                className="px-4 py-2 bg-blue-600 hover:bg-green-600 text-white rounded-md font-medium"
+                className="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-md font-medium"
               >
-                Confirm
+                Confirmer
               </button>
             </div>
           </motion.div>
