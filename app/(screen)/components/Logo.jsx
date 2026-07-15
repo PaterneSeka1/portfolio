@@ -10,7 +10,7 @@ function Mark({ variant = "icon", className = "", logoUrl }) {
   if (logoUrl) {
     return (
       <span className={`relative inline-block ${className}`}>
-        <Image src={logoUrl} alt="Paterne SEKA" fill className="object-contain" />
+        <Image src={logoUrl} alt="Paterne SEKA" fill sizes="48px" className="object-contain" />
       </span>
     )
   }

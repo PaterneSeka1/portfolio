@@ -8,6 +8,7 @@ export const dynamic = "force-dynamic"
 export const metadata = {
   title: "Contact — Paterne SEKA",
   description: "Construisons une solution utile et performante.",
+  alternates: { canonical: "/contact" },
 }
 
 export default async function Contact({ searchParams }) {

@@ -50,7 +50,7 @@ export default function Footer({ profile, logoUrl }) {
       </div>
 
       <div className="border-t border-white/10">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-2 text-xs text-white/50">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-2 text-xs text-white/70">
           <p>© {year} {profile.name}. Tous droits réservés.</p>
           <Link href="/admin" className="hover:text-white/70 transition-colors">
             Admin

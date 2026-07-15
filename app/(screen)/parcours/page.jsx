@@ -6,6 +6,7 @@ export const dynamic = "force-dynamic"
 export const metadata = {
   title: "Parcours — Paterne SEKA",
   description: "Parcours professionnel de Paterne SEKA.",
+  alternates: { canonical: "/parcours" },
 }
 
 export default async function Parcours() {
@@ -24,7 +25,7 @@ export default async function Parcours() {
             <div className="space-y-1.5">
               <h2 className="font-heading font-semibold text-lg text-navy">{exp.company}</h2>
               <p className="text-accent text-sm font-medium">{exp.role}</p>
-              {exp.period && <p className="text-xs text-navy/50">{exp.period}</p>}
+              {exp.period && <p className="text-xs text-navy/70">{exp.period}</p>}
               <ul className="list-disc list-inside text-navy/70 text-sm space-y-1 pt-1">
                 {exp.missions.map((mission) => (
                   <li key={mission}>{mission}</li>

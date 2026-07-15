@@ -17,7 +17,7 @@ async function seedBrandSettings() {
   await prisma.brandSettings.upsert({
     where: { id: "brand" },
     update: {},
-    create: { id: "brand" },
+    create: { id: "brand", logoUrl: "/logo-ps.png" },
   });
 }
 

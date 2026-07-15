@@ -6,6 +6,7 @@ export const dynamic = "force-dynamic"
 export const metadata = {
   title: "À propos — Paterne SEKA",
   description: "Développeur full-stack orienté produit, du besoin métier au déploiement.",
+  alternates: { canonical: "/about" },
 }
 
 const method = [
@@ -29,6 +30,7 @@ export default async function About() {
             src={profile.heroPhoto}
             alt={profile.name}
             fill
+            sizes="224px"
             className="object-cover"
           />
         </div>

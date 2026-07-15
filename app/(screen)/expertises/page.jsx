@@ -16,6 +16,7 @@ export const dynamic = "force-dynamic"
 export const metadata = {
   title: "Expertises — Paterne SEKA",
   description: "Frontend, backend, bases de données, architecture, DevOps et accompagnement.",
+  alternates: { canonical: "/expertises" },
 }
 
 const icons = {

@@ -4,6 +4,7 @@ export const dynamic = "force-dynamic"
 
 export const metadata = {
   title: "Mentions légales — Paterne SEKA",
+  alternates: { canonical: "/mentions-legales" },
 }
 
 export default async function MentionsLegales() {

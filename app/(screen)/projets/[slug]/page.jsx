@@ -13,6 +13,7 @@ export async function generateMetadata({ params }) {
   return {
     title: `${project.title} — Paterne SEKA`,
     description: project.summary,
+    alternates: { canonical: `/projets/${project.slug}` },
   }
 }
 
@@ -55,9 +56,25 @@ export default async function ProjectCaseStudy({ params }) {
 
   const { caseStudy } = project
   const isExternalCta = project.cta.href.startsWith("http")
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: project.title,
+    description: project.summary,
+    url: `${siteUrl}/projets/${project.slug}`,
+    author: { "@type": "Person", name: "Paterne SEKA" },
+    keywords: project.technologies.join(", "),
+    ...(project.publicUrl ? { sameAs: project.publicUrl } : {}),
+  }
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-20">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Link href="/projets" className="inline-flex items-center gap-2 text-sm text-navy/60 hover:text-accent transition-colors mb-8">
         <ArrowLeft size={16} />
         Retour aux réalisations
@@ -105,7 +122,13 @@ export default async function ProjectCaseStudy({ params }) {
             <div className="grid sm:grid-cols-2 gap-4">
               {project.images.map((image) => (
                 <div key={image.id} className="relative h-48 rounded-xl overflow-hidden">
-                  <Image src={image.url} alt={image.alt || project.title} fill className="object-cover" />
+                  <Image
+                    src={image.url}
+                    alt={image.alt || project.title}
+                    fill
+                    sizes="(max-width: 640px) 100vw, 50vw"
+                    className="object-cover"
+                  />
                 </div>
               ))}
             </div>

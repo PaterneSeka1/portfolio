@@ -19,8 +19,9 @@ export default function AdminLoginPage() {
 
         <form action={formAction} className="space-y-4 bg-white rounded-2xl p-6">
           <div>
-            <label className="block text-sm font-medium text-navy mb-1.5">Email</label>
+            <label htmlFor="email" className="block text-sm font-medium text-navy mb-1.5">Email</label>
             <input
+              id="email"
               type="email"
               name="email"
               required
@@ -29,8 +30,9 @@ export default function AdminLoginPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-navy mb-1.5">Mot de passe</label>
+            <label htmlFor="password" className="block text-sm font-medium text-navy mb-1.5">Mot de passe</label>
             <input
+              id="password"
               type="password"
               name="password"
               required

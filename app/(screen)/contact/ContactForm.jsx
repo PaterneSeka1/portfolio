@@ -7,6 +7,7 @@ import { contactSchema, projectTypes, timelines } from "../../../lib/validation/
 
 const inputClass =
   "w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-navy placeholder:text-navy/40 focus:outline-none focus:ring-2 focus:ring-accent"
+const labelClass = "block text-sm font-medium text-navy mb-1.5"
 
 function FieldError({ message }) {
   if (!message) return null
@@ -65,32 +66,32 @@ export default function ContactForm({ referencedProject }) {
 
       <div className="grid sm:grid-cols-2 gap-5">
         <div>
-          <label className="block text-sm font-medium text-navy mb-1.5">Nom *</label>
-          <input className={inputClass} {...register("name")} />
+          <label htmlFor="name" className={labelClass}>Nom *</label>
+          <input id="name" className={inputClass} {...register("name")} />
           <FieldError message={errors.name?.message} />
         </div>
         <div>
-          <label className="block text-sm font-medium text-navy mb-1.5">Email *</label>
-          <input type="email" className={inputClass} {...register("email")} />
+          <label htmlFor="email" className={labelClass}>Email *</label>
+          <input id="email" type="email" className={inputClass} {...register("email")} />
           <FieldError message={errors.email?.message} />
         </div>
       </div>
 
       <div className="grid sm:grid-cols-2 gap-5">
         <div>
-          <label className="block text-sm font-medium text-navy mb-1.5">Entreprise</label>
-          <input className={inputClass} {...register("company")} />
+          <label htmlFor="company" className={labelClass}>Entreprise</label>
+          <input id="company" className={inputClass} {...register("company")} />
         </div>
         <div>
-          <label className="block text-sm font-medium text-navy mb-1.5">Téléphone</label>
-          <input className={inputClass} {...register("phone")} />
+          <label htmlFor="phone" className={labelClass}>Téléphone</label>
+          <input id="phone" className={inputClass} {...register("phone")} />
         </div>
       </div>
 
       <div className="grid sm:grid-cols-2 gap-5">
         <div>
-          <label className="block text-sm font-medium text-navy mb-1.5">Type de projet *</label>
-          <select className={inputClass} {...register("projectType")} defaultValue="">
+          <label htmlFor="projectType" className={labelClass}>Type de projet *</label>
+          <select id="projectType" className={inputClass} {...register("projectType")} defaultValue="">
             <option value="" disabled>Sélectionnez un type</option>
             {projectTypes.map((type) => (
               <option key={type} value={type}>{type}</option>
@@ -99,8 +100,8 @@ export default function ContactForm({ referencedProject }) {
           <FieldError message={errors.projectType?.message} />
         </div>
         <div>
-          <label className="block text-sm font-medium text-navy mb-1.5">Délai *</label>
-          <select className={inputClass} {...register("timeline")} defaultValue="">
+          <label htmlFor="timeline" className={labelClass}>Délai *</label>
+          <select id="timeline" className={inputClass} {...register("timeline")} defaultValue="">
             <option value="" disabled>Sélectionnez un délai</option>
             {timelines.map((t) => (
               <option key={t} value={t}>{t}</option>
@@ -111,13 +112,13 @@ export default function ContactForm({ referencedProject }) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-navy mb-1.5">Budget (facultatif)</label>
-        <input className={inputClass} placeholder="Ex. : à définir ensemble" {...register("budget")} />
+        <label htmlFor="budget" className={labelClass}>Budget (facultatif)</label>
+        <input id="budget" className={inputClass} placeholder="Ex. : à définir ensemble" {...register("budget")} />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-navy mb-1.5">Message *</label>
-        <textarea rows={6} className={inputClass} {...register("message")} />
+        <label htmlFor="message" className={labelClass}>Message *</label>
+        <textarea id="message" rows={6} className={inputClass} {...register("message")} />
         <FieldError message={errors.message?.message} />
       </div>
 

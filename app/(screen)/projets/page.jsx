@@ -6,6 +6,7 @@ export const dynamic = "force-dynamic"
 export const metadata = {
   title: "Réalisations — Paterne SEKA",
   description: "Applications métier, produits SaaS et sites web conçus et développés par Paterne SEKA.",
+  alternates: { canonical: "/projets" },
 }
 
 export default async function Projets() {
