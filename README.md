@@ -54,11 +54,34 @@ npm run typecheck
 npm run build
 ```
 
-## Déploiement
+## Déploiement (Vercel)
 
-1. Provisionner une base PostgreSQL et définir `DATABASE_URL` en production.
-2. Définir les variables d'environnement (`SESSION_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `EMAIL_USER`/`EMAIL_PASS` si SMTP, `NEXT_PUBLIC_SITE_URL`).
-3. `npm install` (regénère automatiquement le client Prisma via `postinstall`), puis `npm run db:migrate` et `npm run db:seed` (une seule fois, à l'initialisation).
-4. `npm run build` puis `npm run start` (ou déploiement sur une plateforme compatible Next.js).
+Le système de fichiers de Vercel est en lecture seule à l'exécution : `public/uploads` ne
+fonctionne qu'en développement local. En production, les uploads (photo de profil, CV, logo,
+médias, galeries projets) passent par un petit service de stockage séparé — voir
+[`storage-server/`](./storage-server) — à déployer sur un VPS.
 
-Les fichiers uploadés depuis l'administration (photo de profil, CV, logo, médias, galeries projets) sont stockés localement dans `public/uploads`. En production, prévoir un montage persistant ou une bascule vers un stockage objet (Cloudinary ou équivalent).
+1. **Base de données** : provisionner un PostgreSQL accessible depuis Vercel (idéalement avec
+   pooling de connexions, ex. Neon/Supabase) et définir `DATABASE_URL`.
+2. **Stockage fichiers** : déployer `storage-server/` sur le VPS (voir son README), puis définir
+   côté Vercel `STORAGE_API_URL` et `STORAGE_API_TOKEN` (même valeur que `STORAGE_TOKEN` sur le
+   VPS). Sans ces deux variables, l'admin plantera dès qu'on tente un upload.
+3. Définir les autres variables d'environnement sur Vercel : `SESSION_SECRET`, `ADMIN_EMAIL`,
+   `ADMIN_PASSWORD`, `EMAIL_USER`/`EMAIL_PASS` si SMTP, `NEXT_PUBLIC_SITE_URL` (domaine réel du
+   site, pas `localhost`).
+4. Appliquer les migrations et le seed **contre la base de production**, depuis votre machine :
+   ```bash
+   DATABASE_URL="<url de prod>" npx prisma migrate deploy
+   DATABASE_URL="<url de prod>" ADMIN_EMAIL=... ADMIN_PASSWORD=... npm run db:seed
+   ```
+   (`npm install` régénère automatiquement le client Prisma via le script `postinstall`, y compris
+   pendant le build Vercel.)
+5. Déployer sur Vercel (build command par défaut : `next build`).
+
+### Checklist rapide avant de considérer le déploiement fonctionnel
+
+- [ ] `DATABASE_URL` de prod configuré sur Vercel, migrations appliquées, seed exécuté
+- [ ] `storage-server` déployé et joignable en HTTPS (`curl https://.../health`)
+- [ ] `STORAGE_API_URL` / `STORAGE_API_TOKEN` définis sur Vercel
+- [ ] `SESSION_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `NEXT_PUBLIC_SITE_URL` définis sur Vercel
+- [ ] Test d'upload réel depuis `/admin` une fois déployé

@@ -1,0 +1,15 @@
+services:
+  storage:
+    build: .
+    container_name: portfolio_storage
+    restart: unless-stopped
+    ports:
+      - "8787:8787"
+    environment:
+      STORAGE_TOKEN: ${STORAGE_TOKEN}
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL}
+    volumes:
+      - storage_uploads:/app/uploads
+
+volumes:
+  storage_uploads:

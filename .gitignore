@@ -46,3 +46,7 @@ next-env.d.ts
 # local media uploads (dev storage)
 /public/uploads/*
 !/public/uploads/.gitkeep
+
+# storage-server (deployed separately on the VPS)
+/storage-server/node_modules
+/storage-server/uploads
