@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: paterne_portfolio_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: portfolio
+      POSTGRES_PASSWORD: portfolio
+      POSTGRES_DB: portfolio
+    ports:
+      - "5436:5432"
+    volumes:
+      - paterne_portfolio_db_data:/var/lib/postgresql/data
+
+volumes:
+  paterne_portfolio_db_data:

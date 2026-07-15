@@ -1,19 +1,12 @@
-'use client'
-
-import { useThemeStore } from "./store/themeStore";
 import Navbar from "./(screen)/components/Navbar";
 import Footer from "./(screen)/components/Footer";
 
-export default function ClientLayout({ children }) {
-  const { theme, toggleTheme } = useThemeStore();
-
+export default function ClientLayout({ children, profile, logoUrl }) {
   return (
     <>
-      <Navbar theme={theme} toggleTheme={toggleTheme} />
-      <main className="min-h-screen transition-colors duration-700">
-        {children}
-      </main>
-      <Footer theme={theme} />
+      <Navbar profile={profile} logoUrl={logoUrl} />
+      <main className="min-h-screen pt-16">{children}</main>
+      <Footer profile={profile} logoUrl={logoUrl} />
     </>
   );
 }

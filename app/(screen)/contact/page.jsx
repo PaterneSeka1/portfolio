@@ -1,169 +1,57 @@
-'use client';
+import ContactForm from "./ContactForm"
+import { getProfile } from "../../../lib/db/profile"
+import { getProjectBySlug } from "../../../lib/db/projects"
+import { Mail, Phone, MapPin } from "lucide-react"
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import toast from "react-hot-toast";
-import { useThemeStore } from "../../store/themeStore";
-import Modal from "../components/ModalContact";
+export const dynamic = "force-dynamic"
 
-export default function Contact() {
-  const { theme } = useThemeStore();
+export const metadata = {
+  title: "Contact — Paterne SEKA",
+  description: "Construisons une solution utile et performante.",
+}
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
-  const [loading, setLoading] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
-
-  // Handle input change
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  // Handle form submission
-  const handleSubmit = async () => {
-    if (!formData.name || !formData.email || !formData.message) {
-      toast.error("Please fill out all fields.");
-      return;
-    }
-
-    setLoading(true);
-    toast.loading("Sending message...");
-
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      if (res.ok) {
-        toast.dismiss();
-        setFormData({ name: "", email: "", message: "" });
-        toast.success("Thank you for your message! I will reply soon.");
-        setModalOpen(false);
-      } else {
-        toast.dismiss();
-        toast.error("Error sending message.");
-      }
-    } catch (err) {
-      toast.dismiss();
-      toast.error("Error sending message. Please try again later.");
-      console.error(err);
-    }
-
-    setLoading(false);
-  };
+export default async function Contact({ searchParams }) {
+  const { projet } = await searchParams
+  const [profile, referencedProject] = await Promise.all([
+    getProfile(),
+    projet ? getProjectBySlug(projet) : Promise.resolve(null),
+  ])
 
   return (
-    <main
-      className={`relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 transition-colors duration-700
-        ${theme === "dark"
-          ? "bg-gradient-to-b from-gray-900 to-black text-white"
-          : "bg-gradient-to-b from-gray-100 to-white text-gray-900"
-        }`}
-    >
-      {/* Animated background effect */}
-      <motion.div
-        className="absolute inset-0 -z-10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 2 }}
-      >
-        <div
-          className={`absolute top-1/2 left-1/2 w-[1200px] h-[1200px] rounded-full blur-[180px] opacity-25 animate-pulse -translate-x-1/2 -translate-y-1/2
-          ${theme === "dark" ? "bg-indigo-600" : "bg-blue-300"}`}
-        />
-      </motion.div>
+    <div className="max-w-5xl mx-auto px-6 py-20 grid md:grid-cols-3 gap-12">
+      <div className="md:col-span-2">
+        <h1 className="font-heading text-3xl md:text-4xl font-bold text-navy">
+          Construisons une solution utile et performante
+        </h1>
+        <p className="mt-3 text-navy/70 text-lg max-w-xl">
+          Parlez-moi de votre projet, je vous répondrai rapidement.
+        </p>
 
-      <motion.h1
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        className="text-4xl md:text-6xl font-extrabold mb-4 text-center"
-      >
-        Contact
-      </motion.h1>
+        <div className="mt-10">
+          <ContactForm referencedProject={referencedProject} />
+        </div>
+      </div>
 
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3, duration: 1 }}
-        className={`text-lg md:text-xl mb-8 text-center max-w-2xl ${
-          theme === "dark" ? "text-gray-300" : "text-gray-700"
-        }`}
-      >
-        Do you have a project or a question? Send me a message and I will get back to you as soon as possible.
-      </motion.p>
-
-      <motion.form
-        onSubmit={(e) => e.preventDefault()}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5, duration: 1 }}
-        className={`w-full max-w-xl flex flex-col gap-4 p-6 rounded-lg shadow-md ${
-          theme === "dark" ? "bg-gray-800" : "bg-white"
-        }`}
-      >
-        <input
-          type="text"
-          name="name"
-          placeholder="Your Name"
-          value={formData.name}
-          onChange={handleChange}
-          className={`w-full p-3 border rounded-md ${
-            theme === "dark"
-              ? "bg-gray-700 text-gray-100 border-gray-600"
-              : "bg-gray-100 text-gray-900 border-gray-300"
-          }`}
-          required
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Your Email"
-          value={formData.email}
-          onChange={handleChange}
-          className={`w-full p-3 border rounded-md ${
-            theme === "dark"
-              ? "bg-gray-700 text-gray-100 border-gray-600"
-              : "bg-gray-100 text-gray-900 border-gray-300"
-          }`}
-          required
-        />
-        <textarea
-          name="message"
-          placeholder="Your Message"
-          value={formData.message}
-          onChange={handleChange}
-          className={`w-full p-3 border rounded-md ${
-            theme === "dark"
-              ? "bg-gray-700 text-gray-100 border-gray-600"
-              : "bg-gray-100 text-gray-900 border-gray-300"
-          }`}
-          rows="6"
-          required
-        />
-        <button
-          type="button"
-          disabled={loading}
-          onClick={() => setModalOpen(true)}
-          className="self-end bg-blue-500 hover:bg-green-600 text-white px-4 py-2 rounded-md font-medium transition-colors disabled:opacity-50"
-        >
-          {loading ? "Sending..." : "Send Message"}
-        </button>
-      </motion.form>
-
-      {/* Confirmation Modal */}
-      <Modal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onConfirm={handleSubmit}
-        theme={theme}
-      />
-    </main>
-  );
+      <aside className="space-y-4 h-fit rounded-2xl border border-gray-100 p-6">
+        <div className="flex items-start gap-3">
+          <Mail size={18} className="text-institutional mt-0.5" />
+          <a href={`mailto:${profile.email}`} className="text-navy/80 hover:text-accent break-all">
+            {profile.email}
+          </a>
+        </div>
+        {profile.phone && (
+          <div className="flex items-start gap-3">
+            <Phone size={18} className="text-institutional mt-0.5" />
+            <a href={`tel:${profile.phone.replace(/\s/g, "")}`} className="text-navy/80 hover:text-accent">
+              {profile.phone}
+            </a>
+          </div>
+        )}
+        <div className="flex items-start gap-3">
+          <MapPin size={18} className="text-institutional mt-0.5" />
+          <span className="text-navy/80">{profile.location}</span>
+        </div>
+      </aside>
+    </div>
+  )
 }

@@ -1,82 +1,61 @@
-'use client'
-
 import Link from 'next/link'
-import { useThemeStore } from '../../store/themeStore'
 import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa'
+import Logo from './Logo'
 
-export default function Footer() {
-  const { theme } = useThemeStore()
+const navLinks = [
+  { name: 'Accueil', href: '/' },
+  { name: 'À propos', href: '/about' },
+  { name: 'Expertises', href: '/expertises' },
+  { name: 'Réalisations', href: '/projets' },
+  { name: 'Parcours', href: '/parcours' },
+  { name: 'Contact', href: '/contact' },
+]
+
+export default function Footer({ profile, logoUrl }) {
+  const year = new Date().getFullYear()
 
   return (
-    <footer
-      className={`w-full py-6 px-6 flex flex-col md:flex-row justify-between items-center border-t transition-colors duration-500
-        ${theme === 'dark'
-          ? 'bottom-0 left-0 bg-gray-900 text-white border-gray-700'
-          : 'bottom-0 left-0 bg-white text-gray-900 border-gray-200'
-        }`}
-      style={{ zIndex: 50 }}
-    >
-      {/* Branding */}
-      <div className="mb-4 md:mb-0 text-center md:text-left">
-        <h2 className="text-lg font-bold">Paterne SEKA</h2>
-        <p
-          className={`text-sm hidden md:flex ${
-            theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-          }`}
-        >
-          © 2025 Tous droits réservés.
-        </p>
+    <footer className="w-full bg-navy text-white/90">
+      <div className="max-w-6xl mx-auto px-6 py-12 grid gap-10 md:grid-cols-3">
+        <div className="space-y-3">
+          <Logo variant="white" withWordmark className="h-10 w-10" logoUrl={logoUrl} />
+          <p className="text-sm text-white/70 max-w-xs">{profile.promise}</p>
+        </div>
+
+        <nav className="flex flex-col gap-2 text-sm">
+          {navLinks.map(link => (
+            <Link key={link.name} href={link.href} className="text-white/70 hover:text-white transition-colors">
+              {link.name}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="space-y-4">
+          <div className="flex gap-4 text-xl">
+            <a href={profile.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="text-white/70 hover:text-white transition-colors">
+              <FaGithub />
+            </a>
+            <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="text-white/70 hover:text-white transition-colors">
+              <FaLinkedin />
+            </a>
+            <a href={`mailto:${profile.email}`} aria-label="Email" className="text-white/70 hover:text-white transition-colors">
+              <FaEnvelope />
+            </a>
+          </div>
+          <div className="flex flex-col gap-2 text-sm text-white/60">
+            <Link href="/mentions-legales" className="hover:text-white transition-colors">Mentions légales</Link>
+            <Link href="/confidentialite" className="hover:text-white transition-colors">Confidentialité</Link>
+          </div>
+        </div>
       </div>
 
-      {/* Navigation Links */}
-      <nav className="md:flex flex-col md:flex-row gap-4 text-center md:text-left mb-4 md:mb-0 hidden">
-        <Link href="/projects" className="hover:text-red-500 transition-colors">
-          Projects
-        </Link>
-        <Link href="/expertises" className="hover:text-red-500 transition-colors">
-          Expertises
-        </Link>
-        <Link href="/skills" className="hover:text-red-500 transition-colors">
-          Skills
-        </Link>
-        <Link href="/contact" className="hover:text-red-500 transition-colors">
-          Contact
-        </Link>
-        <Link href="/about" className="hover:text-red-500 transition-colors">
-          About
-        </Link>
-      </nav>
-
-      {/* Social Links with Icons */}
-      <div className="flex gap-4 text-2xl">
-        <a
-          href="https://github.com/PaterneSeka1"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`hover:text-blue-500 transition-colors ${
-            theme === 'dark' ? 'text-white' : 'text-gray-800'
-          }`}
-        >
-          <FaGithub />
-        </a>
-        <a
-          href="https://www.linkedin.com/in/paterne-seka-522574210/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`hover:text-blue-500 transition-colors ${
-            theme === 'dark' ? 'text-white' : 'text-gray-800'
-          }`}
-        >
-          <FaLinkedin />
-        </a>
-        <a
-          href="mailto:paterne.seka@epitech.eu"
-          className={`hover:text-green-500 transition-colors ${
-            theme === 'dark' ? 'text-white' : 'text-gray-800'
-          }`}
-        >
-          <FaEnvelope />
-        </a>
+      <div className="border-t border-white/10">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-2 text-xs text-white/50">
+          <p>© {year} {profile.name}. Tous droits réservés.</p>
+          <Link href="/admin" className="hover:text-white/70 transition-colors">
+            Admin
+          </Link>
+        </div>
       </div>
     </footer>
   )

@@ -1,190 +1,94 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
-import { useRouter, usePathname } from 'next/navigation'
-import { motion, useAnimation } from 'framer-motion'
-import { useThemeStore } from '../../store/themeStore'
-import { FiSun, FiMoon, FiShare2, FiMenu, FiX } from 'react-icons/fi'
+import { useState } from 'react'
+import { usePathname } from 'next/navigation'
+import { FiMenu, FiX } from 'react-icons/fi'
+import { Download } from 'lucide-react'
+import Logo from './Logo'
 
 const links = [
-  { name: 'home', href: '/' },
-  { name: 'projects', href: '/projects' },
-  { name: 'expertises', href: '/expertises' },
-  { name: 'skills', href: '/skills' },
-  { name: 'contact', href: '/contact' },
-  { name: 'about', href: '/about' }
+  { name: 'Accueil', href: '/' },
+  { name: 'À propos', href: '/about' },
+  { name: 'Expertises', href: '/expertises' },
+  { name: 'Réalisations', href: '/projets' },
+  { name: 'Parcours', href: '/parcours' },
+  { name: 'Contact', href: '/contact' },
 ]
 
-export default function Navbar() {
+export default function Navbar({ profile, logoUrl }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const { theme, toggleTheme } = useThemeStore()
-  const [activeLink, setActiveLink] = useState('home')
-  const controls = useAnimation()
-  const router = useRouter()
   const pathname = usePathname()
+  const activeLink = links.find(l => l.href === pathname)?.name
 
-  const toggleMenu = () => setIsMenuOpen(prev => !prev)
   const closeMenu = () => setIsMenuOpen(false)
 
-  const sharePortfolio = async () => {
-    const shareData = { title: 'Paterne SEKA', url: window.location.origin }
-    try {
-      if (navigator.share) {
-        await navigator.share(shareData)
-      } else {
-        await navigator.clipboard.writeText(shareData.url)
-        alert('Link copied to clipboard!')
-      }
-    } catch (err) {
-      console.error('Error sharing:', err)
-    }
-  }
-
-  // Detect active link from route
-  useEffect(() => {
-    const link = links.find(l => l.href === pathname)
-    if (link) setActiveLink(link.name)
-  }, [pathname])
-
-  // Logo pulse
-  useEffect(() => {
-    controls.start({
-      scale: [1, 1.05, 1],
-      transition: { duration: 2, repeat: Infinity, ease: 'easeInOut' }
-    })
-  }, [controls])
-
-  const baseClass = 'relative hover:text-red-500 transition-all duration-300 select-none'
-  const activeClass = 'text-red-500 font-semibold'
+  const linkClass = (name) =>
+    `relative text-sm font-medium transition-colors duration-200 ${
+      activeLink === name ? 'text-accent' : 'text-navy/80 hover:text-accent'
+    }`
 
   return (
-    <nav
-      className={`w-full flex justify-between items-center py-4 px-6 fixed top-0 left-0 z-50 backdrop-blur-md transition-colors duration-500
-        ${theme === 'dark' ? 'bg-gray-900/70 text-white' : 'bg-white/70 text-gray-900'}`}
-    >
-      {/* Logo */}
-      <div
-        onClick={() => {
-          setActiveLink('home')
-          router.push('/')
-          closeMenu()
-        }}
-        className="flex items-center gap-3 text-2xl font-bold cursor-pointer"
-      >
-        <motion.div
-          animate={controls}
-          whileHover={{
-            rotate: 4,
-            boxShadow:
-              theme === 'dark'
-                ? '0 0 25px rgba(34,197,94,0.8)'
-                : '0 0 25px rgba(34,197,94,0.6)'
-          }}
-          transition={{ type: 'spring', stiffness: 300 }}
-          className={`relative w-10 h-10 rounded-full overflow-hidden border-2 py-1 px-1
-          ${theme === 'dark' ? 'border-green-400' : 'border-green-600'} 
-          bg-gradient-to-r from-blue-400 via-green-400 to-green-600 flex items-center justify-center`}
-        >
-          <motion.span
-            className="text-white font-bold text-lg select-none bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 text-transparent"
-            whileHover={{ backgroundPosition: ['0%','100%','0%'] }}
-            style={{ backgroundSize: '200% auto' }}
-          >
-            PS
-          </motion.span>
-        </motion.div>
-      </div>
+    <nav className="w-full flex justify-between items-center py-3 px-6 fixed top-0 left-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
+      <Link href="/" className="flex items-center gap-3" onClick={closeMenu}>
+        <Logo variant="icon" className="h-10 w-10" logoUrl={logoUrl} />
+        <span className="font-heading font-bold text-navy hidden sm:inline">
+          Paterne SEKA
+        </span>
+      </Link>
 
-      {/* Desktop */}
-      <div className="hidden md:flex items-center gap-6 relative">
+      <div className="hidden md:flex items-center gap-8">
         {links.map(link => (
-          <Link
-            key={link.name}
-            href={link.href}
-            className={`${baseClass} ${activeLink === link.name ? activeClass : ''}`}
-            onClick={() => setActiveLink(link.name)}
-          >
-            {link.name.charAt(0).toUpperCase() + link.name.slice(1)}
-
-            {activeLink === link.name && (
-              <motion.div
-                layoutId="underline"
-                className="absolute -bottom-1 left-0 w-full h-[2px] rounded-full bg-red-500"
-              />
-            )}
+          <Link key={link.name} href={link.href} className={linkClass(link.name)}>
+            {link.name}
           </Link>
         ))}
       </div>
 
-      {/* Buttons */}
-      <div className="flex gap-4 text-2xl">
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          transition={{ duration: 0.3 }}
-          onClick={toggleTheme}
-          className="p-3 rounded-full shadow-md bg-gray-200 dark:bg-gray-800 dark:text-white text-gray-900"
-          title="Toggle theme"
+      <div className="hidden md:flex items-center gap-4">
+        <a
+          href={profile.cvUrl}
+          download
+          className="inline-flex items-center gap-2 rounded-lg bg-institutional px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-navy"
         >
-          {theme === 'dark' ? <FiSun size={20} /> : <FiMoon size={20} />}
-        </motion.button>
-
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          transition={{ duration: 0.3 }}
-          onClick={sharePortfolio}
-          className="p-3 rounded-full shadow-md bg-gray-200 dark:bg-gray-800 dark:text-white text-gray-900"
-          title="Share portfolio"
-        >
-          <FiShare2 size={20} />
-        </motion.button>
+          <Download size={16} />
+          Mon CV
+        </a>
       </div>
 
-      {/* Mobile menu toggle */}
-      <div className="flex md:hidden items-center">
-        <button
-          onClick={toggleMenu}
-          className="p-3 rounded-full shadow-md hover:scale-105 transition-transform"
-        >
-          {isMenuOpen ? <FiX size={20} /> : <FiMenu size={20} />}
-        </button>
-      </div>
-
-      {/* Mobile menu */}
-      <motion.div
-        initial={{ opacity: 0, y: -40 }}
-        animate={{ opacity: isMenuOpen ? 1 : 0, y: isMenuOpen ? 0 : -40 }}
-        transition={{ duration: 0.25 }}
-        className={`
-          md:hidden absolute top-full left-0 w-full 
-          bg-white/95 dark:bg-gray-900/95 text-gray-900 dark:text-white 
-          shadow-lg overflow-hidden
-          ${isMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'}
-        `}
+      <button
+        onClick={() => setIsMenuOpen(prev => !prev)}
+        className="md:hidden p-2 rounded-lg text-navy"
+        aria-label="Ouvrir le menu"
       >
-        <div className="flex flex-col p-6 space-y-4">
-          {links.map(link => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className={`${baseClass} ${activeLink === link.name ? activeClass : ''}`}
-              onClick={() => {
-                setActiveLink(link.name)
-                closeMenu()
-              }}
-            >
-              {link.name.charAt(0).toUpperCase() + link.name.slice(1)}
+        {isMenuOpen ? <FiX size={22} /> : <FiMenu size={22} />}
+      </button>
 
-              {activeLink === link.name && (
-                <motion.div
-                  layoutId="underline"
-                  className="absolute -bottom-1 left-0 w-full h-[2px] rounded-full bg-red-500"
-                />
-              )}
-            </Link>
-          ))}
+      {isMenuOpen && (
+        <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-lg border-t border-gray-100">
+          <div className="flex flex-col p-6 gap-4">
+            {links.map(link => (
+              <Link
+                key={link.name}
+                href={link.href}
+                className={linkClass(link.name)}
+                onClick={closeMenu}
+              >
+                {link.name}
+              </Link>
+            ))}
+            <a
+              href={profile.cvUrl}
+              download
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-institutional px-4 py-2 text-sm font-semibold text-white"
+              onClick={closeMenu}
+            >
+              <Download size={16} />
+              Mon CV
+            </a>
+          </div>
         </div>
-      </motion.div>
+      )}
     </nav>
   )
 }

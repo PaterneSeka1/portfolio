@@ -1,51 +1,63 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+import { contactSchema } from "../../../lib/validation/contact";
+import { createContactMessage } from "../../../lib/db/contact";
 
 export async function POST(req) {
   try {
-    const { name, email, message } = await req.json();
+    const body = await req.json();
+    const parsed = contactSchema.safeParse(body);
 
-    if (!name || !email || !message) {
+    if (!parsed.success) {
       return NextResponse.json(
-        { message: "All fields are required" },
+        { message: "Données invalides", errors: parsed.error.flatten().fieldErrors },
         { status: 400 }
       );
     }
 
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL_USER, // ton email
-        pass: process.env.EMAIL_PASS, // ton mot de passe d'application
-      },
-    });
+    // Honeypot: a filled hidden field means the submission came from a bot.
+    if (parsed.data.website) {
+      return NextResponse.json({ message: "Message envoyé" }, { status: 200 });
+    }
 
-    const mailOptions = {
-      from: `${name} <${email}>`,
-      to: process.env.EMAIL_USER,
-      subject: `Nouveau message de ${name}`,
-      html: `
-        <h2>Nouveau message reçu</h2>
-        <p><strong>Nom :</strong> ${name}</p>
-        <p><strong>Email :</strong> ${email}</p>
-        <p><strong>Message :</strong></p>
-        <p>${message}</p>
-      `,
-    };
+    const { name, email, company, phone, projectType, budget, timeline, message } = parsed.data;
 
-    await transporter.sendMail(mailOptions);
+    await createContactMessage(parsed.data);
 
-    return NextResponse.json(
-      { message: "Email sent successfully" },
-      { status: 200 }
-    );
+    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
+      });
+
+      await transporter.sendMail({
+        from: `${name} <${process.env.EMAIL_USER}>`,
+        replyTo: email,
+        to: process.env.EMAIL_USER,
+        subject: `Nouvelle demande de contact — ${name}`,
+        html: `
+          <h2>Nouvelle demande de contact</h2>
+          <p><strong>Nom :</strong> ${name}</p>
+          <p><strong>Email :</strong> ${email}</p>
+          <p><strong>Entreprise :</strong> ${company || "—"}</p>
+          <p><strong>Téléphone :</strong> ${phone || "—"}</p>
+          <p><strong>Type de projet :</strong> ${projectType}</p>
+          <p><strong>Budget :</strong> ${budget || "—"}</p>
+          <p><strong>Délai :</strong> ${timeline}</p>
+          <p><strong>Message :</strong></p>
+          <p>${message}</p>
+        `,
+      });
+    }
+
+    return NextResponse.json({ message: "Message envoyé" }, { status: 200 });
   } catch (error) {
-    console.error("Error sending email:", error);
+    console.error("Error sending contact message:", error);
     return NextResponse.json(
-      {
-        message: "Failed to send email",
-        error: error?.message,
-      },
+      { message: "Échec de l'envoi du message", error: error?.message },
       { status: 500 }
     );
   }

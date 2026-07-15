@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
+  <rect width="40" height="40" rx="10" fill="#0D1B2A" />
+  <polygon points="0,40 14,40 0,26" fill="#133A7C" opacity="0.5" />
+  <text x="20" y="27" text-anchor="middle" font-family="Arial, sans-serif" font-weight="800" font-size="17" letter-spacing="-0.5" fill="#2563EB">PS</text>
+</svg>
