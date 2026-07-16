@@ -1,6 +1,7 @@
 "use client"
 
-import { useActionState } from "react"
+import { useActionState, useEffect } from "react"
+import toast from "react-hot-toast"
 import { updateBrandAction } from "../../../../lib/actions/brand"
 
 const inputClass =
@@ -11,6 +12,11 @@ const initialState = { error: null, success: false }
 
 export default function BrandForm({ brand }) {
   const [state, formAction, isPending] = useActionState(updateBrandAction, initialState)
+
+  useEffect(() => {
+    if (state?.success) toast.success("Identité mise à jour.")
+    else if (state?.error) toast.error(state.error)
+  }, [state])
 
   return (
     <form action={formAction} className="space-y-6 max-w-2xl">
@@ -70,7 +76,6 @@ export default function BrandForm({ brand }) {
       </p>
 
       {state?.error && <p className="text-sm text-red-600">{state.error}</p>}
-      {state?.success && <p className="text-sm text-green-600">Identité mise à jour.</p>}
 
       <button
         type="submit"

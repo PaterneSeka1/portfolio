@@ -1,6 +1,7 @@
 "use client"
 
-import { useActionState } from "react"
+import { useActionState, useEffect } from "react"
+import toast from "react-hot-toast"
 import { Upload } from "lucide-react"
 import { importDataAction } from "../../../../lib/actions/settings"
 
@@ -8,6 +9,11 @@ const initialState = { error: null }
 
 export default function ImportForm() {
   const [state, formAction, isPending] = useActionState(importDataAction, initialState)
+
+  useEffect(() => {
+    if (state?.success) toast.success("Import réussi.")
+    else if (state?.error) toast.error(state.error)
+  }, [state])
 
   return (
     <form action={formAction} className="flex flex-wrap items-center gap-3">
@@ -21,7 +27,6 @@ export default function ImportForm() {
         {isPending ? "Import en cours..." : "Importer"}
       </button>
       {state?.error && <p className="text-sm text-red-600 w-full">{state.error}</p>}
-      {state?.success && <p className="text-sm text-green-600 w-full">Import réussi.</p>}
     </form>
   )
 }

@@ -1,6 +1,7 @@
 "use client"
 
-import { useActionState } from "react"
+import { useActionState, useEffect } from "react"
+import toast from "react-hot-toast"
 import { updateSettingsAction } from "../../../../lib/actions/settings"
 
 const inputClass =
@@ -11,6 +12,11 @@ const initialState = { error: null }
 
 export default function SettingsForm({ settings }) {
   const [state, formAction, isPending] = useActionState(updateSettingsAction, initialState)
+
+  useEffect(() => {
+    if (state?.success) toast.success("Paramètres mis à jour.")
+    else if (state?.error) toast.error(state.error)
+  }, [state])
 
   return (
     <form action={formAction} className="space-y-6 max-w-2xl">
@@ -80,7 +86,6 @@ export default function SettingsForm({ settings }) {
       </section>
 
       {state?.error && <p className="text-sm text-red-600">{state.error}</p>}
-      {state?.success && <p className="text-sm text-green-600">Paramètres mis à jour.</p>}
 
       <button
         type="submit"

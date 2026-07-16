@@ -37,7 +37,7 @@ export default async function AdminDashboard() {
           <ul className="space-y-3">
             {recentProjects.map((p) => (
               <li key={p.id} className="flex items-center justify-between text-sm">
-                <Link href={`/admin/projets/${p.id}`} className="text-navy hover:text-accent">
+                <Link href={`/admin/projets?edit=${p.id}`} className="text-navy hover:text-accent">
                   {p.title}
                 </Link>
                 <span className="text-navy/50">
@@ -55,7 +55,7 @@ export default async function AdminDashboard() {
           <h2 className="font-heading font-semibold text-navy mb-4">Actions rapides</h2>
           <div className="flex flex-col gap-3">
             <Link
-              href="/admin/projets/nouveau"
+              href="/admin/projets?new=1"
               className="inline-flex items-center gap-2 rounded-lg bg-navy text-white px-4 py-2.5 text-sm font-semibold hover:bg-institutional transition-colors"
             >
               <Plus size={16} />

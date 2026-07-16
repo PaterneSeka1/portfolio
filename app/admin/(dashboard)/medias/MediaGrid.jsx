@@ -1,12 +1,18 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import Image from "next/image"
+import toast from "react-hot-toast"
 import { Trash2, Copy } from "lucide-react"
 import { deleteMediaAction } from "../../../../lib/actions/media"
+import ActionButton from "../_components/ActionButton"
 
 export default function MediaGrid({ items }) {
+  const router = useRouter()
+
   const copyUrl = (url) => {
     navigator.clipboard?.writeText(url)
+    toast.success("URL copiée.")
   }
 
   return (
@@ -31,11 +37,15 @@ export default function MediaGrid({ items }) {
               >
                 <Copy size={14} />
               </button>
-              <form action={deleteMediaAction.bind(null, item.id)}>
-                <button type="submit" className="p-1.5 rounded-lg text-red-600 hover:bg-red-50" title="Supprimer">
-                  <Trash2 size={14} />
-                </button>
-              </form>
+              <ActionButton
+                action={() => deleteMediaAction(item.id)}
+                icon={Trash2}
+                label="Supprimer"
+                className="p-1.5 rounded-lg text-red-600 hover:bg-red-50"
+                confirm="Supprimer définitivement ce média ?"
+                successMessage="Média supprimé."
+                onSuccess={() => router.refresh()}
+              />
             </div>
           </div>
         </div>

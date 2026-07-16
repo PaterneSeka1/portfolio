@@ -1,6 +1,7 @@
 "use client"
 
-import { useActionState } from "react"
+import { useActionState, useEffect } from "react"
+import toast from "react-hot-toast"
 
 const inputClass =
   "w-full rounded-lg border border-gray-200 px-4 py-2.5 text-navy focus:outline-none focus:ring-2 focus:ring-accent"
@@ -8,8 +9,18 @@ const labelClass = "block text-sm font-medium text-navy mb-1.5"
 
 const initialState = { error: null }
 
-export default function ExperienceForm({ action, experience }) {
+export default function ExperienceForm({ action, experience, onSuccess }) {
   const [state, formAction, isPending] = useActionState(action, initialState)
+
+  useEffect(() => {
+    if (state?.success) {
+      toast.success(experience ? "Expérience mise à jour." : "Expérience créée.")
+      onSuccess?.(state)
+    } else if (state?.error) {
+      toast.error(state.error)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state])
 
   return (
     <form action={formAction} className="space-y-5 max-w-2xl">

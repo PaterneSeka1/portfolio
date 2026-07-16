@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation"
 import Link from "next/link"
-import { ArrowLeft, Mail, Archive, Trash2 } from "lucide-react"
+import { ArrowLeft, Mail } from "lucide-react"
 import { getMessageById, markMessageRead } from "../../../../../lib/db/messages"
-import { setMessageStatusAction, deleteMessageAction } from "../../../../../lib/actions/messages"
+import MessageActions from "./MessageActions"
 
 export const dynamic = "force-dynamic"
 
@@ -68,19 +68,7 @@ export default async function MessageDetailPage({ params }) {
             Répondre par email
           </a>
 
-          <form action={setMessageStatusAction.bind(null, id, message.status === "archived" ? "read" : "archived")}>
-            <button type="submit" className="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-4 py-2.5 text-sm font-semibold text-navy hover:border-accent transition-colors">
-              <Archive size={16} />
-              {message.status === "archived" ? "Désarchiver" : "Archiver"}
-            </button>
-          </form>
-
-          <form action={deleteMessageAction.bind(null, id)}>
-            <button type="submit" className="inline-flex items-center gap-2 rounded-lg border border-red-200 px-4 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50 transition-colors">
-              <Trash2 size={16} />
-              Supprimer
-            </button>
-          </form>
+          <MessageActions id={id} status={message.status} />
         </div>
       </div>
     </div>

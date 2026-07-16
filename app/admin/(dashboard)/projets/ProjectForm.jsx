@@ -1,6 +1,7 @@
 "use client"
 
-import { useActionState } from "react"
+import { useActionState, useEffect } from "react"
+import toast from "react-hot-toast"
 
 const inputClass =
   "w-full rounded-lg border border-gray-200 px-4 py-2.5 text-navy focus:outline-none focus:ring-2 focus:ring-accent"
@@ -12,9 +13,19 @@ function arr(value) {
   return Array.isArray(value) ? value.join("\n") : "";
 }
 
-export default function ProjectForm({ action, project }) {
+export default function ProjectForm({ action, project, onSuccess }) {
   const [state, formAction, isPending] = useActionState(action, initialState)
   const cs = project?.caseStudy ?? {}
+
+  useEffect(() => {
+    if (state?.success) {
+      toast.success(project ? "Projet mis à jour." : "Projet créé.")
+      onSuccess?.(state)
+    } else if (state?.error) {
+      toast.error(state.error)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state])
 
   return (
     <form action={formAction} className="space-y-8 max-w-3xl">
@@ -156,7 +167,6 @@ export default function ProjectForm({ action, project }) {
       </section>
 
       {state?.error && <p className="text-sm text-red-600">{state.error}</p>}
-      {state?.success && <p className="text-sm text-green-600">Projet enregistré.</p>}
 
       <button
         type="submit"

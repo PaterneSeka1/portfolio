@@ -1,6 +1,7 @@
 "use client"
 
 import { useActionState, useEffect } from "react"
+import toast from "react-hot-toast"
 import { Download } from "lucide-react"
 import { exportDataAction } from "../../../../lib/actions/settings"
 
@@ -20,6 +21,7 @@ export default function ExportButton() {
     a.download = `portfolio-export-${state.exportedAt.slice(0, 10)}.json`
     a.click()
     URL.revokeObjectURL(url)
+    toast.success("Export téléchargé.")
   }, [state])
 
   return (

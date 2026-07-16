@@ -1,6 +1,7 @@
 "use client"
 
-import { useActionState } from "react"
+import { useActionState, useEffect } from "react"
+import toast from "react-hot-toast"
 import { ICONS } from "../../../../lib/validation/expertise"
 
 const inputClass =
@@ -9,8 +10,18 @@ const labelClass = "block text-sm font-medium text-navy mb-1.5"
 
 const initialState = { error: null }
 
-export default function ExpertiseForm({ action, expertise }) {
+export default function ExpertiseForm({ action, expertise, onSuccess }) {
   const [state, formAction, isPending] = useActionState(action, initialState)
+
+  useEffect(() => {
+    if (state?.success) {
+      toast.success(expertise ? "Expertise mise à jour." : "Expertise créée.")
+      onSuccess?.(state)
+    } else if (state?.error) {
+      toast.error(state.error)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state])
 
   return (
     <form action={formAction} className="space-y-5 max-w-2xl">

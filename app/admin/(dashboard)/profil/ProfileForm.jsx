@@ -1,6 +1,7 @@
 "use client"
 
-import { useActionState } from "react"
+import { useActionState, useEffect } from "react"
+import toast from "react-hot-toast"
 import { updateProfileAction } from "../../../../lib/actions/profile"
 
 const inputClass =
@@ -11,6 +12,11 @@ const initialState = { error: null, success: false }
 
 export default function ProfileForm({ profile }) {
   const [state, formAction, isPending] = useActionState(updateProfileAction, initialState)
+
+  useEffect(() => {
+    if (state?.success) toast.success("Profil mis à jour.")
+    else if (state?.error) toast.error(state.error)
+  }, [state])
 
   return (
     <form action={formAction} className="space-y-6 max-w-3xl">
@@ -87,7 +93,6 @@ export default function ProfileForm({ profile }) {
       </div>
 
       {state?.error && <p className="text-sm text-red-600">{state.error}</p>}
-      {state?.success && <p className="text-sm text-green-600">Profil mis à jour.</p>}
 
       <button
         type="submit"
