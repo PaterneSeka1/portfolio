@@ -74,7 +74,7 @@ export default async function Expertises() {
       {skillGroups.length > 0 && (
         <div className="mt-16">
           <h2 className="font-heading text-2xl font-bold text-navy mb-8">Toutes mes compétences</h2>
-          <div className="space-y-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6">
             {skillGroups.map((group) => (
               <div key={group.category}>
                 <h3 className="text-sm font-semibold text-institutional uppercase tracking-wide mb-3">

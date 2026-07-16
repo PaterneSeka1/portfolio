@@ -106,7 +106,7 @@ export default async function ProjectCaseStudy({ params }) {
       <a
         href={project.cta.href}
         {...(isExternalCta ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-        className="inline-block mt-8 rounded-lg bg-navy text-white px-6 py-3 font-semibold hover:bg-institutional transition-colors"
+        className="inline-block mt-8 rounded-lg bg-accent text-white px-6 py-3 font-semibold hover:bg-accent/90 transition-colors"
       >
         {project.cta.label}
       </a>
@@ -139,7 +139,7 @@ export default async function ProjectCaseStudy({ params }) {
       <a
         href={project.cta.href}
         {...(isExternalCta ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-        className="inline-block mt-4 rounded-lg bg-navy text-white px-6 py-3 font-semibold hover:bg-institutional transition-colors"
+        className="inline-block mt-4 rounded-lg bg-accent text-white px-6 py-3 font-semibold hover:bg-accent/90 transition-colors"
       >
         {project.cta.label}
       </a>

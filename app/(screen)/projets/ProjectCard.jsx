@@ -38,17 +38,20 @@ export default function ProjectCard({ project }) {
           ))}
         </div>
 
-        <div className="mt-auto pt-3 flex items-center justify-between gap-3">
-          <Link href={`/projets/${project.slug}`} className="text-sm font-semibold text-accent hover:underline">
-            Voir l&apos;étude de cas
-          </Link>
+        <div className="mt-auto pt-3 flex flex-col gap-3">
           <a
             href={project.cta.href}
             {...(isExternalCta ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-            className="text-sm font-semibold rounded-lg bg-navy text-white px-4 py-2 hover:bg-institutional transition-colors"
+            className="w-full text-center text-sm font-semibold rounded-lg bg-accent text-white px-4 py-2.5 hover:bg-accent/90 transition-colors"
           >
             {project.cta.label}
           </a>
+          <Link
+            href={`/projets/${project.slug}`}
+            className="text-sm font-semibold text-navy/70 hover:text-accent transition-colors text-center"
+          >
+            Voir l&apos;étude de cas
+          </Link>
         </div>
       </div>
     </article>

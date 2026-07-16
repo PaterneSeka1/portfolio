@@ -5,7 +5,7 @@ export default function ClientLayout({ children, profile, logoUrl }) {
   return (
     <>
       <Navbar profile={profile} logoUrl={logoUrl} />
-      <main className="min-h-screen pt-16">{children}</main>
+      <main className="pt-16">{children}</main>
       <Footer profile={profile} logoUrl={logoUrl} />
     </>
   );
