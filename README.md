@@ -61,8 +61,11 @@ fonctionne qu'en développement local. En production, les uploads (photo de prof
 médias, galeries projets) passent par un petit service de stockage séparé — voir
 [`storage-server/`](./storage-server) — à déployer sur un VPS.
 
-1. **Base de données** : provisionner un PostgreSQL accessible depuis Vercel (idéalement avec
-   pooling de connexions, ex. Neon/Supabase) et définir `DATABASE_URL`.
+1. **Base de données** : provisionner un PostgreSQL accessible depuis Vercel et définir
+   `DATABASE_URL`. Soit un fournisseur managé (Neon/Supabase, pooling de connexions inclus), soit
+   auto-hébergé sur le même VPS que `storage-server` via le service `db` de son
+   `docker-compose.yml` — voir [`storage-server/README.md`](./storage-server/README.md#base-de-données-postgresql-sur-le-même-vps-alternative-à-neonsupabase)
+   pour les compromis (pas de TLS ni de sauvegardes automatiques par défaut).
 2. **Stockage fichiers** : déployer `storage-server/` sur le VPS (voir son README), puis définir
    côté Vercel `STORAGE_API_URL` et `STORAGE_API_TOKEN` (même valeur que `STORAGE_TOKEN` sur le
    VPS). Sans ces deux variables, l'admin plantera dès qu'on tente un upload.

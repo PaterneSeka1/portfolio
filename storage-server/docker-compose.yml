@@ -11,5 +11,19 @@ services:
     volumes:
       - storage_uploads:/app/uploads
 
+  db:
+    image: postgres:16-alpine
+    container_name: portfolio_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-portfolio}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-portfolio}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - portfolio_db_data:/var/lib/postgresql/data
+
 volumes:
   storage_uploads:
+  portfolio_db_data:
