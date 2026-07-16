@@ -25,7 +25,7 @@ export async function generateMetadata() {
     settings?.seoDescription ||
     profile?.promise ||
     "Portfolio de Paterne SEKA, Full-Stack Engineer & Product Builder. Conception et développement d'applications web, plateformes métier et produits numériques robustes et sécurisés.";
-  const ogImage = settings?.ogImage;
+  const ogImage = settings?.ogImage || "/logo-ps.png";
 
   return {
     metadataBase: new URL(SITE_URL),
