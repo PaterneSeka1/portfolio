@@ -4,6 +4,7 @@ import { useActionState, useEffect } from "react"
 import toast from "react-hot-toast"
 import { Upload } from "lucide-react"
 import { importDataAction } from "../../../../lib/actions/settings"
+import { fileInputClass } from "../_components/formStyles"
 
 const initialState = { error: null }
 
@@ -17,7 +18,7 @@ export default function ImportForm() {
 
   return (
     <form action={formAction} className="flex flex-wrap items-center gap-3">
-      <input type="file" name="file" accept="application/json" required className="text-sm" />
+      <input type="file" name="file" accept="application/json" required className={fileInputClass} />
       <button
         type="submit"
         disabled={isPending}

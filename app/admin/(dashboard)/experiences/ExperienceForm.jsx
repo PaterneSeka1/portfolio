@@ -2,10 +2,7 @@
 
 import { useActionState, useEffect } from "react"
 import toast from "react-hot-toast"
-
-const inputClass =
-  "w-full rounded-lg border border-gray-200 px-4 py-2.5 text-navy focus:outline-none focus:ring-2 focus:ring-accent"
-const labelClass = "block text-sm font-medium text-navy mb-1.5"
+import { inputClass, labelClass, checkboxClass } from "../_components/formStyles"
 
 const initialState = { error: null }
 
@@ -58,7 +55,7 @@ export default function ExperienceForm({ action, experience, onSuccess }) {
       </div>
 
       <label className="flex items-center gap-2 text-sm text-navy">
-        <input type="checkbox" name="published" defaultChecked={experience?.published ?? true} className="h-4 w-4" />
+        <input type="checkbox" name="published" defaultChecked={experience?.published ?? true} className={checkboxClass} />
         Publié sur le site
       </label>
 

@@ -2,10 +2,7 @@
 
 import { useActionState, useEffect } from "react"
 import toast from "react-hot-toast"
-
-const inputClass =
-  "w-full rounded-lg border border-gray-200 px-4 py-2.5 text-navy focus:outline-none focus:ring-2 focus:ring-accent"
-const labelClass = "block text-sm font-medium text-navy mb-1.5"
+import { inputClass, labelClass, checkboxClass } from "../_components/formStyles"
 
 const initialState = { error: null }
 
@@ -99,17 +96,17 @@ export default function ProjectForm({ action, project, onSuccess }) {
             <input type="number" name="order" defaultValue={project?.order ?? 0} className={inputClass} />
           </div>
           <label className="flex items-center gap-2 text-sm text-navy pt-7">
-            <input type="checkbox" name="featured" defaultChecked={project?.featured ?? false} className="h-4 w-4" />
+            <input type="checkbox" name="featured" defaultChecked={project?.featured ?? false} className={checkboxClass} />
             Projet vedette
           </label>
           <label className="flex items-center gap-2 text-sm text-navy pt-7">
-            <input type="checkbox" name="published" defaultChecked={project?.published ?? false} className="h-4 w-4" />
+            <input type="checkbox" name="published" defaultChecked={project?.published ?? false} className={checkboxClass} />
             Publié
           </label>
         </div>
       </section>
 
-      <section className="space-y-5">
+      <section className="space-y-5 border-t border-gray-100 pt-6">
         <h2 className="font-heading font-semibold text-navy">SEO</h2>
         <div>
           <label className={labelClass}>Titre SEO (facultatif)</label>
@@ -121,7 +118,7 @@ export default function ProjectForm({ action, project, onSuccess }) {
         </div>
       </section>
 
-      <section className="space-y-5">
+      <section className="space-y-5 border-t border-gray-100 pt-6">
         <h2 className="font-heading font-semibold text-navy">Étude de cas</h2>
 
         <div>

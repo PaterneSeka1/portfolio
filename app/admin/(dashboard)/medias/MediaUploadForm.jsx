@@ -3,6 +3,7 @@
 import { useActionState, useEffect } from "react"
 import toast from "react-hot-toast"
 import { uploadMediaAction } from "../../../../lib/actions/media"
+import { inputClass, labelClass, fileInputClass } from "../_components/formStyles"
 
 const initialState = { error: null }
 
@@ -20,17 +21,14 @@ export default function MediaUploadForm({ onSuccess }) {
   }, [state])
 
   return (
-    <form action={formAction} className="flex flex-wrap items-end gap-3">
+    <form action={formAction} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-navy mb-1.5">Fichier</label>
-        <input type="file" name="file" accept="image/*,application/pdf" required className="text-sm" />
+        <label className={labelClass}>Fichier</label>
+        <input type="file" name="file" accept="image/*,application/pdf" required className={fileInputClass} />
       </div>
       <div>
-        <label className="block text-sm font-medium text-navy mb-1.5">Texte alternatif</label>
-        <input
-          name="alt"
-          className="rounded-lg border border-gray-200 px-3 py-2 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-accent"
-        />
+        <label className={labelClass}>Texte alternatif</label>
+        <input name="alt" className={inputClass} />
       </div>
       <button
         type="submit"

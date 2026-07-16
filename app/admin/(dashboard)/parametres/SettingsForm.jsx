@@ -3,25 +3,27 @@
 import { useActionState, useEffect } from "react"
 import toast from "react-hot-toast"
 import { updateSettingsAction } from "../../../../lib/actions/settings"
-
-const inputClass =
-  "w-full rounded-lg border border-gray-200 px-4 py-2.5 text-navy focus:outline-none focus:ring-2 focus:ring-accent"
-const labelClass = "block text-sm font-medium text-navy mb-1.5"
+import { inputClass, labelClass, checkboxClass, fileInputClass } from "../_components/formStyles"
 
 const initialState = { error: null }
 
-export default function SettingsForm({ settings }) {
+export default function SettingsForm({ settings, onSuccess }) {
   const [state, formAction, isPending] = useActionState(updateSettingsAction, initialState)
 
   useEffect(() => {
-    if (state?.success) toast.success("Paramètres mis à jour.")
-    else if (state?.error) toast.error(state.error)
+    if (state?.success) {
+      toast.success("Paramètres mis à jour.")
+      onSuccess?.(state)
+    } else if (state?.error) {
+      toast.error(state.error)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state])
 
   return (
-    <form action={formAction} className="space-y-6 max-w-2xl">
-      <section className="space-y-4">
-        <h2 className="font-heading font-semibold text-navy">SEO &amp; Open Graph</h2>
+    <form action={formAction} className="space-y-8">
+      <section className="space-y-5">
+        <h2 className="font-heading font-semibold text-navy">SEO & Open Graph</h2>
         <div>
           <label className={labelClass}>Titre SEO</label>
           <input name="seoTitle" defaultValue={settings?.seoTitle ?? ""} className={inputClass} />
@@ -32,12 +34,12 @@ export default function SettingsForm({ settings }) {
         </div>
         <div>
           <label className={labelClass}>Image Open Graph</label>
-          {settings?.ogImage && <p className="text-xs text-navy/50 mb-1">Actuelle : {settings.ogImage}</p>}
-          <input type="file" name="ogImageFile" accept="image/*" className="text-sm" />
+          {settings?.ogImage && <p className="text-xs text-navy/50 mb-1.5">Actuelle : {settings.ogImage}</p>}
+          <input type="file" name="ogImageFile" accept="image/*" className={fileInputClass} />
         </div>
       </section>
 
-      <section className="space-y-4">
+      <section className="space-y-5 border-t border-gray-100 pt-6">
         <h2 className="font-heading font-semibold text-navy">Contact</h2>
         <div className="grid sm:grid-cols-2 gap-5">
           <div>
@@ -51,8 +53,8 @@ export default function SettingsForm({ settings }) {
         </div>
       </section>
 
-      <section className="space-y-4">
-        <h2 className="font-heading font-semibold text-navy">SMTP &amp; Analytics</h2>
+      <section className="space-y-5 border-t border-gray-100 pt-6">
+        <h2 className="font-heading font-semibold text-navy">SMTP & Analytics</h2>
         <div className="grid sm:grid-cols-2 gap-5">
           <div>
             <label className={labelClass}>Hôte SMTP</label>
@@ -73,14 +75,14 @@ export default function SettingsForm({ settings }) {
         </div>
       </section>
 
-      <section className="space-y-4">
-        <h2 className="font-heading font-semibold text-navy">Domaine &amp; maintenance</h2>
+      <section className="space-y-5 border-t border-gray-100 pt-6">
+        <h2 className="font-heading font-semibold text-navy">Domaine & maintenance</h2>
         <div>
           <label className={labelClass}>Domaine</label>
           <input name="domain" defaultValue={settings?.domain ?? ""} className={inputClass} />
         </div>
         <label className="flex items-center gap-2 text-sm text-navy">
-          <input type="checkbox" name="maintenanceMode" defaultChecked={settings?.maintenanceMode ?? false} className="h-4 w-4" />
+          <input type="checkbox" name="maintenanceMode" defaultChecked={settings?.maintenanceMode ?? false} className={checkboxClass} />
           Mode maintenance
         </label>
       </section>
