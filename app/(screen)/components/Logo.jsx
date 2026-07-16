@@ -6,7 +6,17 @@ const VARIANTS = {
   navy: { tile: "#0D1B2A", accent: "#2563EB", mark: "#2563EB", text: "#0D1B2A" },
 };
 
+const WHITE_LOGO_SRC = "/logo-ps-blanc.png";
+
 function Mark({ variant = "icon", className = "", logoUrl }) {
+  if (variant === "white") {
+    return (
+      <span className={`relative inline-block ${className}`}>
+        <Image src={WHITE_LOGO_SRC} alt="Paterne SEKA" fill sizes="48px" className="object-contain" />
+      </span>
+    )
+  }
+
   if (logoUrl) {
     return (
       <span className={`relative inline-block ${className}`}>
