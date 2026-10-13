@@ -4,7 +4,7 @@ import { useActionState, useState, useEffect } from "react"
 import Link from "next/link"
 import toast from "react-hot-toast"
 import { Eye, EyeOff } from "lucide-react"
-import Logo from "../../(screen)/components/Logo"
+import Logo from "../../_components/Logo"
 import { loginAction } from "../../../lib/auth/actions"
 
 const initialState = { error: null }

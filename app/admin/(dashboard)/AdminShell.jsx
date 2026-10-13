@@ -16,7 +16,7 @@ import {
   Menu,
   X,
 } from "lucide-react"
-import Logo from "../../(screen)/components/Logo"
+import Logo from "../../_components/Logo"
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
