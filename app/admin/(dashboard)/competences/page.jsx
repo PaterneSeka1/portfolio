@@ -1,10 +1,10 @@
 import { getAllSkills } from "../../../../lib/db/skills"
-import SkillsManager from "./SkillsManager"
+import SkillBoard from "./SkillBoard"
 
 export const dynamic = "force-dynamic"
+export const metadata = { title: "Technologies — Administration" }
 
 export default async function AdminSkillsPage() {
   const skills = await getAllSkills()
-
-  return <SkillsManager skills={skills} />
+  return <SkillBoard skills={JSON.parse(JSON.stringify(skills))} />
 }
