@@ -28,6 +28,21 @@ Portfolio professionnel de Paterne SEKA (Full-Stack Engineer — applications m�
 - Carte de partage Open Graph : `/og/fr` et `/og/en` (1200×630, générées au build).
 - Diagrammes d'architecture des études de cas : un bloc par ligne `Libellé | détail`, `- ` en début de ligne pour des branches parallèles. Ne jamais y mettre d'IP, d'URL privée ni de secret.
 
+## Administration (`/admin`)
+
+| Groupe | Module | Rôle |
+| --- | --- | --- |
+| — | Tableau de bord | Compteurs (publiées, brouillons, mises en avant, messages non lus), derniers messages, points à compléter |
+| Contenu | Réalisations | Liste filtrable, éditeur par sections, captures, statut **Brouillon / Publié / Archivé**, aperçu (`/work/<slug>?preview=1`, réservé à l'admin connecté) |
+| Contenu | Expérience · Expertise · Technologies | Panneaux latéraux, ordre d'affichage, affichage/masquage, version anglaise |
+| Contenu | Profil & accueil | Textes du hero, coordonnées, photo, CV |
+| Site | Messages · Médiathèque · Référencement | Boîte de réception, fichiers et captures, SEO de l'accueil |
+| Système | Paramètres | Export / import JSON, changement de mot de passe, déconnexion |
+
+- Statut *Archivé* : la réalisation disparaît du site public mais reste dans l'admin.
+- Sécurité : chaque action serveur vérifie la session (`requireAdmin`), le proxy protège `/admin` et renvoie vers la connexion avec `?expired=1` si la session n'est plus valide ; 5 échecs de connexion en 15 minutes bloquent temporairement l'e-mail concerné (mémoire du serveur).
+- Composants d'interface partagés : `app/admin/_ui/`.
+
 ## Installation
 
 Prérequis : Node.js 20+, Docker (pour la base de données locale).
@@ -100,8 +115,10 @@ médias, galeries projets) passent par un petit service de stockage séparé —
    pendant le build Vercel.)
 
    ⚠️ Le seed **remplace** projets, expertises, compétences et expériences par le contenu de
-   `lib/data/*` (le profil et les réglages SEO sont mis à jour). Exportez d'abord vos données
-   depuis `/admin/parametres` si vous avez modifié du contenu dans l'admin.
+   `lib/data/*` (le profil et les réglages SEO sont mis à jour) et **réinitialise le mot de passe
+   admin** avec `ADMIN_PASSWORD`. Exportez d'abord vos données depuis `/admin/parametres` si vous
+   avez modifié du contenu dans l'admin. Pour une base existante, `prisma migrate deploy` suffit :
+   les migrations conservent le contenu (l'ancien « publié » devient le statut *Publié*).
 5. Déployer sur Vercel (build command par défaut : `next build`).
 
 ### Checklist rapide avant de considérer le déploiement fonctionnel
