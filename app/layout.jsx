@@ -1,19 +1,8 @@
-import { Sora, Inter } from "next/font/google";
+import { sora, inter } from "./fonts";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { getSiteSettings } from "../lib/db/settings";
 import { getProfile } from "../lib/db/profile";
-
-const sora = Sora({
-  variable: "--font-sora",
-  subsets: ["latin"],
-  weight: ["400", "600", "700", "800"],
-});
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
