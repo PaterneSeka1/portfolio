@@ -79,7 +79,7 @@ export default function ContactForm({ locale, labels, projectTypes, validation, 
         </div>
         <div>
           <label htmlFor="company" className={labelClass}>
-            {labels.company} <span className="text-white/45">({labels.optional})</span>
+            {labels.company} <span className="text-white/50">({labels.optional})</span>
           </label>
           <input id="company" autoComplete="organization" className={inputClass} {...register("company")} />
         </div>

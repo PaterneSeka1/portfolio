@@ -182,11 +182,11 @@ export default async function CaseStudyPage({ params }) {
           <aside aria-label={labels.overview} className="lg:sticky lg:top-24 lg:self-start">
             <dl className="space-y-6 rounded-2xl border border-white/[0.08] bg-surface/50 p-5 text-sm">
               <div>
-                <dt className="text-xs font-semibold uppercase tracking-[0.14em] text-white/45">{labels.labels.type}</dt>
+                <dt className="text-xs font-semibold uppercase tracking-[0.14em] text-white/50">{labels.labels.type}</dt>
                 <dd className="mt-1.5 text-white/85">{work.categories[project.category]}</dd>
               </div>
               <div>
-                <dt className="text-xs font-semibold uppercase tracking-[0.14em] text-white/45">
+                <dt className="text-xs font-semibold uppercase tracking-[0.14em] text-white/50">
                   {labels.labels.visibility}
                 </dt>
                 <dd className="mt-1.5 text-white/85">
@@ -195,7 +195,7 @@ export default async function CaseStudyPage({ params }) {
               </div>
               {hasContent(cs.role) && (
                 <div>
-                  <dt className="text-xs font-semibold uppercase tracking-[0.14em] text-white/45">
+                  <dt className="text-xs font-semibold uppercase tracking-[0.14em] text-white/50">
                     {labels.sections.role}
                   </dt>
                   <dd className="mt-1.5 text-white/85">{cs.role[0]}</dd>
@@ -203,7 +203,7 @@ export default async function CaseStudyPage({ params }) {
               )}
               {hasContent(stack) && (
                 <div>
-                  <dt className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-white/45">
+                  <dt className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-white/50">
                     {labels.labels.stack}
                   </dt>
                   <dd>
@@ -265,7 +265,7 @@ export default async function CaseStudyPage({ params }) {
                     </li>
                   ))}
                 </ul>
-                <p className="mt-3 text-xs text-white/45">{labels.galleryNote}</p>
+                <p className="mt-3 text-xs text-white/50">{labels.galleryNote}</p>
               </Section>
             )}
 

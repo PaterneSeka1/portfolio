@@ -122,7 +122,7 @@ export default async function Home({ params }) {
               intro={home.production.text}
             />
             <div className="mt-8">
-              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-white/45">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-white/50">
                 {home.production.stackLabel}
               </p>
               <TagList items={home.production.stack} label={home.production.stackLabel} />

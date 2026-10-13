@@ -9,6 +9,7 @@ import { isLocale, locales } from "../../lib/i18n/config";
 import { buildMetadata } from "../../lib/seo";
 import { getLocalizedProfile } from "../../lib/db/profile";
 import { getSiteSettings } from "../../lib/db/settings";
+import { frenchTypography } from "../../lib/i18n/typography";
 
 export const dynamicParams = false;
 
@@ -22,8 +23,8 @@ export async function generateMetadata({ params }) {
   const settings = await getSiteSettings();
 
   // The admin SEO settings are written in French: they only override the French version.
-  const title = (locale === "fr" && settings?.seoTitle) || dict.meta.defaultTitle;
-  const description = (locale === "fr" && settings?.seoDescription) || dict.meta.description;
+  const title = (locale === "fr" && frenchTypography(settings?.seoTitle)) || dict.meta.defaultTitle;
+  const description = (locale === "fr" && frenchTypography(settings?.seoDescription)) || dict.meta.description;
 
   return {
     ...buildMetadata({ locale, path: "/", title: { absolute: title }, description }),

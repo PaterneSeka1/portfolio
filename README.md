@@ -1,13 +1,32 @@
 # Portfolio — Paterne SEKA
 
-Portfolio professionnel de Paterne SEKA (Full-Stack Engineer & Product Builder) : site public + administration complète, construits avec Next.js (App Router) et Prisma/PostgreSQL.
+Portfolio professionnel de Paterne SEKA (Full-Stack Engineer — applications métier et solutions digitales) : site public bilingue FR/EN + administration complète, construits avec Next.js (App Router) et Prisma/PostgreSQL.
 
 ## Stack
 
-- **Frontend** : Next.js, React, TypeScript/JavaScript, Tailwind CSS, Framer Motion
+- **Frontend** : Next.js, React, TypeScript/JavaScript, Tailwind CSS (polices Inter et Sora auto-hébergées)
 - **Backend** : Route Handlers & Server Actions Next.js, Prisma
 - **Base de données** : PostgreSQL
 - **Authentification admin** : session JWT (cookie httpOnly signé)
+
+## Structure du site public
+
+| Route (FR) | Route (EN) | Contenu |
+| --- | --- | --- |
+| `/` | `/en` | Hero, réalisations principales, ce que je construis, méthode, mise en production, collaboration |
+| `/work` | `/en/work` | Projets principaux + autres projets |
+| `/work/[slug]` | `/en/work/[slug]` | Étude de cas (contexte, problème, rôle, architecture…) |
+| `/expertise` | `/en/expertise` | Domaines d'expertise puis technologies |
+| `/about` | `/en/about` | Parcours, collaboration, expérience (`#experience`) |
+| `/contact` | `/en/contact` | Formulaire court (`?project=<slug>` pour citer un projet) |
+| `/legal`, `/privacy` | `/en/legal`, `/en/privacy` | Mentions légales, confidentialité |
+
+- Le français est servi sans préfixe (réécriture interne vers `app/[locale]` dans `proxy.js`), l'anglais sous `/en`.
+- Textes d'interface : `lib/i18n/dictionaries/{fr,en}.js`. Contenu en base : colonnes en français + colonne JSON `en` (traduction, éditable dans l'admin ; un champ vide reprend le français).
+- La typographie française (espaces insécables, apostrophes) est appliquée au rendu (`lib/i18n/typography.js`).
+- Les anciennes URL (`/projets`, `/expertises`, `/parcours`, `/mentions-legales`, `/confidentialite`) redirigent en 308 (`next.config.js`).
+- Carte de partage Open Graph : `/og/fr` et `/og/en` (1200×630, générées au build).
+- Diagrammes d'architecture des études de cas : un bloc par ligne `Libellé | détail`, `- ` en début de ligne pour des branches parallèles. Ne jamais y mettre d'IP, d'URL privée ni de secret.
 
 ## Installation
 
@@ -79,6 +98,10 @@ médias, galeries projets) passent par un petit service de stockage séparé —
    ```
    (`npm install` régénère automatiquement le client Prisma via le script `postinstall`, y compris
    pendant le build Vercel.)
+
+   ⚠️ Le seed **remplace** projets, expertises, compétences et expériences par le contenu de
+   `lib/data/*` (le profil et les réglages SEO sont mis à jour). Exportez d'abord vos données
+   depuis `/admin/parametres` si vous avez modifié du contenu dans l'admin.
 5. Déployer sur Vercel (build command par défaut : `next build`).
 
 ### Checklist rapide avant de considérer le déploiement fonctionnel

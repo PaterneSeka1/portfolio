@@ -79,7 +79,7 @@ export default function ArchitectureDiagram({ source, caption }) {
           </div>
         ))}
       </div>
-      {caption && <figcaption className="mt-5 text-center text-xs text-white/45">{caption}</figcaption>}
+      {caption && <figcaption className="mt-5 text-center text-xs text-white/50">{caption}</figcaption>}
     </figure>
   )
 }

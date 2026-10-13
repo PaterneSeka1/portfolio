@@ -98,7 +98,7 @@ export function ArchiveProjectItem({ project, locale, work }) {
           </span>
         </div>
         <p className="text-sm leading-relaxed text-white/65">{project.summary}</p>
-        <p className="text-xs text-white/45">{project.technologies.join(" · ")}</p>
+        <p className="text-xs text-white/50">{project.technologies.join(" · ")}</p>
       </div>
       <div className="flex shrink-0 flex-wrap gap-x-5 gap-y-2 text-sm font-semibold">
         {Object.keys(cs).length > 0 && (

@@ -13,7 +13,7 @@ export function generateStaticParams() {
 const SIZE = { width: 1200, height: 630 }
 
 const TAGLINES = {
-  fr: "Applications métier & solutions digitales",
+  fr: "Applications métier et solutions digitales",
   en: "Business Applications & Digital Solutions",
 }
 
