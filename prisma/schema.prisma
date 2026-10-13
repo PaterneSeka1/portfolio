@@ -58,6 +58,12 @@ enum ProjectCategory {
   ai
 }
 
+enum ProjectStatus {
+  draft
+  published
+  archived
+}
+
 enum ProjectVisibility {
   public
   private
@@ -77,7 +83,8 @@ model Project {
   ctaHref      String
   featured     Boolean           @default(false)
   order        Int               @default(0)
-  published    Boolean           @default(true)
+  /// draft: being prepared · published: on the public site · archived: removed from the public site
+  status       ProjectStatus     @default(draft)
   seoTitle       String?
   seoDescription String?
   caseStudy    Json?
@@ -123,14 +130,22 @@ model Skill {
 }
 
 model Experience {
-  id        String   @id @default(cuid())
-  company   String
-  role      String
-  period    String?
-  missions  String[]
+  id           String    @id @default(cuid())
+  company      String
+  role         String
+  /// Free-text period, used only when no start date is set.
+  period       String?
+  startDate    DateTime?
+  endDate      DateTime?
+  current      Boolean   @default(false)
+  location     String?
+  description  String?
+  technologies String[]  @default([])
+  /// Responsibilities, one per item.
+  missions     String[]
   order     Int      @default(0)
   published Boolean  @default(true)
-  /// English translation: { company, role, period, missions }
+  /// English translation: { company, role, period, location, description, missions }
   en        Json?
 }
 

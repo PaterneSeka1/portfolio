@@ -11,13 +11,23 @@ import { getDictionary } from "../../../../lib/i18n"
 import { localePath } from "../../../../lib/i18n/config"
 import { getProjectBySlug, getProjects } from "../../../../lib/db/projects"
 import { SITE_URL, buildMetadata } from "../../../../lib/seo"
+import { getSession } from "../../../../lib/auth/current-user"
+
+/** ?preview=1 shows drafts and archived projects, for a signed-in admin only. */
+async function isPreview(searchParams) {
+  const query = await searchParams
+  if (query?.preview !== "1") return false
+  return Boolean(await getSession())
+}
 
 export const dynamic = "force-dynamic"
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata({ params, searchParams }) {
   const { locale, slug } = await params
-  const project = await getProjectBySlug(slug, locale)
+  const preview = await isPreview(searchParams)
+  const project = await getProjectBySlug(slug, locale, { preview })
   if (!project) return {}
+  if (preview) return { title: `Aperçu — ${project.title}`, robots: { index: false, follow: false } }
   const headline = project.caseStudy?.headline
   return buildMetadata({
     locale,
@@ -62,9 +72,13 @@ function Block({ value }) {
   return Array.isArray(value) ? <BulletList items={value} /> : <Prose>{value}</Prose>
 }
 
-export default async function CaseStudyPage({ params }) {
+export default async function CaseStudyPage({ params, searchParams }) {
   const { locale, slug } = await params
-  const [project, allProjects] = await Promise.all([getProjectBySlug(slug, locale), getProjects(locale)])
+  const preview = await isPreview(searchParams)
+  const [project, allProjects] = await Promise.all([
+    getProjectBySlug(slug, locale, { preview }),
+    getProjects(locale),
+  ])
   if (!project) notFound()
 
   const dict = getDictionary(locale)
@@ -112,6 +126,21 @@ export default async function CaseStudyPage({ params }) {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
+      {preview && (
+        <div role="status" className="sticky top-16 z-40 border-b border-amber-300/30 bg-amber-300/15 backdrop-blur">
+          <Container className="flex flex-wrap items-center justify-between gap-2 py-2.5 text-sm text-amber-100">
+            <p>
+              <strong className="font-semibold">Aperçu administrateur</strong> — statut :{" "}
+              {{ draft: "brouillon", published: "publié", archived: "archivé" }[project.status]}. Cette page
+              n&apos;est visible que par vous.
+            </p>
+            <Link href={`/admin/projets/${project.id}`} className="font-semibold underline underline-offset-4">
+              Retour à l&apos;édition
+            </Link>
+          </Container>
+        </div>
+      )}
 
       <article>
         <header className="border-b border-white/[0.06]">

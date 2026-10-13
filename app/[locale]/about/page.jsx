@@ -7,6 +7,7 @@ import { localePath } from "../../../lib/i18n/config"
 import { getLocalizedProfile } from "../../../lib/db/profile"
 import { getExperiences } from "../../../lib/db/experiences"
 import { buildMetadata } from "../../../lib/seo"
+import { formatExperiencePeriod } from "../../../lib/format"
 
 export const dynamic = "force-dynamic"
 
@@ -101,10 +102,19 @@ export default async function AboutPage({ params }) {
                 >
                   <div>
                     <h3 className="font-heading text-lg font-semibold text-white">{exp.company}</h3>
-                    {exp.period && <p className="mt-1 text-sm text-white/50">{exp.period}</p>}
+                    {formatExperiencePeriod(exp, locale, about.present) && (
+                      <p className="mt-1 text-sm text-white/60">{formatExperiencePeriod(exp, locale, about.present)}</p>
+                    )}
+                    {exp.location && <p className="mt-0.5 text-sm text-white/50">{exp.location}</p>}
+                    {exp.current && (
+                      <p className="mt-3 inline-flex rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2.5 py-0.5 text-xs font-medium text-emerald-300">
+                        {about.currentRole}
+                      </p>
+                    )}
                   </div>
                   <div>
                     <p className="font-medium text-accent-light">{exp.role}</p>
+                    {exp.description && <p className="mt-3 text-[15px] leading-relaxed text-white/75">{exp.description}</p>}
                     {exp.missions?.length > 0 && (
                       <ul className="mt-4 space-y-2 text-[15px] text-white/70">
                         {exp.missions.map((mission) => (
@@ -114,6 +124,9 @@ export default async function AboutPage({ params }) {
                           </li>
                         ))}
                       </ul>
+                    )}
+                    {exp.technologies?.length > 0 && (
+                      <p className="mt-4 text-sm text-white/50">{exp.technologies.join(" · ")}</p>
                     )}
                   </div>
                 </li>
