@@ -4,6 +4,7 @@ import { profile } from "../lib/data/profile.js";
 import { expertises } from "../lib/data/expertises.js";
 import { experiences } from "../lib/data/experiences.js";
 import { projects } from "../lib/data/projects.js";
+import { skills } from "../lib/data/skills.js";
 
 async function seedProfile() {
   await prisma.profile.upsert({
@@ -21,14 +22,18 @@ async function seedBrandSettings() {
   });
 }
 
+const SEO_TITLE = "Paterne SEKA — Full-Stack Engineer & Business Applications Developer";
+const SEO_DESCRIPTION =
+  "Paterne SEKA, Full-Stack Engineer basé à Abidjan. Conception et développement d'applications métier et de solutions digitales, de l'analyse du besoin jusqu'à la mise en production.";
+
 async function seedSiteSettings() {
   await prisma.siteSettings.upsert({
     where: { id: "site" },
-    update: {},
+    update: { seoTitle: SEO_TITLE, seoDescription: SEO_DESCRIPTION },
     create: {
       id: "site",
-      seoTitle: `${profile.name} — ${profile.title}`,
-      seoDescription: profile.promise,
+      seoTitle: SEO_TITLE,
+      seoDescription: SEO_DESCRIPTION,
       contactEmail: profile.email,
       contactPhone: profile.phone,
     },
@@ -45,21 +50,23 @@ async function seedExpertises() {
       technologies: item.technologies,
       order: index,
       visible: true,
+      en: item.en ?? undefined,
     })),
   });
 }
 
 async function seedSkills() {
   await prisma.skill.deleteMany();
-  const skills = expertises.flatMap((item) =>
-    item.technologies.map((name, index) => ({
-      category: item.title,
-      name,
+  await prisma.skill.createMany({
+    data: skills.map((skill, index) => ({
+      category: skill.category,
+      name: skill.name,
+      learning: skill.learning,
       order: index,
       visible: true,
-    }))
-  );
-  await prisma.skill.createMany({ data: skills });
+      en: skill.en,
+    })),
+  });
 }
 
 async function seedExperiences() {
@@ -72,6 +79,7 @@ async function seedExperiences() {
       missions: exp.missions,
       order: index,
       published: true,
+      en: exp.en ?? undefined,
     })),
   });
 }
@@ -93,9 +101,13 @@ async function seedProjects() {
         githubUrl: project.githubUrl ?? null,
         ctaLabel: project.cta.label,
         ctaHref: project.cta.href,
+        featured: project.featured ?? false,
         order: index,
         published: true,
+        seoTitle: project.seoTitle ?? null,
+        seoDescription: project.seoDescription ?? null,
         caseStudy: project.caseStudy,
+        en: project.en ?? undefined,
       },
     });
   }

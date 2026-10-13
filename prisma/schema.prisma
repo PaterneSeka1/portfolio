@@ -19,6 +19,8 @@ model Profile {
   id                String   @id @default(cuid())
   name              String
   title             String
+  /// Short positioning line displayed under the title in the hero.
+  tagline           String?
   promise           String
   location          String
   available         Boolean  @default(true)
@@ -30,6 +32,8 @@ model Profile {
   linkedin          String?
   cvUrl             String?
   heroPhoto         String?
+  /// English translation: { title, tagline, promise, availabilityLabel, location }
+  en                Json?
   updatedAt         DateTime @updatedAt
 }
 
@@ -51,6 +55,7 @@ enum ProjectCategory {
   business
   saas
   website
+  ai
 }
 
 enum ProjectVisibility {
@@ -76,6 +81,8 @@ model Project {
   seoTitle       String?
   seoDescription String?
   caseStudy    Json?
+  /// English translation: { title, summary, ctaLabel, seoTitle, seoDescription, caseStudy }
+  en           Json?
   images       ProjectImage[]
   createdAt    DateTime          @default(now())
   updatedAt    DateTime          @updatedAt
@@ -98,6 +105,8 @@ model Expertise {
   technologies String[]
   order        Int      @default(0)
   visible      Boolean  @default(true)
+  /// English translation: { title, description, technologies }
+  en           Json?
 }
 
 model Skill {
@@ -107,6 +116,10 @@ model Skill {
   icon     String?
   order    Int     @default(0)
   visible  Boolean @default(true)
+  /// Marks a technology the owner is still building experience with.
+  learning Boolean @default(false)
+  /// English translation: { category, name }
+  en       Json?
 }
 
 model Experience {
@@ -117,6 +130,8 @@ model Experience {
   missions  String[]
   order     Int      @default(0)
   published Boolean  @default(true)
+  /// English translation: { company, role, period, missions }
+  en        Json?
 }
 
 enum MessageStatus {
@@ -133,7 +148,7 @@ model ContactMessage {
   phone       String?
   projectType String
   budget      String?
-  timeline    String
+  timeline    String?
   message     String
   status      MessageStatus @default(new)
   createdAt   DateTime      @default(now())
