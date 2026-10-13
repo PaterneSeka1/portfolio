@@ -3,6 +3,7 @@
 import { useActionState, useEffect } from "react"
 import toast from "react-hot-toast"
 import { updateProfileAction } from "../../../../lib/actions/profile"
+import TranslationFields from "../_components/TranslationFields"
 import { inputClass, labelClass, checkboxClass, fileInputClass } from "../_components/formStyles"
 
 const initialState = { error: null, success: false }
@@ -34,6 +35,11 @@ export default function ProfileForm({ profile, onSuccess }) {
             <label className={labelClass}>Titre</label>
             <input name="title" defaultValue={profile.title} className={inputClass} required />
           </div>
+        </div>
+
+        <div>
+          <label className={labelClass}>Positionnement (sous le titre, ex. « Applications métier et solutions digitales »)</label>
+          <input name="tagline" defaultValue={profile.tagline ?? ""} className={inputClass} />
         </div>
 
         <div>
@@ -105,6 +111,14 @@ export default function ProfileForm({ profile, onSuccess }) {
           </div>
         </div>
       </section>
+
+      <TranslationFields fields={[
+          { name: "title", label: "Title" },
+          { name: "tagline", label: "Tagline" },
+          { name: "promise", label: "Promise", rows: 3 },
+          { name: "availabilityLabel", label: "Availability label" },
+          { name: "location", label: "Location" },
+        ]} values={profile?.en} />
 
       {state?.error && <p className="text-sm text-red-600">{state.error}</p>}
 

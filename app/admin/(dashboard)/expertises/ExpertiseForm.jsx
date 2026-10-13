@@ -3,6 +3,7 @@
 import { useActionState, useEffect } from "react"
 import toast from "react-hot-toast"
 import { ICONS } from "../../../../lib/validation/expertise"
+import TranslationFields from "../_components/TranslationFields"
 import { inputClass, labelClass, checkboxClass } from "../_components/formStyles"
 
 const initialState = { error: null }
@@ -61,6 +62,12 @@ export default function ExpertiseForm({ action, expertise, onSuccess }) {
         <input type="checkbox" name="visible" defaultChecked={expertise?.visible ?? true} className={checkboxClass} />
         Visible sur le site
       </label>
+
+      <TranslationFields fields={[
+          { name: "title", label: "Title" },
+          { name: "description", label: "Description", rows: 3 },
+          { name: "technologies", label: "Technologies (comma separated)", kind: "csv" },
+        ]} values={expertise?.en} />
 
       {state?.error && <p className="text-sm text-red-600">{state.error}</p>}
 

@@ -3,16 +3,46 @@
 import { useActionState, useEffect } from "react"
 import toast from "react-hot-toast"
 import { inputClass, labelClass, checkboxClass } from "../_components/formStyles"
+import { CASE_STUDY_FIELDS, formatField } from "../../../../lib/admin/form-fields"
 
 const initialState = { error: null }
 
-function arr(value) {
-  return Array.isArray(value) ? value.join("\n") : "";
+function CaseStudyFields({ prefix, values }) {
+  return CASE_STUDY_FIELDS.map((field) => {
+    const id = `${prefix}${field.key}`
+    const defaultValue = formatField(field.kind, values?.[field.key])
+    const className = `${inputClass} ${field.mono ? "font-mono text-sm" : ""}`
+    return (
+      <div key={id}>
+        <label htmlFor={id} className={labelClass}>{field.label}</label>
+        {field.rows === 1 ? (
+          <input id={id} name={id} defaultValue={defaultValue} className={className} />
+        ) : (
+          <textarea id={id} name={id} defaultValue={defaultValue} rows={field.rows} className={className} />
+        )}
+      </div>
+    )
+  })
+}
+
+function EnField({ name, label, defaultValue, rows }) {
+  const id = `en_${name}`
+  return (
+    <div>
+      <label htmlFor={id} className={labelClass}>{label}</label>
+      {rows ? (
+        <textarea id={id} name={id} defaultValue={defaultValue ?? ""} rows={rows} className={inputClass} />
+      ) : (
+        <input id={id} name={id} defaultValue={defaultValue ?? ""} className={inputClass} />
+      )}
+    </div>
+  )
 }
 
 export default function ProjectForm({ action, project, onSuccess }) {
   const [state, formAction, isPending] = useActionState(action, initialState)
   const cs = project?.caseStudy ?? {}
+  const en = project?.en ?? {}
 
   useEffect(() => {
     if (state?.success) {
@@ -52,6 +82,7 @@ export default function ProjectForm({ action, project, onSuccess }) {
               <option value="business">Application métier</option>
               <option value="saas">Produit SaaS</option>
               <option value="website">Site web</option>
+              <option value="ai">Intégration IA</option>
             </select>
           </div>
           <div>
@@ -82,7 +113,7 @@ export default function ProjectForm({ action, project, onSuccess }) {
         <div className="grid sm:grid-cols-2 gap-5">
           <div>
             <label className={labelClass}>Libellé du CTA</label>
-            <input name="ctaLabel" defaultValue={project?.cta?.label ?? "Demander une démonstration"} className={inputClass} required />
+            <input name="ctaLabel" defaultValue={project?.cta?.label ?? "Discutons-en"} className={inputClass} required />
           </div>
           <div>
             <label className={labelClass}>Lien du CTA</label>
@@ -97,7 +128,7 @@ export default function ProjectForm({ action, project, onSuccess }) {
           </div>
           <label className="flex items-center gap-2 text-sm text-navy pt-7">
             <input type="checkbox" name="featured" defaultChecked={project?.featured ?? false} className={checkboxClass} />
-            Projet vedette
+            Projet principal (mis en avant)
           </label>
           <label className="flex items-center gap-2 text-sm text-navy pt-7">
             <input type="checkbox" name="published" defaultChecked={project?.published ?? false} className={checkboxClass} />
@@ -119,49 +150,32 @@ export default function ProjectForm({ action, project, onSuccess }) {
       </section>
 
       <section className="space-y-5 border-t border-gray-100 pt-6">
-        <h2 className="font-heading font-semibold text-navy">Étude de cas</h2>
-
-        <div>
-          <label className={labelClass}>Contexte</label>
-          <textarea name="context" defaultValue={cs.context ?? ""} rows={2} className={inputClass} />
-        </div>
-        <div>
-          <label className={labelClass}>Problème</label>
-          <textarea name="problem" defaultValue={cs.problem ?? ""} rows={2} className={inputClass} />
-        </div>
-        <div>
-          <label className={labelClass}>Objectifs (un par ligne)</label>
-          <textarea name="objectives" defaultValue={arr(cs.objectives)} rows={3} className={inputClass} />
-        </div>
-        <div>
-          <label className={labelClass}>Utilisateurs et rôles (un par ligne)</label>
-          <textarea name="users" defaultValue={arr(cs.users)} rows={2} className={inputClass} />
-        </div>
-        <div>
-          <label className={labelClass}>Fonctionnalités (une par ligne)</label>
-          <textarea name="features" defaultValue={arr(cs.features)} rows={3} className={inputClass} />
-        </div>
-        <div>
-          <label className={labelClass}>Architecture</label>
-          <textarea name="architecture" defaultValue={cs.architecture ?? ""} rows={2} className={inputClass} />
-        </div>
-        <div>
-          <label className={labelClass}>Stack (séparée par des virgules)</label>
-          <input name="stack" defaultValue={cs.stack?.join(", ") ?? ""} className={inputClass} />
-        </div>
-        <div>
-          <label className={labelClass}>Défis (un par ligne)</label>
-          <textarea name="challenges" defaultValue={arr(cs.challenges)} rows={2} className={inputClass} />
-        </div>
-        <div>
-          <label className={labelClass}>Solutions (une par ligne)</label>
-          <textarea name="solutions" defaultValue={arr(cs.solutions)} rows={2} className={inputClass} />
-        </div>
-        <div>
-          <label className={labelClass}>Résultats (un par ligne)</label>
-          <textarea name="results" defaultValue={arr(cs.results)} rows={2} className={inputClass} />
-        </div>
+        <h2 className="font-heading font-semibold text-navy">Étude de cas (français)</h2>
+        <p className="text-sm text-navy/60">
+          Les champs vides ne sont pas affichés. N&apos;indiquez que des informations exactes : pas de chiffres,
+          de clients ni de résultats inventés, aucune donnée interne.
+        </p>
+        <CaseStudyFields prefix="cs_" values={cs} />
       </section>
+
+      <details className="border-t border-gray-100 pt-6 group">
+        <summary className="cursor-pointer font-heading font-semibold text-navy">Version anglaise (/en)</summary>
+        <div className="space-y-5 mt-5">
+          <p className="text-sm text-navy/60">
+            Champs facultatifs : un champ vide reprend la version française.
+          </p>
+          <div className="grid sm:grid-cols-2 gap-5">
+            <EnField name="title" label="Title" defaultValue={en.title} />
+            <EnField name="ctaLabel" label="CTA label" defaultValue={en.ctaLabel} />
+          </div>
+          <EnField name="summary" label="Summary" defaultValue={en.summary} rows={3} />
+          <EnField name="technologies" label="Technologies (comma separated)" defaultValue={formatField("csv", en.technologies)} />
+          <EnField name="seoTitle" label="SEO title" defaultValue={en.seoTitle} />
+          <EnField name="seoDescription" label="SEO description" defaultValue={en.seoDescription} rows={2} />
+          <h3 className="font-heading font-semibold text-navy pt-2">Case study</h3>
+          <CaseStudyFields prefix="en_cs_" values={en.caseStudy} />
+        </div>
+      </details>
 
       {state?.error && <p className="text-sm text-red-600">{state.error}</p>}
 

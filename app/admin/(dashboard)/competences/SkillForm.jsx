@@ -2,6 +2,7 @@
 
 import { useActionState, useEffect } from "react"
 import toast from "react-hot-toast"
+import TranslationFields from "../_components/TranslationFields"
 import { inputClass, labelClass, checkboxClass } from "../_components/formStyles"
 
 const initialState = { error: null }
@@ -47,6 +48,16 @@ export default function SkillForm({ action, skill, onSuccess }) {
         <input type="checkbox" name="visible" defaultChecked={skill?.visible ?? true} className={checkboxClass} />
         Visible sur le site
       </label>
+
+      <label className="flex items-center gap-2 text-sm text-navy">
+        <input type="checkbox" name="learning" defaultChecked={skill?.learning ?? false} className={checkboxClass} />
+        En progression (domaine en cours d&apos;apprentissage)
+      </label>
+
+      <TranslationFields fields={[
+          { name: "category", label: "Category" },
+          { name: "name", label: "Name" },
+        ]} values={skill?.en} />
 
       {state?.error && <p className="text-sm text-red-600">{state.error}</p>}
 

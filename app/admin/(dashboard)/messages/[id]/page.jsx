@@ -38,7 +38,7 @@ export default async function MessageDetailPage({ params }) {
           </div>
           <div>
             <dt className="text-navy/50">Délai</dt>
-            <dd className="text-navy">{message.timeline}</dd>
+            <dd className="text-navy">{message.timeline || "—"}</dd>
           </div>
           {message.phone && (
             <div>

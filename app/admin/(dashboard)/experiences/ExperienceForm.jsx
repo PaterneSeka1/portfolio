@@ -2,6 +2,7 @@
 
 import { useActionState, useEffect } from "react"
 import toast from "react-hot-toast"
+import TranslationFields from "../_components/TranslationFields"
 import { inputClass, labelClass, checkboxClass } from "../_components/formStyles"
 
 const initialState = { error: null }
@@ -58,6 +59,13 @@ export default function ExperienceForm({ action, experience, onSuccess }) {
         <input type="checkbox" name="published" defaultChecked={experience?.published ?? true} className={checkboxClass} />
         Publié sur le site
       </label>
+
+      <TranslationFields fields={[
+          { name: "company", label: "Company" },
+          { name: "role", label: "Role" },
+          { name: "period", label: "Period" },
+          { name: "missions", label: "Missions (one per line)", kind: "lines", rows: 4 },
+        ]} values={experience?.en} />
 
       {state?.error && <p className="text-sm text-red-600">{state.error}</p>}
 
