@@ -12,6 +12,8 @@ const legacyRedirects = [
   { source: "/parcours", destination: "/about#experience" },
   { source: "/mentions-legales", destination: "/legal" },
   { source: "/confidentialite", destination: "/privacy" },
+  // Admin module removed in v2 (brand settings had no effect on the site).
+  { source: "/admin/identite", destination: "/admin/parametres" },
 ].map((redirect) => ({ ...redirect, permanent: true }));
 
 const nextConfig = {
