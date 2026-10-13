@@ -3,7 +3,7 @@ import { SESSION_COOKIE, verifySessionToken } from "./lib/auth/session";
 import { defaultLocale, locales } from "./lib/i18n/config";
 
 async function guardAdmin(request) {
-  const { pathname } = request.nextUrl;
+  const { pathname, search } = request.nextUrl;
   const token = request.cookies.get(SESSION_COOKIE)?.value;
   const session = token ? await verifySessionToken(token) : null;
 
@@ -15,7 +15,13 @@ async function guardAdmin(request) {
   }
 
   if (!session) {
-    return NextResponse.redirect(new URL("/admin/login", request.url));
+    const url = new URL("/admin/login", request.url);
+    url.searchParams.set("next", `${pathname}${search}`);
+    // A cookie that no longer verifies means the session expired (or was revoked).
+    if (token) url.searchParams.set("expired", "1");
+    const response = NextResponse.redirect(url);
+    if (token) response.cookies.delete(SESSION_COOKIE);
+    return response;
   }
 
   return NextResponse.next();
