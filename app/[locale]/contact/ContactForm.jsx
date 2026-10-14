@@ -1,13 +1,14 @@
 "use client"
 
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import toast from "react-hot-toast"
+import { AlertCircle, ArrowRight, CheckCircle2, LoaderCircle } from "lucide-react"
 import { createContactSchema, projectTypeKeys } from "../../../lib/validation/contact"
+import { trackEvent } from "../../../lib/analytics"
 
 const inputClass =
-  "w-full rounded-lg border border-white/15 bg-white/[0.04] px-4 py-3 text-base text-white placeholder:text-white/35 transition-colors focus:border-accent-light focus:outline-none focus:ring-2 focus:ring-accent-light/40 aria-[invalid=true]:border-red-400"
+  "w-full rounded-control border border-white/15 bg-white/[0.04] px-4 py-3 text-base text-white placeholder:text-white/35 transition-surface hover:border-white/25 focus:border-accent-light focus:outline-none focus:ring-2 focus:ring-accent-light/40 aria-[invalid=true]:border-red-400"
 const labelClass = "mb-2 block text-sm font-medium text-white/85"
 
 function FieldError({ id, message }) {
@@ -21,6 +22,8 @@ function FieldError({ id, message }) {
 
 export default function ContactForm({ locale, labels, projectTypes, validation, project }) {
   const schema = useMemo(() => createContactSchema(validation), [validation])
+  // Result of the last submission, announced in a live region below the button.
+  const [status, setStatus] = useState("idle")
   const {
     register,
     handleSubmit,
@@ -41,6 +44,7 @@ export default function ContactForm({ locale, labels, projectTypes, validation, 
   })
 
   const onSubmit = async (data) => {
+    setStatus("idle")
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
@@ -48,10 +52,11 @@ export default function ContactForm({ locale, labels, projectTypes, validation, 
         body: JSON.stringify(data),
       })
       if (!res.ok) throw new Error("request_failed")
-      toast.success(labels.success)
+      setStatus("success")
+      trackEvent("contact_submit", { projectType: data.projectType, project: data.project || undefined })
       reset({ ...data, name: "", company: "", email: "", message: "" })
     } catch {
-      toast.error(labels.error)
+      setStatus("error")
     }
   }
 
@@ -61,7 +66,7 @@ export default function ContactForm({ locale, labels, projectTypes, validation, 
   })
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate aria-busy={isSubmitting}>
       <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
         <label htmlFor="website">Website</label>
         <input id="website" type="text" tabIndex={-1} autoComplete="off" {...register("website")} />
@@ -72,9 +77,19 @@ export default function ContactForm({ locale, labels, projectTypes, validation, 
       <div className="grid gap-6 sm:grid-cols-2">
         <div>
           <label htmlFor="name" className={labelClass}>
-            {labels.name} <span aria-hidden="true" className="text-accent-light">*</span>
+            {labels.name}{" "}
+            <span aria-hidden="true" className="text-accent-light">
+              *
+            </span>
           </label>
-          <input id="name" autoComplete="name" required className={inputClass} {...fieldProps("name")} {...register("name")} />
+          <input
+            id="name"
+            autoComplete="name"
+            required
+            className={inputClass}
+            {...fieldProps("name")}
+            {...register("name")}
+          />
           <FieldError id="name-error" message={errors.name?.message} />
         </div>
         <div>
@@ -88,7 +103,10 @@ export default function ContactForm({ locale, labels, projectTypes, validation, 
       <div className="grid gap-6 sm:grid-cols-2">
         <div>
           <label htmlFor="email" className={labelClass}>
-            {labels.email} <span aria-hidden="true" className="text-accent-light">*</span>
+            {labels.email}{" "}
+            <span aria-hidden="true" className="text-accent-light">
+              *
+            </span>
           </label>
           <input
             id="email"
@@ -104,7 +122,10 @@ export default function ContactForm({ locale, labels, projectTypes, validation, 
         </div>
         <div>
           <label htmlFor="projectType" className={labelClass}>
-            {labels.projectType} <span aria-hidden="true" className="text-accent-light">*</span>
+            {labels.projectType}{" "}
+            <span aria-hidden="true" className="text-accent-light">
+              *
+            </span>
           </label>
           <select
             id="projectType"
@@ -132,7 +153,10 @@ export default function ContactForm({ locale, labels, projectTypes, validation, 
 
       <div>
         <label htmlFor="message" className={labelClass}>
-          {labels.message} <span aria-hidden="true" className="text-accent-light">*</span>
+          {labels.message}{" "}
+          <span aria-hidden="true" className="text-accent-light">
+            *
+          </span>
         </label>
         <textarea
           id="message"
@@ -146,13 +170,35 @@ export default function ContactForm({ locale, labels, projectTypes, validation, 
         <FieldError id="message-error" message={errors.message?.message} />
       </div>
 
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-accent px-6 py-3 font-semibold text-white transition-colors hover:bg-[#1d4fd8] disabled:opacity-60 sm:w-auto"
-      >
-        {isSubmitting ? labels.submitting : labels.submit}
-      </button>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-control bg-accent px-6 py-3 font-semibold text-white shadow-[0_10px_30px_-12px_rgb(37_99_235/0.7)] transition-surface hover:bg-[#1d4fd8] active:translate-y-px disabled:cursor-wait disabled:opacity-70 sm:w-auto"
+        >
+          {isSubmitting ? (
+            <LoaderCircle size={18} aria-hidden="true" className="animate-spin" />
+          ) : (
+            <ArrowRight size={18} aria-hidden="true" className="arrow-nudge" />
+          )}
+          {isSubmitting ? labels.submitting : labels.submit}
+        </button>
+      </div>
+
+      <div role="status" aria-live="polite">
+        {status === "success" && (
+          <p className="flex items-start gap-3 rounded-card border border-success/30 bg-success/10 p-4 text-[15px] text-white/90">
+            <CheckCircle2 size={20} aria-hidden="true" className="mt-0.5 shrink-0 text-success" />
+            {labels.success}
+          </p>
+        )}
+        {status === "error" && (
+          <p className="flex items-start gap-3 rounded-card border border-red-400/30 bg-red-400/10 p-4 text-[15px] text-white/90">
+            <AlertCircle size={20} aria-hidden="true" className="mt-0.5 shrink-0 text-red-300" />
+            {labels.error}
+          </p>
+        )}
+      </div>
     </form>
   )
 }

@@ -1,7 +1,7 @@
 import Image from "next/image"
 import { Download } from "lucide-react"
 import CtaBanner from "../../_components/CtaBanner"
-import { ButtonLink, Container, SectionHeader } from "../../_components/ui"
+import { ButtonLink, Container, Reveal, SectionHeader } from "../../_components/ui"
 import { getDictionary } from "../../../lib/i18n"
 import { localePath } from "../../../lib/i18n/config"
 import { getLocalizedProfile } from "../../../lib/db/profile"
@@ -36,7 +36,13 @@ export default async function AboutPage({ params }) {
           </div>
           {profile.cvUrl && (
             <div className="mt-10">
-              <ButtonLink href={profile.cvUrl} variant="secondary" download>
+              <ButtonLink
+                href={profile.cvUrl}
+                variant="secondary"
+                download
+                data-track="cv_download"
+                data-track-from="about"
+              >
                 <Download size={18} aria-hidden="true" />
                 {about.resumeCta}
               </ButtonLink>
@@ -45,7 +51,7 @@ export default async function AboutPage({ params }) {
         </div>
 
         {profile.heroPhoto && (
-          <div className="relative mx-auto aspect-[4/5] w-full max-w-xs overflow-hidden rounded-[1.75rem] border border-white/10 bg-surface lg:mx-0 lg:mt-16">
+          <div className="enter relative mx-auto aspect-[4/5] w-full max-w-xs overflow-hidden rounded-[1.75rem] border border-white/10 bg-surface lg:mx-0 lg:mt-16">
             <Image
               src={profile.heroPhoto}
               alt={dict.hero.photoAlt}
@@ -62,16 +68,20 @@ export default async function AboutPage({ params }) {
           <h2 id="path" className="font-heading text-xl font-semibold text-white sm:text-2xl">
             {about.pathTitle}
           </h2>
-          <ol className="mt-8 grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          <Reveal as="ol" stagger className="mt-8 grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
             {about.path.map((step, index) => (
-              <li key={step} className="rounded-xl border border-white/[0.08] bg-ink p-4">
+              <li
+                key={step}
+                style={{ "--i": index }}
+                className="rounded-card border border-line bg-ink p-4 transition-surface hover:border-white/20"
+              >
                 <span className="font-heading text-xs font-bold text-accent-light" aria-hidden="true">
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 <p className="mt-2 text-sm font-medium text-white">{step}</p>
               </li>
             ))}
-          </ol>
+          </Reveal>
         </Container>
       </section>
 
@@ -89,16 +99,21 @@ export default async function AboutPage({ params }) {
       </section>
 
       {experiences.length > 0 && (
-        <section id="experience" aria-labelledby="experience-title" className="border-t border-white/[0.06] py-16 sm:py-20">
+        <section
+          id="experience"
+          aria-labelledby="experience-title"
+          className="border-t border-white/[0.06] py-16 sm:py-20"
+        >
           <Container>
             <h2 id="experience-title" className="font-heading text-2xl font-bold text-white sm:text-3xl">
               {about.experienceTitle}
             </h2>
             <ol className="mt-10 space-y-6">
               {experiences.map((exp) => (
-                <li
+                <Reveal
+                  as="li"
                   key={exp.id}
-                  className="grid gap-4 rounded-2xl border border-white/[0.08] p-6 sm:p-8 md:grid-cols-[240px_1fr] md:gap-10"
+                  className="grid gap-4 rounded-panel border border-line p-6 sm:p-8 md:grid-cols-[240px_1fr] md:gap-10"
                 >
                   <div>
                     <h3 className="font-heading text-lg font-semibold text-white">{exp.company}</h3>
@@ -114,12 +129,17 @@ export default async function AboutPage({ params }) {
                   </div>
                   <div>
                     <p className="font-medium text-accent-light">{exp.role}</p>
-                    {exp.description && <p className="mt-3 text-[15px] leading-relaxed text-white/75">{exp.description}</p>}
+                    {exp.description && (
+                      <p className="mt-3 text-[15px] leading-relaxed text-white/75">{exp.description}</p>
+                    )}
                     {exp.missions?.length > 0 && (
                       <ul className="mt-4 space-y-2 text-[15px] text-white/70">
                         {exp.missions.map((mission) => (
                           <li key={mission} className="flex gap-3 leading-relaxed">
-                            <span aria-hidden="true" className="mt-[0.65em] h-1.5 w-1.5 shrink-0 rounded-full bg-white/30" />
+                            <span
+                              aria-hidden="true"
+                              className="mt-[0.65em] h-1.5 w-1.5 shrink-0 rounded-full bg-white/30"
+                            />
                             <span>{mission}</span>
                           </li>
                         ))}
@@ -129,7 +149,7 @@ export default async function AboutPage({ params }) {
                       <p className="mt-4 text-sm text-white/50">{exp.technologies.join(" · ")}</p>
                     )}
                   </div>
-                </li>
+                </Reveal>
               ))}
             </ol>
           </Container>

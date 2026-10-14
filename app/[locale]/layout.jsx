@@ -1,9 +1,10 @@
 import { notFound } from "next/navigation";
-import { Toaster } from "react-hot-toast";
 import { sora, inter } from "../fonts";
 import "../globals.css";
 import Navbar from "../_components/Navbar";
 import Footer from "../_components/Footer";
+import MotionObserver from "../_components/motion/MotionObserver";
+import AnalyticsListener from "../_components/AnalyticsListener";
 import { getDictionary } from "../../lib/i18n";
 import { isLocale, locales } from "../../lib/i18n/config";
 import { buildMetadata } from "../../lib/seo";
@@ -53,16 +54,17 @@ export default async function LocaleLayout({ children, params }) {
       <body className={`${sora.variable} ${inter.variable} site antialiased`}>
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:rounded-lg focus:bg-accent focus:px-4 focus:py-2 focus:text-white"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:rounded-control focus:bg-accent focus:px-4 focus:py-2.5 focus:font-semibold focus:text-white"
         >
           {dict.a11y.skipToContent}
         </a>
-        <Toaster position="top-right" toastOptions={{ duration: 5000 }} />
         <Navbar locale={locale} nav={dict.nav} a11y={dict.a11y} cvUrl={profile?.cvUrl} />
         <main id="main" tabIndex={-1} className="pt-16 outline-none">
           {children}
         </main>
         <Footer locale={locale} dict={dict} profile={profile} />
+        <MotionObserver />
+        <AnalyticsListener />
       </body>
     </html>
   );

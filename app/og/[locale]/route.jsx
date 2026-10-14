@@ -13,8 +13,8 @@ export function generateStaticParams() {
 const SIZE = { width: 1200, height: 630 }
 
 const TAGLINES = {
-  fr: "Applications métier et solutions digitales",
-  en: "Business Applications & Digital Solutions",
+  fr: "Applications métier et produits numériques, de l'idée à la production",
+  en: "Business applications and digital products, from idea to production",
 }
 
 /** Social sharing card (LinkedIn, WhatsApp, X, Facebook): 1200×630 PNG. */
@@ -66,9 +66,9 @@ export async function GET(_request, { params }) {
             Paterne SEKA
           </div>
           <div style={{ display: "flex", marginTop: 28, fontSize: 44, fontWeight: 700, color: "#7cb2ff" }}>
-            Full-Stack Engineer
+            Full-Stack Engineer & Product Builder
           </div>
-          <div style={{ display: "flex", marginTop: 10, fontSize: 40, color: "rgba(255,255,255,0.9)" }}>
+          <div style={{ display: "flex", marginTop: 14, fontSize: 32, color: "rgba(255,255,255,0.85)" }}>
             {TAGLINES[locale]}
           </div>
         </div>

@@ -12,7 +12,10 @@ export function parseDiagram(source) {
     const line = raw.trim()
     if (!line) continue
     const isBranch = line.startsWith("- ")
-    const [label, detail] = line.replace(/^-\s+/, "").split("|").map((part) => part.trim())
+    const [label, detail] = line
+      .replace(/^-\s+/, "")
+      .split("|")
+      .map((part) => part.trim())
     const node = { label, detail: detail || null }
     if (isBranch && steps.length > 0) {
       const last = steps[steps.length - 1]
@@ -27,7 +30,7 @@ export function parseDiagram(source) {
 function Node({ label, detail, highlight }) {
   return (
     <div
-      className={`rounded-xl border px-4 py-3 text-center ${
+      className={`rounded-card border px-4 py-3 text-center transition-surface hover:border-white/25 ${
         highlight ? "border-accent/50 bg-accent/10" : "border-white/10 bg-white/[0.04]"
       }`}
     >
@@ -58,10 +61,11 @@ export default function ArchitectureDiagram({ source, caption }) {
     .join(" → ")
 
   return (
-    <figure className="rounded-2xl border border-white/[0.08] bg-surface/50 p-4 sm:p-6">
-      <div role="img" aria-label={`${caption}. ${description}`} className="mx-auto max-w-xl">
+    <figure className="rounded-panel border border-line bg-surface/50 p-4 sm:p-6">
+      {/* One accessible description for the whole diagram; the steps then appear in sequence. */}
+      <div role="img" aria-label={`${caption}. ${description}`} data-reveal-children className="mx-auto max-w-xl">
         {steps.map((step, index) => (
-          <div key={`${step.label}-${index}`}>
+          <div key={`${step.label}-${index}`} style={{ "--i": index }}>
             {index > 0 && <Arrow />}
             <div className="mx-auto max-w-xs">
               <Node label={step.label} detail={step.detail} highlight={step.branches.length > 0} />

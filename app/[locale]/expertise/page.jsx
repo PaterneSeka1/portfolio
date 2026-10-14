@@ -1,5 +1,5 @@
 import CtaBanner from "../../_components/CtaBanner"
-import { Container, Icon, SectionHeader, Tag } from "../../_components/ui"
+import { Container, Icon, Reveal, SectionHeader, Tag } from "../../_components/ui"
 import { getDictionary } from "../../../lib/i18n"
 import { localePath } from "../../../lib/i18n/config"
 import { getExpertises } from "../../../lib/db/expertises"
@@ -23,10 +23,7 @@ export default async function ExpertisePage({ params }) {
   const { locale } = await params
   const dict = getDictionary(locale)
   const { expertise } = dict
-  const [domains, skillGroups] = await Promise.all([
-    getExpertises(locale),
-    getSkillsGroupedByCategory(locale),
-  ])
+  const [domains, skillGroups] = await Promise.all([getExpertises(locale), getSkillsGroupedByCategory(locale)])
 
   return (
     <>
@@ -40,19 +37,21 @@ export default async function ExpertisePage({ params }) {
             {expertise.domainsTitle}
           </h2>
           <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {domains.map((item) => (
-              <li key={item.id} className="flex flex-col rounded-2xl border border-white/[0.08] bg-surface/50 p-6">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/15 text-accent-light">
-                  <Icon name={item.icon} />
+            {domains.map((item, index) => (
+              <Reveal as="li" key={item.id} index={index % 3}>
+                <div className="group flex h-full flex-col rounded-card border border-line bg-surface/50 p-6 transition-surface hover:border-white/20 hover:bg-surface/80">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-control bg-accent/15 text-accent-light transition-surface group-hover:bg-accent group-hover:text-white">
+                    <Icon name={item.icon} />
+                  </div>
+                  <h3 className="mt-5 font-heading text-lg font-semibold text-white">{item.title}</h3>
+                  <p className="mt-2 flex-1 text-[15px] leading-relaxed text-white/65">{item.description}</p>
+                  {item.technologies?.length > 0 && (
+                    <p className="mt-5 border-t border-white/[0.08] pt-4 text-sm text-white/55">
+                      {item.technologies.join(" · ")}
+                    </p>
+                  )}
                 </div>
-                <h3 className="mt-5 font-heading text-lg font-semibold text-white">{item.title}</h3>
-                <p className="mt-2 flex-1 text-[15px] leading-relaxed text-white/65">{item.description}</p>
-                {item.technologies?.length > 0 && (
-                  <p className="mt-5 border-t border-white/[0.08] pt-4 text-sm text-white/55">
-                    {item.technologies.join(" · ")}
-                  </p>
-                )}
-              </li>
+              </Reveal>
             ))}
           </ul>
         </Container>
@@ -62,7 +61,7 @@ export default async function ExpertisePage({ params }) {
         <section aria-labelledby="technologies" className="py-10 sm:py-14">
           <Container>
             <SectionHeader id="technologies" title={expertise.technologiesTitle} intro={expertise.technologiesIntro} />
-            <div className="mt-10 grid gap-px overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.08] sm:grid-cols-2 lg:grid-cols-3">
+            <Reveal className="mt-10 grid gap-px overflow-hidden rounded-card border border-line bg-white/[0.08] sm:grid-cols-2 lg:grid-cols-3">
               {skillGroups.map((group) => (
                 <div key={group.category} className="bg-ink p-6">
                   <h3 className="flex flex-wrap items-center gap-2 font-heading font-semibold text-white">
@@ -83,7 +82,7 @@ export default async function ExpertisePage({ params }) {
                   </ul>
                 </div>
               ))}
-            </div>
+            </Reveal>
           </Container>
         </section>
       )}

@@ -28,6 +28,17 @@ Portfolio professionnel de Paterne SEKA (Full-Stack Engineer — applications m�
 - Carte de partage Open Graph : `/og/fr` et `/og/en` (1200×630, générées au build).
 - Diagrammes d'architecture des études de cas : un bloc par ligne `Libellé | détail`, `- ` en début de ligne pour des branches parallèles. Ne jamais y mettre d'IP, d'URL privée ni de secret.
 
+## Interface publique
+
+- **Design system** : tokens dans `app/globals.css` (`@theme`) — couleurs, surfaces, rayons (`rounded-control/card/panel`), ombres (`shadow-card/raised/window`), largeur (`max-w-page`), courbes (`ease-standard/enter/exit/emphasized`) et durées de mouvement (`--motion-instant/fast/normal/slow`). Polices Sora/Inter via `@theme inline`.
+- **Mouvement** (aucune bibliothèque) : entrée du hero en CSS (`.enter`, décalée par `--i`) ; révélation au scroll par simple attribut `data-reveal` (ou `data-reveal-children`), piloté par un seul îlot client, `app/_components/motion/MotionObserver.jsx`. Les sections restent des Server Components ; sans JavaScript ou avec `prefers-reduced-motion`, rien n'est masqué. Ne pas combiner `data-reveal` et une transformation au survol sur le même élément.
+- **Effets pilotés par le scroll en CSS** (dégradation propre si non supportés) : en-tête qui se densifie, ligne de progression de la méthode.
+- **Hero** : composition de fenêtres produit (`HeroShowcase`, projets listés dans `HERO_SHOWCASE` de `lib/projects.js`) ; parallaxe au pointeur uniquement sur pointeur fin ≥ 1024 px (`PointerTilt`, variables CSS, sans re-rendu React).
+- **Captures** : `ProductFrames.jsx` affiche la première capture d'une réalisation (admin → Réalisations → Captures) ; à défaut, un schéma d'interface abstrait propre au produit, sans texte ni donnée. Ajouter des captures anonymisées remplace automatiquement les schémas (hero, projet à la une, cartes, étude de cas).
+- **Points clés** (`caseStudy.highlights`, champ « Points clés » de l'éditeur) : 2 à 4 forces courtes et vérifiables, affichées sur les cartes, le projet à la une et en tête d'étude de cas. À défaut, les trois premières fonctionnalités sont utilisées.
+- **Projet à la une** : la première réalisation mise en avant (ordre de l'admin).
+- **Mesure d'audience** : aucun outil installé. Les éléments clés portent `data-track` (`cv_download`, `github_click`, `linkedin_click`, `case_study_open`, `contact_click`, `contact_submit`) ; `lib/analytics.js` les transmet à Plausible ou Umami s'ils sont ajoutés, sinon émet un événement DOM `portfolio:track`.
+
 ## Administration (`/admin`)
 
 | Groupe | Module | Rôle |
@@ -85,6 +96,7 @@ Site public : http://localhost:3000 — Administration : http://localhost:3000/a
 ```bash
 npm run lint
 npm run typecheck
+npm test        # tests unitaires (node:test, sans dépendance) : helpers projets, SEO, analytics, parité FR/EN
 npm run build
 ```
 

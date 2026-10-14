@@ -1,6 +1,6 @@
 import CtaBanner from "../../_components/CtaBanner"
-import { ArchiveProjectItem, FeaturedProjectCard } from "../../_components/ProjectCards"
-import { Container, SectionHeader } from "../../_components/ui"
+import { ArchiveProjectItem, ProjectCard } from "../../_components/ProjectCards"
+import { Container, Reveal, SectionHeader } from "../../_components/ui"
 import { getDictionary } from "../../../lib/i18n"
 import { localePath } from "../../../lib/i18n/config"
 import { getProjects } from "../../../lib/db/projects"
@@ -37,14 +37,20 @@ export default async function WorkPage({ params }) {
       {featured.length > 0 && (
         <section aria-labelledby="featured-work" className="py-10 sm:py-14">
           <Container>
-            <h2 id="featured-work" className="mb-8 text-xs font-semibold uppercase tracking-[0.18em] text-accent-light">
+            <h2 id="featured-work" className="mb-8 text-xs font-semibold tracking-[0.18em] text-accent-light uppercase">
               {work.featuredTitle}
             </h2>
             <ul className="grid gap-6 md:grid-cols-2">
               {featured.map((project, index) => (
-                <li key={project.slug}>
-                  <FeaturedProjectCard project={project} locale={locale} work={work} priority={index < 2} />
-                </li>
+                <Reveal as="li" key={project.slug} index={index % 2}>
+                  <ProjectCard
+                    project={project}
+                    locale={locale}
+                    work={work}
+                    sketchLabel={dict.hero.showcase.sketchNote}
+                    priority={index < 2 && Boolean(project.images?.[0])}
+                  />
+                </Reveal>
               ))}
             </ul>
           </Container>
@@ -54,17 +60,17 @@ export default async function WorkPage({ params }) {
       {others.length > 0 && (
         <section aria-labelledby="other-projects" className="py-10 sm:py-14">
           <Container>
-            <div className="mb-8">
+            <Reveal className="mb-8">
               <h2 id="other-projects" className="font-heading text-2xl font-bold text-white">
                 {work.otherTitle}
               </h2>
               <p className="mt-2 text-white/60">{work.otherIntro}</p>
-            </div>
-            <ul className="grid gap-4">
-              {others.map((project) => (
-                <ArchiveProjectItem key={project.slug} project={project} locale={locale} work={work} />
+            </Reveal>
+            <Reveal as="ul" stagger className="grid gap-4">
+              {others.map((project, index) => (
+                <ArchiveProjectItem key={project.slug} project={project} locale={locale} work={work} index={index} />
               ))}
-            </ul>
+            </Reveal>
           </Container>
         </section>
       )}

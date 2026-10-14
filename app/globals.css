@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* ==========================================================================
+   Design tokens
+   Tailwind v4 namespaces: --color-*, --font-*, --radius-*, --shadow-*,
+   --ease-*, --container-*, --breakpoint-* generate the matching utilities
+   (bg-surface, rounded-card, shadow-raised, ease-enter, max-w-page, xs:…).
+   ========================================================================== */
 @theme {
   /* Brand */
   --color-navy: #0d1b2a;
@@ -7,29 +13,87 @@
   --color-accent: #2563eb;
   --color-gray-light: #f1f3f6;
 
-  /* Public site (dark theme) */
+  /* Public site (dark theme) surfaces, from deepest to most raised. */
   --color-ink: #09131e;
   --color-surface: #0f1f30;
   --color-surface-2: #142a40;
   --color-accent-light: #7cb2ff;
+  --color-success: #34d399;
 
-  --font-heading: var(--font-sora);
-  --font-sans: var(--font-inter);
+  /* Hairlines on dark surfaces. */
+  --color-line: rgb(255 255 255 / 0.08);
+  --color-line-strong: rgb(255 255 255 / 0.16);
 
-  --animate-fade-up: fade-up 0.6s ease-out both;
+  /* 400px: small phones get the tight layout, larger phones a little more air. */
+  --breakpoint-xs: 25rem;
 
-  @keyframes fade-up {
+  /* Main content width (was max-w-6xl everywhere). */
+  --container-page: 72rem;
+
+  /* Radii: controls (buttons, inputs) < cards < panels (large blocks). */
+  --radius-control: 0.625rem;
+  --radius-card: 1rem;
+  --radius-panel: 1.5rem;
+
+  /* Depth: dark UI relies on borders, shadows only add a subtle lift. */
+  --shadow-card: 0 1px 0 0 rgb(255 255 255 / 0.04) inset, 0 20px 40px -32px rgb(0 0 0 / 0.9);
+  --shadow-raised: 0 1px 0 0 rgb(255 255 255 / 0.06) inset, 0 28px 60px -30px rgb(0 0 0 / 0.95);
+  --shadow-window: 0 40px 80px -40px rgb(0 0 0 / 0.95), 0 0 0 1px rgb(255 255 255 / 0.06);
+
+  /* Motion easing. */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ease-emphasized: cubic-bezier(0.3, 0, 0, 1.15);
+
+  --animate-enter: enter var(--motion-slow) var(--ease-enter) both;
+
+  @keyframes enter {
     from {
       opacity: 0;
-      transform: translateY(16px);
+      transform: translate3d(0, var(--motion-distance-md), 0);
     }
     to {
       opacity: 1;
-      transform: translateY(0);
+      transform: none;
     }
   }
 }
 
+/* Font families come from next/font, whose CSS variables are set on <body>.
+   `inline` makes the utilities use var(--font-sora) / var(--font-inter) where
+   they apply, instead of resolving them on :root, where they do not exist
+   (which silently fell back to the system font). */
+@theme inline {
+  --font-heading: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Motion durations and distances (not Tailwind namespaces: used through
+   var() in this file and as `duration-(--motion-fast)` in components). */
+:root {
+  --motion-instant: 80ms;
+  --motion-fast: 160ms;
+  --motion-normal: 240ms;
+  --motion-slow: 520ms;
+  --motion-stagger: 70ms;
+
+  --motion-distance-xs: 2px;
+  --motion-distance-sm: 6px;
+  --motion-distance-md: 14px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-distance-xs: 0px;
+    --motion-distance-sm: 0px;
+    --motion-distance-md: 0px;
+  }
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
 html {
   -webkit-text-size-adjust: 100%;
 }
@@ -37,12 +101,14 @@ html {
 body {
   background: #ffffff;
   color: var(--color-navy);
-  font-family: var(--font-sans);
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
 body.site {
   background: var(--color-ink);
   color: #ffffff;
+  /* Decorative elements may overflow their section: never the page. */
+  overflow-x: clip;
 }
 
 body.site ::selection {
@@ -63,6 +129,7 @@ body.site ::selection {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
   }
 }
 
@@ -88,6 +155,249 @@ body.site input:focus-visible,
 body.site textarea:focus-visible,
 body.site select:focus-visible {
   outline-color: var(--color-accent-light);
+}
+
+/* ==========================================================================
+   Interaction utilities
+   ========================================================================== */
+
+/* Shared transition for interactive surfaces (cards, buttons, links). */
+@utility transition-surface {
+  /* `translate` / `scale`: Tailwind v4 translate-* and scale-* utilities use the individual properties. */
+  transition-property: transform, translate, scale, border-color, background-color, box-shadow, color, opacity;
+  transition-duration: var(--motion-normal);
+  transition-timing-function: var(--ease-standard);
+}
+
+/* Fine-pointer hover lift for cards. Touch devices never depend on it. */
+@utility hover-lift {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      transform: translate3d(0, -4px, 0);
+    }
+  }
+}
+
+/* Arrow nudged by a parent `.group` hover or focus. */
+@utility arrow-nudge {
+  transition: transform var(--motion-normal) var(--ease-emphasized);
+  :where(.group):hover &,
+  :where(.group):focus-visible & {
+    transform: translate3d(3px, 0, 0);
+  }
+}
+
+/* Very subtle dotted grid used behind the hero and some panels. */
+@utility bg-grid {
+  background-image: radial-gradient(rgb(255 255 255 / 0.07) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* ==========================================================================
+   Motion system
+   - Hero entrance: CSS keyframes, staggered with --i.
+   - Scroll reveal: elements marked [data-reveal] are hidden only once the
+     MotionObserver island has run (html.motion-ready) and only when the user
+     accepts motion. Without JavaScript everything stays visible.
+   ========================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  .enter {
+    animation: var(--animate-enter);
+    animation-delay: calc(var(--i, 0) * var(--motion-stagger) + 40ms);
+  }
+
+  /* Colour transitions stay immediate so hover states keep working on revealed
+     elements; never combine [data-reveal] with a hover transform. */
+  .motion-ready [data-reveal] {
+    --reveal-delay: calc(min(var(--i, 0), 6) * var(--motion-stagger));
+    transition:
+      opacity var(--motion-slow) var(--ease-enter) var(--reveal-delay),
+      transform var(--motion-slow) var(--ease-enter) var(--reveal-delay),
+      border-color var(--motion-normal) var(--ease-standard),
+      background-color var(--motion-normal) var(--ease-standard);
+  }
+
+  .motion-ready [data-reveal]:not([data-revealed]) {
+    opacity: 0;
+    transform: translate3d(0, var(--motion-distance-md), 0);
+  }
+
+  /* Children animated in sequence once their parent is revealed. */
+  .motion-ready [data-reveal-children] > * {
+    --reveal-delay: calc(min(var(--i, 0), 8) * var(--motion-stagger) + 80ms);
+    transition:
+      opacity var(--motion-slow) var(--ease-enter) var(--reveal-delay),
+      transform var(--motion-slow) var(--ease-enter) var(--reveal-delay),
+      border-color var(--motion-normal) var(--ease-standard),
+      background-color var(--motion-normal) var(--ease-standard);
+  }
+
+  .motion-ready [data-reveal-children]:not([data-revealed]) > * {
+    opacity: 0;
+    transform: translate3d(0, var(--motion-distance-sm), 0);
+  }
+}
+
+/* Printing (or "save as PDF") never depends on scrolling. */
+@media print {
+  [data-reveal],
+  [data-reveal-children] > * {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ==========================================================================
+   Site header: condenses slightly once the page is scrolled.
+   Scroll-driven animation, no JavaScript; static fallback elsewhere.
+   ========================================================================== */
+.site-header {
+  background-color: rgb(9 19 30 / 0.82);
+  border-color: var(--color-line);
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .site-header {
+      animation: header-condense linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 96px;
+    }
+  }
+}
+
+@keyframes header-condense {
+  from {
+    background-color: rgb(9 19 30 / 0.4);
+    border-color: transparent;
+    box-shadow: none;
+  }
+  to {
+    background-color: rgb(9 19 30 / 0.86);
+    border-color: var(--color-line);
+    box-shadow: 0 12px 32px -24px rgb(0 0 0 / 0.9);
+  }
+}
+
+/* Mobile menu panel entrance. */
+@media (prefers-reduced-motion: no-preference) {
+  .menu-panel {
+    animation: menu-in var(--motion-normal) var(--ease-enter) both;
+  }
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -8px, 0);
+  }
+}
+
+/* ==========================================================================
+   Hero showcase: perspective stage driven by --tilt-x / --tilt-y, written by
+   the PointerTilt island on fine pointers only (no React re-render).
+   ========================================================================== */
+.tilt-stage {
+  perspective: 1800px;
+}
+
+.tilt-scene {
+  --tilt-x: 0;
+  --tilt-y: 0;
+  transform: rotateX(calc(var(--tilt-y) * -3deg)) rotateY(calc(var(--tilt-x) * 4deg));
+  transform-style: preserve-3d;
+  transition: transform var(--motion-slow) var(--ease-standard);
+}
+
+.tilt-layer {
+  transform: translate3d(
+    calc(var(--tilt-x) * var(--depth, 0) * 1px),
+    calc(var(--tilt-y) * var(--depth, 0) * 1px),
+    0
+  );
+  transition: transform var(--motion-slow) var(--ease-standard);
+}
+
+/* ==========================================================================
+   Method timeline: the progress line draws itself while the list crosses the
+   viewport (scroll-driven, no scroll-jacking). Fully drawn as a fallback.
+   ========================================================================== */
+.timeline {
+  view-timeline-name: --timeline;
+}
+
+.timeline-progress {
+  transform-origin: left center;
+}
+
+@media (max-width: 63.999rem) {
+  .timeline-progress {
+    transform-origin: center top;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .timeline-progress {
+      animation: timeline-grow-x linear both;
+      animation-timeline: --timeline;
+      animation-range: entry 40% contain 45%;
+    }
+
+    @media (max-width: 63.999rem) {
+      .timeline-progress {
+        animation-name: timeline-grow-y;
+        animation-range: entry 10% exit 60%;
+      }
+    }
+  }
+}
+
+@keyframes timeline-grow-x {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes timeline-grow-y {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+/* ==========================================================================
+   Infrastructure diagram: a request "travels" once along the connectors when
+   the diagram is revealed. Decorative only: the list carries the content.
+   ========================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  .motion-ready .flow[data-revealed] .flow-pulse {
+    animation: flow-pulse 1.1s var(--ease-standard) both;
+    animation-delay: calc(var(--i, 0) * 180ms + 300ms);
+  }
+}
+
+.flow-pulse {
+  opacity: 0;
+}
+
+@keyframes flow-pulse {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+  }
 }
 
 /* Admin side sheet entrance. */

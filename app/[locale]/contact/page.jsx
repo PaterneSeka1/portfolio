@@ -30,8 +30,8 @@ export default async function ContactPage({ params, searchParams }) {
   const direct = [
     profile.email && { icon: Mail, label: profile.email, href: `mailto:${profile.email}` },
     profile.phone && { icon: Phone, label: profile.phone, href: `tel:${profile.phone.replace(/\s/g, "")}` },
-    profile.linkedin && { icon: Linkedin, label: "LinkedIn", href: profile.linkedin, external: true },
-    profile.github && { icon: Github, label: "GitHub", href: profile.github, external: true },
+    profile.linkedin && { icon: Linkedin, label: "LinkedIn", href: profile.linkedin, external: true, track: "linkedin_click" },
+    profile.github && { icon: Github, label: "GitHub", href: profile.github, external: true, track: "github_click" },
   ].filter(Boolean)
 
   return (
@@ -56,26 +56,27 @@ export default async function ContactPage({ params, searchParams }) {
         </div>
       </div>
 
-      <aside aria-labelledby="direct-contact" className="h-fit rounded-2xl border border-white/[0.08] bg-surface/50 p-6 lg:mt-20">
+      <aside aria-labelledby="direct-contact" className="h-fit rounded-card border border-line bg-surface/50 p-6 lg:mt-20">
         <h2 id="direct-contact" className="font-heading font-semibold text-white">
           {contact.directContact}
         </h2>
-        <ul className="mt-5 space-y-4 text-sm">
-          {direct.map(({ icon: Icon, label, href, external }) => (
+        <ul className="mt-3 text-sm">
+          {direct.map(({ icon: Icon, label, href, external, track }) => (
             <li key={label}>
               <a
                 href={href}
                 {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                className="flex items-start gap-3 break-all text-white/75 hover:text-white"
+                {...(track ? { "data-track": track, "data-track-from": "contact" } : {})}
+                className="-mx-2 flex min-h-11 items-center gap-3 rounded-control px-2 py-1.5 break-all text-white/75 transition-surface hover:bg-white/[0.04] hover:text-white"
               >
-                <Icon size={18} className="mt-0.5 shrink-0 text-accent-light" aria-hidden="true" />
+                <Icon size={18} className="shrink-0 text-accent-light" aria-hidden="true" />
                 {label}
                 {external && <span className="sr-only">{dict.a11y.newTab}</span>}
               </a>
             </li>
           ))}
-          <li className="flex items-start gap-3 text-white/75">
-            <MapPin size={18} className="mt-0.5 shrink-0 text-accent-light" aria-hidden="true" />
+          <li className="flex min-h-11 items-center gap-3 py-1.5 text-white/75">
+            <MapPin size={18} className="shrink-0 text-accent-light" aria-hidden="true" />
             {profile.location}
           </li>
         </ul>

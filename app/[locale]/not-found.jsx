@@ -1,13 +1,12 @@
 import { headers } from "next/headers"
 import { ButtonLink, Container } from "../_components/ui"
 import { getDictionary } from "../../lib/i18n"
-import { localePath } from "../../lib/i18n/config"
+import { localeFromPathname, localePath } from "../../lib/i18n/config"
 
 export default async function NotFound() {
   // not-found.js does not receive params: infer the locale from the requested URL.
   const requestHeaders = await headers()
-  const pathname = requestHeaders.get("x-pathname") ?? ""
-  const locale = pathname === "/en" || pathname.startsWith("/en/") ? "en" : "fr"
+  const locale = localeFromPathname(requestHeaders.get("x-pathname") ?? "")
   const { notFound } = getDictionary(locale)
 
   return (
