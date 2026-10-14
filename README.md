@@ -1,13 +1,47 @@
 # Portfolio — Paterne SEKA
 
-Portfolio professionnel de Paterne SEKA (Full-Stack Engineer & Product Builder) : site public + administration complète, construits avec Next.js (App Router) et Prisma/PostgreSQL.
+Portfolio professionnel de Paterne SEKA (Full-Stack Engineer — applications métier et solutions digitales) : site public bilingue FR/EN + administration complète, construits avec Next.js (App Router) et Prisma/PostgreSQL.
 
 ## Stack
 
-- **Frontend** : Next.js, React, TypeScript/JavaScript, Tailwind CSS, Framer Motion
+- **Frontend** : Next.js, React, TypeScript/JavaScript, Tailwind CSS (polices Inter et Sora auto-hébergées)
 - **Backend** : Route Handlers & Server Actions Next.js, Prisma
 - **Base de données** : PostgreSQL
 - **Authentification admin** : session JWT (cookie httpOnly signé)
+
+## Structure du site public
+
+| Route (FR) | Route (EN) | Contenu |
+| --- | --- | --- |
+| `/` | `/en` | Hero, réalisations principales, ce que je construis, méthode, mise en production, collaboration |
+| `/work` | `/en/work` | Projets principaux + autres projets |
+| `/work/[slug]` | `/en/work/[slug]` | Étude de cas (contexte, problème, rôle, architecture…) |
+| `/expertise` | `/en/expertise` | Domaines d'expertise puis technologies |
+| `/about` | `/en/about` | Parcours, collaboration, expérience (`#experience`) |
+| `/contact` | `/en/contact` | Formulaire court (`?project=<slug>` pour citer un projet) |
+| `/legal`, `/privacy` | `/en/legal`, `/en/privacy` | Mentions légales, confidentialité |
+
+- Le français est servi sans préfixe (réécriture interne vers `app/[locale]` dans `proxy.js`), l'anglais sous `/en`.
+- Textes d'interface : `lib/i18n/dictionaries/{fr,en}.js`. Contenu en base : colonnes en français + colonne JSON `en` (traduction, éditable dans l'admin ; un champ vide reprend le français).
+- La typographie française (espaces insécables, apostrophes) est appliquée au rendu (`lib/i18n/typography.js`).
+- Les anciennes URL (`/projets`, `/expertises`, `/parcours`, `/mentions-legales`, `/confidentialite`) redirigent en 308 (`next.config.js`).
+- Carte de partage Open Graph : `/og/fr` et `/og/en` (1200×630, générées au build).
+- Diagrammes d'architecture des études de cas : un bloc par ligne `Libellé | détail`, `- ` en début de ligne pour des branches parallèles. Ne jamais y mettre d'IP, d'URL privée ni de secret.
+
+## Administration (`/admin`)
+
+| Groupe | Module | Rôle |
+| --- | --- | --- |
+| — | Tableau de bord | Compteurs (publiées, brouillons, mises en avant, messages non lus), derniers messages, points à compléter |
+| Contenu | Réalisations | Liste filtrable, éditeur par sections, captures, statut **Brouillon / Publié / Archivé**, aperçu (`/work/<slug>?preview=1`, réservé à l'admin connecté) |
+| Contenu | Expérience · Expertise · Technologies | Panneaux latéraux, ordre d'affichage, affichage/masquage, version anglaise |
+| Contenu | Profil & accueil | Textes du hero, coordonnées, photo, CV |
+| Site | Messages · Médiathèque · Référencement | Boîte de réception, fichiers et captures, SEO de l'accueil |
+| Système | Paramètres | Export / import JSON, changement de mot de passe, déconnexion |
+
+- Statut *Archivé* : la réalisation disparaît du site public mais reste dans l'admin.
+- Sécurité : chaque action serveur vérifie la session (`requireAdmin`), le proxy protège `/admin` et renvoie vers la connexion avec `?expired=1` si la session n'est plus valide ; 5 échecs de connexion en 15 minutes bloquent temporairement l'e-mail concerné (mémoire du serveur).
+- Composants d'interface partagés : `app/admin/_ui/`.
 
 ## Installation
 
@@ -79,6 +113,12 @@ médias, galeries projets) passent par un petit service de stockage séparé —
    ```
    (`npm install` régénère automatiquement le client Prisma via le script `postinstall`, y compris
    pendant le build Vercel.)
+
+   ⚠️ Le seed **remplace** projets, expertises, compétences et expériences par le contenu de
+   `lib/data/*` (le profil et les réglages SEO sont mis à jour) et **réinitialise le mot de passe
+   admin** avec `ADMIN_PASSWORD`. Exportez d'abord vos données depuis `/admin/parametres` si vous
+   avez modifié du contenu dans l'admin. Pour une base existante, `prisma migrate deploy` suffit :
+   les migrations conservent le contenu (l'ancien « publié » devient le statut *Publié*).
 5. Déployer sur Vercel (build command par défaut : `next build`).
 
 ### Checklist rapide avant de considérer le déploiement fonctionnel

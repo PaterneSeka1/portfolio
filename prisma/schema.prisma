@@ -19,6 +19,8 @@ model Profile {
   id                String   @id @default(cuid())
   name              String
   title             String
+  /// Short positioning line displayed under the title in the hero.
+  tagline           String?
   promise           String
   location          String
   available         Boolean  @default(true)
@@ -30,6 +32,8 @@ model Profile {
   linkedin          String?
   cvUrl             String?
   heroPhoto         String?
+  /// English translation: { title, tagline, promise, availabilityLabel, location }
+  en                Json?
   updatedAt         DateTime @updatedAt
 }
 
@@ -51,6 +55,13 @@ enum ProjectCategory {
   business
   saas
   website
+  ai
+}
+
+enum ProjectStatus {
+  draft
+  published
+  archived
 }
 
 enum ProjectVisibility {
@@ -72,10 +83,13 @@ model Project {
   ctaHref      String
   featured     Boolean           @default(false)
   order        Int               @default(0)
-  published    Boolean           @default(true)
+  /// draft: being prepared · published: on the public site · archived: removed from the public site
+  status       ProjectStatus     @default(draft)
   seoTitle       String?
   seoDescription String?
   caseStudy    Json?
+  /// English translation: { title, summary, ctaLabel, seoTitle, seoDescription, caseStudy }
+  en           Json?
   images       ProjectImage[]
   createdAt    DateTime          @default(now())
   updatedAt    DateTime          @updatedAt
@@ -98,6 +112,8 @@ model Expertise {
   technologies String[]
   order        Int      @default(0)
   visible      Boolean  @default(true)
+  /// English translation: { title, description, technologies }
+  en           Json?
 }
 
 model Skill {
@@ -107,16 +123,30 @@ model Skill {
   icon     String?
   order    Int     @default(0)
   visible  Boolean @default(true)
+  /// Marks a technology the owner is still building experience with.
+  learning Boolean @default(false)
+  /// English translation: { category, name }
+  en       Json?
 }
 
 model Experience {
-  id        String   @id @default(cuid())
-  company   String
-  role      String
-  period    String?
-  missions  String[]
+  id           String    @id @default(cuid())
+  company      String
+  role         String
+  /// Free-text period, used only when no start date is set.
+  period       String?
+  startDate    DateTime?
+  endDate      DateTime?
+  current      Boolean   @default(false)
+  location     String?
+  description  String?
+  technologies String[]  @default([])
+  /// Responsibilities, one per item.
+  missions     String[]
   order     Int      @default(0)
   published Boolean  @default(true)
+  /// English translation: { company, role, period, location, description, missions }
+  en        Json?
 }
 
 enum MessageStatus {
@@ -133,7 +163,7 @@ model ContactMessage {
   phone       String?
   projectType String
   budget      String?
-  timeline    String
+  timeline    String?
   message     String
   status      MessageStatus @default(new)
   createdAt   DateTime      @default(now())

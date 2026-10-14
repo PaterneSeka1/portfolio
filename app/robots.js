@@ -1,4 +1,4 @@
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+import { SITE_URL } from "../lib/seo";
 
 export default function robots() {
   return {
@@ -8,5 +8,6 @@ export default function robots() {
       disallow: ["/admin", "/api"],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,
+    host: SITE_URL,
   };
 }
