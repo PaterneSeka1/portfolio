@@ -7,6 +7,10 @@ import toast from "react-hot-toast"
 import { FileText, Save, Upload } from "lucide-react"
 import { Button, FormSection, TextArea, TextInput, Toggle, cx } from "../../_ui/primitives"
 import { updateProfileAction } from "../../../../lib/actions/profile"
+import { PROFILE_EN_SPEC, translationPairs } from "../../../../lib/admin/form-fields"
+import AutoTranslate from "../../_ui/AutoTranslate"
+
+const TRANSLATED = translationPairs(PROFILE_EN_SPEC)
 
 const MAX = 5 * 1024 * 1024
 
@@ -150,6 +154,7 @@ export default function ProfileEditor({ profile }) {
       </FormSection>
 
       <FormSection title="Version anglaise" description="Facultatif : un champ vide reprend le texte français sur /en.">
+        <AutoTranslate pairs={TRANSLATED} />
         <div className="grid gap-5 sm:grid-cols-2">
           <TextInput name="en_title" label="Title" optional defaultValue={en.title ?? ""} />
           <TextInput name="en_tagline" label="Tagline" optional defaultValue={en.tagline ?? ""} />

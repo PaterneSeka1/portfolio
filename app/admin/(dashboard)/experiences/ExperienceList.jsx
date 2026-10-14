@@ -13,6 +13,10 @@ import {
   toggleExperiencePublishedAction,
 } from "../../../../lib/actions/experiences"
 import { formatExperiencePeriod } from "../../../../lib/format"
+import { EXPERIENCE_EN_SPEC, translationPairs } from "../../../../lib/admin/form-fields"
+import AutoTranslate from "../../_ui/AutoTranslate"
+
+const TRANSLATED = translationPairs(EXPERIENCE_EN_SPEC)
 
 const toMonth = (value) => (value ? String(value).slice(0, 7) : "")
 
@@ -77,6 +81,7 @@ function ExperienceFields({ experience, errors, suggestions }) {
       <TagInput name="technologies" label="Technologies" description="Facultatif." defaultValue={experience?.technologies ?? []} suggestions={suggestions} />
       <Toggle name="published" label="Afficher sur le site" defaultChecked={experience?.published ?? true} />
 
+      <AutoTranslate pairs={TRANSLATED} />
       <details className="rounded-lg border border-gray-200 p-4">
         <summary className="cursor-pointer text-sm font-medium text-accent">Version anglaise (facultatif)</summary>
         <div className="mt-4 space-y-4">

@@ -7,6 +7,10 @@ import { DropdownMenu, useAction, useConfirm } from "../../_ui/overlays"
 import SheetForm from "../../_ui/SheetForm"
 import { SKILL_CATEGORIES } from "../../../../lib/validation/skill"
 import { deleteSkillAction, moveSkillAction, saveSkillAction, toggleSkillAction } from "../../../../lib/actions/skills"
+import { SKILL_EN_SPEC, translationPairs } from "../../../../lib/admin/form-fields"
+import AutoTranslate from "../../_ui/AutoTranslate"
+
+const TRANSLATED = translationPairs(SKILL_EN_SPEC)
 
 function SkillFields({ skill, defaultCategory, categories, errors }) {
   const en = skill?.en ?? {}
@@ -36,6 +40,7 @@ function SkillFields({ skill, defaultCategory, categories, errors }) {
         defaultChecked={skill?.learning ?? false}
       />
       <Toggle name="visible" label="Afficher sur le site" defaultChecked={skill?.visible ?? true} />
+      <AutoTranslate pairs={TRANSLATED} />
       <details className="rounded-lg border border-gray-200 p-4">
         <summary className="cursor-pointer text-sm font-medium text-accent">Version anglaise (facultatif)</summary>
         <div className="mt-4 space-y-4">

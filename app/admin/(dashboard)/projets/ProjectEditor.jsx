@@ -19,7 +19,10 @@ import {
 import TagInput from "../../_ui/TagInput"
 import { saveProjectAction } from "../../../../lib/actions/projects"
 import { PROJECT_CATEGORIES, PROJECT_VISIBILITIES, slugify } from "../../../../lib/validation/project"
-import { CASE_STUDY_FIELDS, formatField } from "../../../../lib/admin/form-fields"
+import { CASE_STUDY_FIELDS, CASE_STUDY_SPEC, PROJECT_EN_SPEC, formatField, translationPairs } from "../../../../lib/admin/form-fields"
+import AutoTranslate from "../../_ui/AutoTranslate"
+
+const TRANSLATED = [...translationPairs(PROJECT_EN_SPEC), ...translationPairs(CASE_STUDY_SPEC, "cs_", "en_cs_")]
 
 const SECTIONS = [
   { id: "general", label: "Général" },
@@ -357,6 +360,7 @@ export default function ProjectEditor({ project, suggestions, media, created }) 
         </FormSection>
 
         <FormSection id="english" title="Version anglaise" description="Facultatif : chaque champ vide reprend le texte français sur /en.">
+          <AutoTranslate pairs={TRANSLATED} />
           <details className="group" open={Boolean(project?.en)}>
             <summary className="cursor-pointer text-sm font-medium text-accent">
               {project?.en ? "Masquer / afficher les champs anglais" : "Ajouter une version anglaise"}

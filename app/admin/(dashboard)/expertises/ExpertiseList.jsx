@@ -14,7 +14,10 @@ import {
   saveExpertiseAction,
   toggleExpertiseVisibleAction,
 } from "../../../../lib/actions/expertises"
-import { formatField } from "../../../../lib/admin/form-fields"
+import { EXPERTISE_EN_SPEC, formatField, translationPairs } from "../../../../lib/admin/form-fields"
+import AutoTranslate from "../../_ui/AutoTranslate"
+
+const TRANSLATED = translationPairs(EXPERTISE_EN_SPEC)
 
 function ExpertiseFields({ expertise, errors, suggestions }) {
   const en = expertise?.en ?? {}
@@ -63,6 +66,7 @@ function ExpertiseFields({ expertise, errors, suggestions }) {
         error={errors.technologies}
       />
       <Toggle name="visible" label="Afficher sur le site" defaultChecked={expertise?.visible ?? true} />
+      <AutoTranslate pairs={TRANSLATED} />
       <details className="rounded-lg border border-gray-200 p-4">
         <summary className="cursor-pointer text-sm font-medium text-accent">Version anglaise (facultatif)</summary>
         <div className="mt-4 space-y-4">
