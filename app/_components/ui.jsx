@@ -3,14 +3,32 @@ import {
   ArrowRight,
   Building2,
   Database,
+  Handshake,
+  Layers,
   LayoutDashboard,
+  LayoutTemplate,
   Network,
   Plug,
+  Radio,
+  Rocket,
   Server,
   Sparkles,
 } from "lucide-react"
 
-const ICONS = { Building2, Database, LayoutDashboard, Network, Plug, Server, Sparkles }
+const ICONS = {
+  Building2,
+  Database,
+  Handshake,
+  Layers,
+  LayoutDashboard,
+  LayoutTemplate,
+  Network,
+  Plug,
+  Radio,
+  Rocket,
+  Server,
+  Sparkles,
+}
 
 export function Icon({ name, size = 20, className = "" }) {
   const Component = ICONS[name] ?? Building2
