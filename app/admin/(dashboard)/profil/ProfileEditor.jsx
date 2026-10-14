@@ -12,7 +12,7 @@ import AutoTranslate from "../../_ui/AutoTranslate"
 
 const TRANSLATED = translationPairs(PROFILE_EN_SPEC)
 
-const MAX = 5 * 1024 * 1024
+const MAX = 4 * 1024 * 1024
 
 function FilePicker({ name, label, accept, help, current, kind, error }) {
   const [file, setFile] = useState(null)
@@ -51,7 +51,7 @@ function FilePicker({ name, label, accept, help, current, kind, error }) {
                 setLocalError(null)
                 if (!selected) return
                 if (selected.size > MAX) {
-                  setLocalError("Fichier trop lourd : 5 Mo maximum.")
+                  setLocalError("Fichier trop lourd : 4 Mo maximum.")
                   event.target.value = ""
                   return
                 }
@@ -144,12 +144,12 @@ export default function ProfileEditor({ profile }) {
             name="heroPhotoFile"
             label="Photo de l'accueil"
             accept="image/png,image/jpeg,image/webp"
-            help="PNG, JPEG ou WebP, 5 Mo max. Format portrait conseillé."
+            help="PNG, JPEG ou WebP, 4 Mo max. Format portrait conseillé."
             current={profile.heroPhoto}
             kind="image"
             error={errors.heroPhotoFile}
           />
-          <FilePicker name="cvFile" label="CV" accept="application/pdf" help="PDF, 5 Mo max." current={profile.cvUrl} kind="file" error={errors.cvFile} />
+          <FilePicker name="cvFile" label="CV" accept="application/pdf" help="PDF, 4 Mo max." current={profile.cvUrl} kind="file" error={errors.cvFile} />
         </div>
       </FormSection>
 

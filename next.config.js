@@ -19,6 +19,11 @@ const legacyRedirects = [
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  experimental: {
+    // Uploads go through Server Actions, whose default limit is 1 MB. Vercel caps
+    // request bodies at 4.5 MB, so files are limited to 4 MB (see lib/storage.js).
+    serverActions: { bodySizeLimit: "4.5mb" },
+  },
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: storageUrl

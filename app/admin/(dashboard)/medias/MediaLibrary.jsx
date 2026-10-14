@@ -11,7 +11,7 @@ import { useAction, useConfirm } from "../../_ui/overlays"
 import { deleteMediaAction, updateMediaAltAction, uploadMediaAction } from "../../../../lib/actions/media"
 import { formatDate } from "../../../../lib/format-admin"
 
-const MAX = 5 * 1024 * 1024
+const MAX = 4 * 1024 * 1024
 const TYPES = ["image/png", "image/jpeg", "image/webp", "image/svg+xml", "application/pdf"]
 
 const formatSize = (bytes) => (!bytes ? "" : bytes > 1024 * 1024 ? `${(bytes / 1024 / 1024).toFixed(1)} Mo` : `${Math.round(bytes / 1024)} Ko`)
@@ -60,7 +60,7 @@ function UploadForm() {
           <>
             <Upload size={20} aria-hidden="true" />
             Choisir un fichier
-            <span className="text-navy/40">Images ou PDF, 5 Mo max.</span>
+            <span className="text-navy/40">Images ou PDF, 4 Mo max.</span>
           </>
         )}
         <input
@@ -79,7 +79,7 @@ function UploadForm() {
               return setFile(null)
             }
             if (selected.size > MAX) {
-              setError(`Fichier trop lourd (${formatSize(selected.size)}) : 5 Mo maximum.`)
+              setError(`Fichier trop lourd (${formatSize(selected.size)}) : 4 Mo maximum.`)
               event.target.value = ""
               return setFile(null)
             }

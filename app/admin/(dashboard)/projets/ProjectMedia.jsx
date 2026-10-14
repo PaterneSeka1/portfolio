@@ -14,7 +14,7 @@ import {
   updateProjectImageAltAction,
 } from "../../../../lib/actions/project-images"
 
-const MAX_SIZE = 5 * 1024 * 1024
+const MAX_SIZE = 4 * 1024 * 1024
 const TYPES = ["image/png", "image/jpeg", "image/webp"]
 
 /**
@@ -45,7 +45,7 @@ export default function ProjectMedia({ projectId, images }) {
       return
     }
     if (selected.size > MAX_SIZE) {
-      setError(`Image trop lourde (${(selected.size / 1024 / 1024).toFixed(1)} Mo) : 5 Mo maximum.`)
+      setError(`Image trop lourde (${(selected.size / 1024 / 1024).toFixed(1)} Mo) : 4 Mo maximum.`)
       event.target.value = ""
       return
     }
@@ -70,7 +70,13 @@ export default function ProjectMedia({ projectId, images }) {
     data.set("file", file)
     data.set("alt", alt)
     startUpload(async () => {
-      const result = await addProjectImageAction(projectId, null, data)
+      let result
+      try {
+        result = await addProjectImageAction(projectId, null, data)
+      } catch {
+        setError("L'envoi a échoué (connexion ou serveur de stockage). Réessayez dans un instant.")
+        return
+      }
       if (result?.error) {
         setError(result.error)
         return
@@ -169,7 +175,7 @@ export default function ProjectMedia({ projectId, images }) {
             ) : (
               <span className="flex flex-col items-center gap-1 px-2">
                 <Upload size={18} aria-hidden="true" />
-                PNG, JPEG ou WebP — 5 Mo max.
+                PNG, JPEG ou WebP — 4 Mo max.
               </span>
             )}
           </label>
