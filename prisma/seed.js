@@ -109,7 +109,7 @@ async function seedProjects() {
         ctaHref: project.cta.href,
         featured: project.featured ?? false,
         order: index,
-        status: "published",
+        status: project.status ?? "published",
         seoTitle: project.seoTitle ?? null,
         seoDescription: project.seoDescription ?? null,
         caseStudy: project.caseStudy,
